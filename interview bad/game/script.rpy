@@ -3,43 +3,54 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
+#region Character
 default bioName = "Biographer"
 
-define ed = Character("Ed")
+define ed = Character("Ed") #dynamically change name from Immortal Wizard to Ed
 define bio = Character("You")
 define boss = Character("Boss")
 define umi = Character("Umi")
 define yetu = Character("Dr. Olu")
+define devil = Character("The Devil")
+#endregion
 
-default yourFacts = 0
+#region Ending Flags
 
 define totalPhds = "7"
 define totalDoctorals = "8"
+#factstotal
 
+#endregion
+
+#region Points and Counters
+default yourFacts = 0 
+default nameroute = False
+default endearing = False
+default secretending = False
+
+#endregion
+
+
+#region Story Flags
+
+default stareflag = 0
+
+default ed_observation = False
+#endregion
+
+#region Resources
+
+#em dash: —
+
+#endregion
+
+#
 
 # The game starts here.
 
 label start:
-    jump intro
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
+    jump finaltest
 
-    scene bg room
-
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-
-    show eileen happy
-
-    # These display lines of dialogue.
-
-    e "heheheheh ."
-
-    e "Once you add a story, pictures, and music, you can release it to the world!"
-
-    # This ends the game.
 
     return
 
@@ -84,10 +95,12 @@ label icebreaker:
             bio "I'm a little starstruck, I have to admit..."
             ed "Huh. I didn't realize I had... following."
             "Your face runs hot and you absentmindedly start fanning yourself."
-            "You start to wonder how his lashes are so long and supple when it hits you:"
+            "You start to wonder how his lashes are so long... and supple... when it hits you:"
             "He \"didn't realize\" he had a following? How could he not know?"
 
     "Is he... lying?" # ominous tone
+
+    "You pay it no mind."
 
     "You clear your throat and shake your head. Now is not the time to get distracted, you have a job to do!" 
     "You might be the first person to ever get the full story out of such a slippery and elusive figure."
@@ -100,7 +113,10 @@ label icebreaker:
                 "Sorry that wasn't meant for you I think":
                     "He doesn't react."
                 "Clear your throat":
-                    "You clear your throat (again) and start."
+                    "You clear your throat (again)."
+    
+    "The magician leans back in his chair and crosses one leg over another, resting his hands on one knee."
+    "...Seeing him relax makes you relax, as well."
 
     jump demography
     return
@@ -115,8 +131,7 @@ label demography:
     ed "{cps=*0.2}Mm-hm.{/cps}"
     "You are thinking about something already..."
     menu:
-        "Say it":
-            bio "Is that your real name?"
+        "Is that really your real name?":
             ed "No. Obviously."
             bio "You're joking, right?"
             ed "Madam."
@@ -129,7 +144,7 @@ label demography:
             # but of course, out of respect, you won't publish it.
             bio "Oh, all right..."
             $ nameroute = True
-        "Move on":
+        "Keep it to yourself":
             "\"Ed\" cannot possibly be his real name. But you're sure he has his reasons..."
     
     "You think about your deadline again and realize you need to cut back on some of your questions."
@@ -147,8 +162,6 @@ label demography:
             jump starsign
         "The leather jacket he's wearing right now":
             jump jacket
-
-
     
     return
 
@@ -163,11 +176,16 @@ label upbringing:
             ed "Don't be."
         "I'm not surprised":
             bio "As most warlocks' are, I'm sure."
-
-
-            pass
+            "He seems to chuckle at your blase attitude."
+            call endeared
+            
     
     jump interviewintro
+    return
+
+label endeared:
+    $ endearing = True
+    "You feel like you've endeared yourself to him."
     return
 
 label starsign:
@@ -178,21 +196,28 @@ label starsign:
     ed "Well it's wrong."
     ed "What are you gonna do, argue with me? {w=0.2}It's wrong."
     ed "I wasn't born in freaking September."
-    bio "When were you born, then?"
-    ed "October 9. {w=0.2}Write that down." 
-
-    menu birthday:
-        "Correct this in your notes":
-            "You scratched out Virgo and wrote Libra."
-            $ yourFacts += 1
-            $ starfacts = True
-        "Do not":
+    menu:
+        "The Valkyrie Compendium is the most factual encyclopedia on magic ever written, so..."
+        "Insist he's a Virgo":
+            "He acts like one."
             bio "I would rather not contradict the Order of the Valkyries."
             ed "That's fine. But I'm not no damn Virgo."
+            jump interviewintro
+            pass
+        "Ask him his sign":
+            
+            pass
+
+    bio "When were you born, then?"
+    ed "October 9. {w=0.2}Write that down." 
+    "You scratched out Virgo and wrote Libra."
+    $ yourFacts += 1
     
     bio "Now that that's out of the way- {nw}"
     ed "A September birthday...{w=0.2} \"Virgo.\"{w=0.2} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.2}A September birthday?"
     ed "I'm sorry, you can continue."
+    "He reaches out, as if to put his hands on yours, but your chairs are too far apart. You nod and smile."
+    call endeared
     bio "Okay."
 
     jump interviewintro
@@ -200,7 +225,7 @@ label starsign:
 
 label jacket:
     $ jacket = True
-    $ staring = True
+    $ stareflag += 1
     bio "Where did you get that sleek, luxurious jacket?"
     ed "Oh, this? It's designer."
     "You stare at him. He stares at you."
@@ -218,12 +243,15 @@ label jacket:
             # jumps to the main story block
         "Move on":
             "It probably is designer."
-
+    "..."
+    "..."
+    "He's looking directly at you."
     menu:
         ed "What, you like it or something?"
         "I might":
-            # you get like a flirt point
-            pass
+            ed "You might?"
+            ed "Okay, I mess with it." #he's flirting
+            call endeared
         "Just curious":
             pass
     
@@ -241,28 +269,43 @@ label interviewintro:
             bio "I mean, no. Sorry."
             bio "I didn't mean to yell."
             ed "You can yell. If you want to."
-            bio "Like... like at you?"
-            ed "At anyone. At me too. If I'm being a bonehead. You can."
+            bio "Like... like, at you?"
+            ed "At anyone. At me, too. If I'm being a bonehead. You can."
+            "His nonchalance was charming before, but now it's starting to throw you off your game." 
+            bio "It's time to tap in."
+            ed "Okay."
+            bio "I mean that's not what I meant to ask you."
+            ed "Go on."
 
-            bio "That's not what I meant to ask you."
-
-        "You have multiple???":
+        "You have multiple??":
             ed "I might."
             "You stare at him. He stares you."
             "You stare at him... He stares at you."
-            if staring == True:
+            if stareflag >= 1:
                 "You... are starting to get tired of this."
+                $ stareflag +=1
             else:
                 pass
             ed "Hey."
             ed "Stop starin' at me with those big old eyes."
             "You try batting your eyelashes with what you think is a coquettish expression."
             "You're not sure if it came off as such or if it was more of a drunken hand-eye coordination exercise. You decide to move on."
-    bio "My question---it's fairly straightforward---I want to know just how you became an immortal wizard."
-    bio "I'm sure it's very exciting...!"
-    ed ""
+    bio "My question---it's fairly straightforward---I want to know just how you became an immortal wizard!"
+    ed "Mm."
+    bio "It's one of my favorite questions."
+    bio "Of all the fine, magically inclined folks I've interviewed, I've always asked the same question, and I've never gotten the same answer!"
+    ed "Well, if you wanna hear about that..."
+    jump portugal
+    return
+
+label portugal:
+    "He uncrosses his legs, leaning forward with his elbows now resting on his knees." 
+    "You find yourself leaning forward as well, pulled into his vortex, his magnetic field." 
+    "You are about to hear A Story."
 
     return
+
+
 
 label interviewconclusion:
     bio "But... I think in all your stories, you've never told me the \"why.\" You've gone on about the how..."
@@ -277,6 +320,10 @@ label interviewconclusion:
     return
 
 label sneakdevildeal:
+    #criteria for reaching the deal:
+    # you've asked him about his name
+    # you've flirted with him a lot
+    # you've dodged all of his falsehoods
     $ dealtriggered = True
     #stop the music
     ed "Listen here."
@@ -285,36 +332,37 @@ label sneakdevildeal:
     ed "But you're clearly good at what you do. You want people to know that about you, right?"
     "That would be nice..."
     ed "Wouldn't it?"
-    bio "I wouldn't have to answer to my good-for-nothing boss."
+    bio "I... wouldn't have to answer to my good-for-nothing boss."
     ed "Exactly!"
     ed "Look, I'll cut to the chase. I want to help you."
 
     menu:
-        "Question":
-            pass
-        "Accept":
-            #jump to the end
-            pass
-        "Reject":
+        "Accept his help":
+            jump accept
+        "Reject his help":
             jump reject
+        "Ask a question":
+            pass
+
     bio "Oh! Really? I mean, I don't know... help me how?"
     ed "Well... let me put it this way."
     ed "I think that... this profile your paper is doing..."
     ed "I think it's going to make a killing. I think it's gonna make waves."
-    ed "How do the kids say it? It's gonna to do numbers?"
-    bio "What makes you say that?"
+    ed "How do the kids say it? It's gonna do numbers?"
+    bio "Well, what makes you say that?"
     ed "Just by the sheer quality. You're keen. Observant."
     ed "Honest."
-
+    "He's right, you know."
     menu:
-        "Question":
-            pass
-        "Accept":
-            pass
-        "Reject":
+        "Accept his help":
+            jump accept
+        "Reject his help":
             jump reject
+        "Ask another question":
+            pass
+    
     bio "But... why me? There are far more prolific writers doing way worse than I am."
-    ed "There are {i}worse{/i} writers doing much better than you are, too."
+    ed "There are far {i}worse{/i} writers doing much better than you are, too."
     bio "I never said anything about worse writers."
     ed "It's not what you said. It's what you didn't say."
     ed "\"Prolific.\" Not learned, not talented. Prolific." 
@@ -323,20 +371,30 @@ label sneakdevildeal:
     ed "I like you, so I'll help you. Simple as that."
 
     menu:
-        "Question":
-            pass
-        "Accept":
+        "Accept his help":
             jump accept
-        "Reject":
+        "Reject his help":
             jump reject
+        "Ask another question":
+            pass
+
     bio "And what do you get out of helping me?"
     ed "Hm..."
     ed "The satisfaction, I guess. A bit of comfort?"
-    "How selfless..."
+    "Wow. How selfless..."
+    "I don't like the way he's whispering."
+
+    menu:
+        "Accept his help":
+            jump accept
+        "Reject his help":
+            jump reject
+        "Ask another question":
+            pass
 
     bio "How can I be sure I can trust you?"
     ed "Of course. That's very important. You hate lies. And I've proven I love lying."
-    "You laugh, idly."
+    "You laugh idly. But it's not very funny."
     ed "I'll give you my name. My real name."
 
     bio "And what do I give you?"
@@ -346,13 +404,15 @@ label sneakdevildeal:
         "That seems fair":
             jump accept
         "No way, Jose":
-            pass
+            "You don't call him Jose, by the way."
+            jump reject
     
 
     return
 
 label accept:
 
+    "You let out the breath you've been holding."
     bio "Sure! Why not."
     ed "Good! Good. That means I can trust you with this."
     call realname
@@ -368,20 +428,24 @@ label accept:
         "Lock it in with a kiss":
             "You had to stand on the tips of your toes to reach his face."
             "He holds you steady by your waist as you lean into him. You close your eyes and feel his warm lips on yours."
+            "...you feel them again."
             "You felt your heart flutter."
     "As you leave the studio, something starts to nag at you from the back of your mind." # his house (the vampire castle)? a cafe? a hotel? wherever
     "He agreed when you said it would be nice..."
     "But you were sure you never said that aloud."
+    jump finaltest
     return
 
 label reject:
-    bio "Sorry. I don't think I can accept."
+    $ ed_observation = True
+    bio "Sorry. I don't think I can accept your help."
     ed "That's all right... that's all right."
     #the music and background return.
     ed "I hope you remember how many Ph.Ds I have, though. Cuz if you don't, tuh? Well."
     ed "You'll never work in this field again."
     bio "How- how can you be so sure?"
-    ed "Oh I'm sure. Of this... I am... very certain."
+    ed "Oh I'm sure. Of this, I am{w=0.2} {i}very{/i} certain."
+    
     jump finaltest
 
     return
@@ -394,13 +458,27 @@ label realname:
     bio "What does \"Aniedi\" mean?"
     ed "..."
     ed "\"Who knows?\""
-    bio "..."
+    bio "Ah..."
     return
 
 label finaltest:
-    "Pleased with your findings, you returned to the office with your head held high. You had a brilliant idea for the profile."
-    "You could even picture the final line of the article:"
-    "Even in a life full of tall tales, he kept a simple truth in his heart."
+    #scene
+    if secretending == True:
+
+        "You wander into the office, almost in a trance."
+        "You don't even notice your boss calling out for your attention. He seems perplexed as you saunter to your desk."
+        call endoftest
+        jump dealend
+        pass
+    elif ed_observation == True:
+        "You mull on the last conversation you had before you left."
+        pass
+    else:
+        "Pleased with your findings, you returned to the office with your head held high. You had a brilliant idea for the profile."
+        "You could even picture the final line of the article:"
+        "Even in a life full of tall tales, he kept a simple truth in his heart."
+        pass
+
     boss "There you are, you silly goosey goo! So what did you find out? Is he really the world's most credentialed man?"
     bio "Well he's... " #fact or falsehood
 
@@ -424,17 +502,22 @@ label finaltest:
     bio "I thought it was nice..."
     if dealtriggered == True:
         boss "I thought it was CORNY!"
-        bio "Something...else... happened, if you'd rather hear about that?"
+        bio "I have something else that...happened...if you'd rather hear about that?"
 
-    boss "Nope! Don't gaf. SO! How many Ph.Ds did he earn?"
-    bio "um"
-    bio "what"
-    boss "{cps=*.08}How many Ph.Ds did he earn?{/cps}"
+    boss "Nope! {w=0.2}Don't gaf. {w=0.3}SO! {w=0.3}How many Ph.Ds did he earn?"
+    bio "um{w=0.1}"
+    bio "what?"
+    "Your boss sighs."
+    boss "{cps=*.8}How many Ph.Ds did he earn?{/cps}"
     bio "Are you serious?"
     boss "Very."
-    bio "Well-{w=0.4}"
+    bio "Well- {nw}"
     boss "Your job depends on it. Just so you know."
     $ finalanswer = renpy.input(prompt="How many Ph.Ds did Ed earn in his lifetime? (Enter numbers only.)", allow="1234567890")
+    boss "Okay, don't forget to write that in. I'm counting on you!"
+    boss "Don't embarrass the paper!"
+
+    call endoftest
 
     if finalanswer==totalPhds:
         jump goodend
@@ -442,11 +525,30 @@ label finaltest:
         jump badend
     return
 
+label endoftest:
+    "You sit down and write the article exactly as you envision it."
+    "When you're done, you submit it, and you go home."
+    return
+
 
 label goodend:
     "Some weeks after the profile went live, you got a call from your boss."
-    boss "Hey, u"
-    "You reached the good ending!"
+    boss "Hey, um."
+    boss "I wanted to say congratulations. The article is doing pretty well."
+    boss "People are saying some parts aren't true..."
+    boss "Which is, y'know, to be expected for a guy with such a history. {w=0.3}Misinformation, like you said."
+    boss "I, uh... {w=0.4}{i}embellished{/i}{w=0.4} your article a bit. By the way." 
+    boss "Just here and there! To spruce things up a bit, y'know? But I gotcha."
+    boss "You know that, right? I'm your boss, I take of ya'!"
+    boss "I know how you feel about lying and inaccuracies. How it makes you feel queasy and all that."
+    boss "So, to clear your conscience, I went ahead and left your name off the byline."
+    boss "Don't worry, you'll get a bonus for the accurate reporting on the Ph.Ds."
+    boss "You're welcome!"
+    "He hangs up."
+    
+    "You reached the good ending...?"
+    #persistent from reaching the secret ending
+    "You realized this was as good an ending as you could get."
     return
 
 label badend:
@@ -456,14 +558,17 @@ label badend:
         boss "Did you go and count the number of doctoral degrees or the number of Ph.Ds?"
         boss "Cuz I asked for Ph.Ds... and I get that he has an M.D..."
         boss "...but an M.D. isn't a Ph.D."
-    boss "So, you're fired. Totally super mega ultra fired. Don't check Glitter."
+    boss "So, you're fired. Totally super mega ultra fired. For embarrassing the paper."
+    boss "Don't check Glitter."
     "Glitter is Magic Twitter."
-    "It also has a significantly higher proportion of gay stans. Vicious gay stans. It's the highest on the Internet."
-    "When your boss told you not to check Glitter, it's because he knew they were eviscerating you on there. 
-    So you log on to check, against your better judgement."
-    "As it turns out, a Dr. Yetunde Olu, former colleague and ex-girlfriend of Ed, has revealed {i}exactly{/i} how many Ph.Ds he's earned. And it's not [finalanswer]."
-    "In the end, you, too, were a charlatan. A grifter. A hack. A useful idiot---at best." 
-    if dealtriggered == True:
+    "It also has a significantly higher proportion of gay stans. Vicious gay stans."
+    "It's the highest on the Internet, unfortunately for you."
+    "When your boss told you not to check Glitter, it's because he knew they were eviscerating you on there."
+    "So you log on to check, against your better judgement."
+    "As it turns out, a Dr. Yetunde Olu, former colleague and ex-girlfriend of Ed, has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
+    "And it's not [finalanswer]."
+    "In the end, you, too, were a charlatan. A grifter. A hack. A useful idiot—at {i}best.{/i}" 
+    if ed_observation == True:
         "It was just as Ed had predicted."
     "You can never work in this field again."
     "You reached the bad ending."
@@ -471,23 +576,29 @@ label badend:
 
 label dealend:
     "Some weeks after the profile went live, you got a call from your boss."
-    boss "Hey. I want to say I'm sorry."
+    boss "Hey, um."
+    boss "I want to say I'm sorry."
     "Followed by an unusual pause."
     boss "I'm sorry for doubting you, and-"
     "Another pause. You hear shuffling on the other side of the line." 
     "You're sure you hear your boss say, \"okay\" over and over."
     boss "And I've been withholding tens of thousands of dollars in backpay which I-{w=0.5} which I will deposit in your checking account." 
     boss "Immediately."
-    "He hangs up. You've never heard him so stilted... and so scared...? Just one more thing to pile on to the weird couple of weeks you've been having..."
+    "He hangs up." 
+    "You've never heard him so stilted... and so scared...?" 
+    "Just one more thing to pile on to the weird couple of weeks you've been having..."
     "You thought back to the conversation you had with Ed, right before you left."
     "It seems like he was right: your article did incredibly well!"
-    "But it also seems like no one who read it knows what it actually said. Everyone who talks to you about it says something wildly inaccurate."
+    "But it also seems like no one who read it knows what it actually said." 
+    "Everyone who talks to you about it says something wildly inaccurate."
     "And everyone says something different."
-    "You've read it over and over every night since it was published. It's exactly as you remember it---"
+    "You've read it over and over every night since it was published. It's exactly as you remember it—"
     "no tall tales,"
     "no editorializing from your boss,"
     "no inexplicable gaps in the narrative."
-    "So... what's"
+    "It should be a completely factual profile..."
+    "You continue your career as a magical biographer."
+    "But you can't shake the queasy feeling you get from telling a lie for as long as you live."
 
     "You reached the secret ending...!"
     return
