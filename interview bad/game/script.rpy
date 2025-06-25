@@ -18,7 +18,7 @@ define devil = Character("The Devil")
 
 define totalPhds = "7"
 define totalDoctorals = "8"
-#factstotal
+define factstotal = 0
 
 #endregion
 
@@ -59,14 +59,15 @@ label intro:
     "Even though you fancy yourself rather credentialed, what with the seventeen biographies under your belt,"
     "you are repeatedly upstaged by the charlatans in your field who insist upon filling their \"books\" with falsehoods and lies."
     "If there's anything you despise with every fiber of your being, it's lies, and liars, and also people who tell lies."
-    "There's a lot of that in the magical community, and you would rather die than take part."
+    "There's a lot of that in the magical community, and you find it nauseating."
+    "You would rather die than take part!"
 
     "But today is different. Today, you're meeting with one of the most notorious magicians in the magical world."
     "No, not the dusty one... The other one. Your paper is doing a profile on the Immortal Agent of Chaos."
     "It's nearly complete, except for the fact that it's nowhere near finished."
     "You aren't worried, though."
     "Okay, the deadline is this weekend and you're a {i}little{/i} worried."
-    "But after a few weeks of phone calls, dead leads, and couple of desperate summoning circles, your boss finally arranged an interview with him."
+    "But after a few weeks of phone calls, dead-ends, and couple of desperate summoning circles, your boss finally arranged an interview with him."
     "You're finally going to get the truth from the man himself. So there's nothing to worry about!" 
     #lines below this (cut if I run out of time)
     "Of course, you also brought the most factual encyclopedia known to magickind as supplementary material---just in case." 
@@ -76,6 +77,7 @@ label intro:
     return
 
 label icebreaker:
+    #show ed and scene
     menu greeting:
         "You decide to greet him..."
         "Cordially":
@@ -138,7 +140,9 @@ label demography:
             ed "I think if you stick around you will find that I am a very funny guy."
             ed "But I don't joke about my name."
             bio "Well... what is your real name?"
-            ed "We can... save that one for later, can we?" 
+            ed "We can...{w=0.3}" 
+            #play sound ding
+            extend ed "save that one for later, can we?" 
             # so you've initiated the impress him route 
             # what with him lowkey flirting with you and all, he'll tell you his real name if you charm him
             # but of course, out of respect, you won't publish it.
@@ -170,16 +174,21 @@ label upbringing:
     $ upbringing = True
     bio "What was your upbringing like?"
     ed "Harrowing."
-    bio "Oh."
+    bio "Oh..."
     menu:
         "I'm so sorry":
-            ed "Don't be."
+            ed "Don't be. I'm evil."
+            "You furrow your brow in concern, though you're not sure why, because you already knew he was a warlock...?"
+            ed "That was supposed to be a joke."
+            bio "Oh."
+            bio "Well."
         "I'm not surprised":
-            bio "As most warlocks' are, I'm sure."
-            "He seems to chuckle at your blase attitude."
+            "He chuckles at your blasé response."
+            bio "At our paper, we call warlocks with good childhoods priests."
+            "He snorts, then covers his mouth to keep the giggles at bay."
+            ed "I mean, it's true. And they certainly aren't immortal."
             call endeared
             
-    
     jump interviewintro
     return
 
@@ -189,7 +198,6 @@ label endeared:
     return
 
 label starsign:
-    $ starsign = True
     bio "Would you say your nature as a Virgo started you down the path of dark magic?"
     ed "Hold up. I'm not a Virgo."
     bio "Your entry on the Valkyrie Compendium of Known Agitators has your star sign listed as Virgo."
@@ -203,15 +211,13 @@ label starsign:
             bio "I would rather not contradict the Order of the Valkyries."
             ed "That's fine. But I'm not no damn Virgo."
             jump interviewintro
-            pass
         "Ask him his sign":
-            
             pass
 
     bio "When were you born, then?"
     ed "October 9. {w=0.2}Write that down." 
     "You scratched out Virgo and wrote Libra."
-    $ yourFacts += 1
+    $ starsign = True
     
     bio "Now that that's out of the way- {nw}"
     ed "A September birthday...{w=0.2} \"Virgo.\"{w=0.2} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.2}A September birthday?"
@@ -243,7 +249,8 @@ label jacket:
             # jumps to the main story block
         "Move on":
             "It probably is designer."
-    "..."
+    "You look back down at your notes and shake your head."
+    bio "Nothing. Nevermind."
     "..."
     "He's looking directly at you."
     menu:
@@ -253,12 +260,15 @@ label jacket:
             ed "Okay, I mess with it." #he's flirting
             call endeared
         "Just curious":
+            ed "Ooookay."
             pass
-    
+    jump interviewintro
     
     return
 
 label interviewintro:
+    "You let out a breath."
+    bio "Well."
     bio "Now that that's out of the way, I wanted to get into the big discussion."
     bio "You know, the question I'm sure everyone's always wanted to ask you-"
     ed "What my involvement was with all those divorces in the 1920s?"
@@ -290,28 +300,190 @@ label interviewintro:
             ed "Stop starin' at me with those big old eyes."
             "You try batting your eyelashes with what you think is a coquettish expression."
             "You're not sure if it came off as such or if it was more of a drunken hand-eye coordination exercise. You decide to move on."
-    bio "My question---it's fairly straightforward---I want to know just how you became an immortal wizard!"
+    bio "My question—{w=0.2}it's fairly straightforward—{w=0.2}I want to know just how you became an immortal wizard!"
     ed "Mm."
     bio "It's one of my favorite questions."
     bio "Of all the fine, magically inclined folks I've interviewed, I've always asked the same question, and I've never gotten the same answer!"
     ed "Well, if you wanna hear about that..."
+    "He uncrosses his legs, leaning forward with his elbows now resting on his knees." 
+    "You find yourself leaning forward as well, pulled into his vortex, his magnetic field." 
+    "You are about to hear A Story."
     jump portugal
     return
 
 label portugal:
-    "He uncrosses his legs, leaning forward with his elbows now resting on his knees." 
-    "You find yourself leaning forward as well, pulled into his vortex, his magnetic field." 
-    "You are about to hear A Story."
+    #scene portugal
+
+    ed "I had just gotten my first Ph.D—theology. I wasn't religious, but there weren't many options back in those days."
+    bio "Which days?"
+    menu:
+        ed "It was when I turned thirty in 1430. Pretty easy to remember, right?"
+        "I suppose so":
+            pass
+        "You're how old, again?":
+            ed "Thirty."
+            bio "Right. Of course."
+            bio "And just how {i}long{/i} have you been thirty, hm?"
+            ed "Since... 14...30."
+            bio "Oh. Oh yeah."
+            bio "Carry on."
+
+    ed "My girlfriend at the time wanted to try out some different waters, and especially different fish." 
+    ed "So with my studies finished, we figured it would be the perfect time to try somewhere new, and we swam up to Portugal."
+    bio "That sounds so romantic! Wait... what do you mean you {i}swam{/i} to Portugal?"
+    ed "Well you see, swimming is when you place your legs in the water and kic-{nw}"
+    bio "I know what swimming is."
+    ed "You do? So why did you ask?"
+    if stareflag >= 1:
+        "You don't want to enter another staring contest with him, so you carefully consider how you're going to phrase this."
+        pass
+    else:
+        "You carefully consider how you're going to phrase this."
+        pass
+    "Magical types can be such volatile personalities, and if you happen to offend the most important interview of your career, you're boned"
+    "You CANNOT under any circumstances imply he is insane for alleging that he swam to Portugal from literally anywhere."
+
+    menu:
+        "Isn't that... kind of far?":
+            ed "From North Africa? No. It's a coastal nation with pretty easy access to the sea."
+            bio "That's not what I meant."
+            ed "Then what did you mean?"
+            bio "That's... well... you swam by yourself?"
+            ed "...Did I not say I was with my girlfriend?"
+            bio "You {i}and{/i} your girlfriend swam??"
+            ed "Well, yeah, it's not like she can walk."
+
+            pass
+        "You're insane for alleging that you swam to Portugal from anywhere.":
+            ed "Lawyer says what?"
+            bio "What?"
+            ed "Heh. Gottem."
+            "Sigh. He freaking got you."
+            pass
+    
+    ed "So are we clear on how I got to the Kingdom of Portugal or are we still working out the mechanics of swimming?"
+    bio "I'm done. Let's get back on track."
+    "You're not done."
+    bio "It's just, I'm a bit confused."
+    ed "By what? My ex-girlfriend and I swam to Portugal." 
+    ed "She's a mermaid, so it wasn't particularly difficult."
+    menu:
+        "Ohhhh. She's a mermaid!":
+            ed "Exactly."
+            
+        "You do not have a mermaid girlfriend":
+            ed "Correct. I {i}had{/i} a mermaid girlfriend. There's a difference."
+            ed "Who would lie about having a mermaid ex?"
+            bio "Many a sailor have lied about mermaids."
+            ed "Not this sailor, and not this century."
+    
+    menu exploits:
+        "What about the time":
+            pass
+        "What about the one where you had two religions founded after you?":
+            ed "Both were started by ex-boyfriends, guess I just inspire that in people. Want to make the third?"
+            bio "Ah, well, I. Have. To be professional, you know! I can't answer that on the clock."
+            ed "How about off the record?"
+            "Oh hell no. We're moving on."
+            pass
+        "What about the Valkyrie Story":
+            pass
 
     return
 
+label portugalquiz:
+    "You opened up your notepad and scribbled."
+    menu:
+        "Ed arrived in Portugal via..."
+        "Boat":
+            pass
+        "Land":
+            pass
+        "Mermaid":
+            pass
+        "He swam using those strong arms and legs":
+            "Chill out, lil bro. You can't even see them."
+    menu:
+        "He met the Devil the year he turned thirty, which was..."
+        "1418":
+            pass
+        "1422":
+            pass
+        "1430":
+            pass
+        "2023":
+            pass
+    menu:
+        "And he"
 
+    return
+
+label renaissance:
+
+    return
+
+label quiz2:
+    "митя"
+
+    menu:
+        "Ed is ideologically aligned with..."
+        "The monarchy":
+            pass
+        "The owning class":
+            pass
+        "The proletariat":
+            pass
+        "Himself":
+            $ yourFacts +=1
+            pass
+        "Beautiful women everywhere":
+            $ yourFacts +=1
+            ed "That includes you."
+            bio "What!?"
+            menu:
+                "You quickly scratch that out and write..."
+                "Cats":
+                    pass
+                "Seals":
+                    pass
+                "in its place."
+            pass
+        "Are you kidding!? Our paper isn't political!":
+            "Yeah, that's what your boss says, but he knows how running cover for a warlock will reflect on it."
+            "He's not an idiot. He knows about... The Implication." #ominous tone.
+            pass
+    return
+
+label modernism:
+    return
+
+label y2k:
+    ed "This was when I went back and got a Ph.D in film studies."
+    ed "It was pretty easy since I was there for all of it."
+    bio "As we've established. But, you know, just because you were there doesn't mean you have to study it."
+
+    menu:
+        "So you did it just because?":
+            pass
+        "What got you interested in film?":
+            ed "You mean, \"interested enough to want to study it at a high level?\" Because no one gets degrees just because."
+            bio "I don't know how true that is."
+            ed "Well? You could be right."
+            ed "Maybe there's someone out there who wants a doctorate to affirm their gender."
+            ed "But for me, I became invested in film when I realized someone had brought one back in time to scare and confuse me."
+            ed "I was 14, and the movie was {i}Blue Velvet.{/i}"
+            pass
+        "What got you interested in film?":
+            pass
+    return
 
 label interviewconclusion:
     bio "But... I think in all your stories, you've never told me the \"why.\" You've gone on about the how..."
     bio "Why did you do it?"
     ed "Why did I do it?"
     ed "...for love."
+
+    
 
     jump finaltest
 
@@ -322,7 +494,7 @@ label interviewconclusion:
 label sneakdevildeal:
     #criteria for reaching the deal:
     # you've asked him about his name
-    # you've flirted with him a lot
+    # you've endeared yourself to him
     # you've dodged all of his falsehoods
     $ dealtriggered = True
     #stop the music
@@ -382,7 +554,6 @@ label sneakdevildeal:
     ed "Hm..."
     ed "The satisfaction, I guess. A bit of comfort?"
     "Wow. How selfless..."
-    "I don't like the way he's whispering."
 
     menu:
         "Accept his help":
@@ -427,8 +598,9 @@ label accept:
             "You felt a slight gust wind brush past your face and through your hair."
         "Lock it in with a kiss":
             "You had to stand on the tips of your toes to reach his face."
-            "He holds you steady by your waist as you lean into him. You close your eyes and feel his warm lips on yours."
-            "...you feel them again."
+            "He holds you steady by your waist as you lean into him. You close your eyes." 
+            "Then, you feel his warm lips on yours."
+            "...and once again."
             "You felt your heart flutter."
     "As you leave the studio, something starts to nag at you from the back of your mind." # his house (the vampire castle)? a cafe? a hotel? wherever
     "He agreed when you said it would be nice..."
@@ -536,10 +708,12 @@ label goodend:
     boss "Hey, um."
     boss "I wanted to say congratulations. The article is doing pretty well."
     boss "People are saying some parts aren't true..."
-    boss "Which is, y'know, to be expected for a guy with such a history. {w=0.3}Misinformation, like you said."
-    boss "I, uh... {w=0.4}{i}embellished{/i}{w=0.4} your article a bit. By the way." 
-    boss "Just here and there! To spruce things up a bit, y'know? But I gotcha."
-    boss "You know that, right? I'm your boss, I take of ya'!"
+    if yourFacts >= factstotal:
+        boss "That's cuz I, uh... {w=0.4}{i}embellished{/i}{w=0.4} your article a bit.{w=0.3} By the way." 
+        boss "Just here and there! To spruce things up a bit, y'know? Nothin' too crazy."
+    else:
+        boss "Which is, y'know, to be expected for a guy with such a history. {w=0.3}Misinformation, like you said."
+        boss "I'm sure it was tough to get the truth out of him."
     boss "I know how you feel about lying and inaccuracies. How it makes you feel queasy and all that."
     boss "So, to clear your conscience, I went ahead and left your name off the byline."
     boss "Don't worry, you'll get a bonus for the accurate reporting on the Ph.Ds."
@@ -564,9 +738,14 @@ label badend:
     "It also has a significantly higher proportion of gay stans. Vicious gay stans."
     "It's the highest on the Internet, unfortunately for you."
     "When your boss told you not to check Glitter, it's because he knew they were eviscerating you on there."
-    "So you log on to check, against your better judgement."
-    "As it turns out, a Dr. Yetunde Olu, former colleague and ex-girlfriend of Ed, has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
+    "So you log on to check, against your better judgement." 
+    "You immediately find the post. It's got one william likes. The quote gleets are eating you up."
+    "As it turns out, a Dr. Yetunde Olu, former colleague and ex-girlfriend of Ed, wrote a response piece"
+    "wherein she comments that she can excuse the occasional tall tale and even stops short of calling the piece laundering like many critics have,"
+    "but she draws the line at misrepresenting the nature of his involvement in academia."
+    "Among other things, she has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
     "And it's not [finalanswer]."
+    
     "In the end, you, too, were a charlatan. A grifter. A hack. A useful idiot—at {i}best.{/i}" 
     if ed_observation == True:
         "It was just as Ed had predicted."
@@ -602,3 +781,4 @@ label dealend:
 
     "You reached the secret ending...!"
     return
+
