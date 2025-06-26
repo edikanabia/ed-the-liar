@@ -28,14 +28,24 @@ default nameroute = False
 default endearing = False
 default secretending = False
 
+default factscollect = [] #named facts that are picked at random at the end to go over
+
 #endregion
 
 
 #region Story Flags
+default affection = 0
+default favorlost = False
+default e_firsttime = True
+default o_firsttime = True
 
 default stareflag = 0
+default greeting = ""
 
 default ed_observation = False
+
+default homophobic = False
+default homophobicbeliefs = []
 #endregion
 
 #region Resources
@@ -81,6 +91,7 @@ label icebreaker:
     menu greeting:
         "You decide to greet him..."
         "Cordially":
+            $ greeting = "cordial"
             bio "Thank you for taking the time to meet with me today."
             "He casually waves you off."
             ed "I didn't have anything better to do."
@@ -91,6 +102,7 @@ label icebreaker:
             "It seems unlikely that someone as busy as he is has \"nothing better to do.\" He's not messing with you, or...?"
             
         "Excitedly":
+            $ greeting = "excited"
             bio "It's an honor to meet you, sir."
             ed "Really. An honor? \"Sir?\""
             bio "Yes! Actually..." 
@@ -193,8 +205,40 @@ label upbringing:
     return
 
 label endeared:
-    $ endearing = True
-    "You feel like you've endeared yourself to him."
+    $ affection += 1
+    if e_firsttime == True and affection >=1:
+        "..."
+        "You feel like you've endeared yourself to him."
+
+    elif favorlost == True and affection >= 1:
+        "..."
+        "You feel like you've regained his favor."
+        $ favorlost = False
+    
+    else:
+        pass
+    
+
+    return
+
+label offended:
+    $ affection -= 1
+    if affection <= 0:
+        $ endearing = False
+    
+    if affection <= 0 and e_firsttime == False:
+        "You've definitely lost your favor with him."
+        $ endearing = False
+        $ favorlost = True
+        
+    elif o_firsttime == True:
+        "..."
+        "He seems offended."
+    elif affection == 1:
+        "He's starting to get testy. Try not to offend him again..."
+        
+    else:
+        pass
     return
 
 label starsign:
@@ -313,7 +357,6 @@ label interviewintro:
 
 label portugal:
     #scene portugal
-
     ed "I had just gotten my first Ph.D—theology. I wasn't religious, but there weren't many options back in those days."
     bio "Which days?"
     menu:
@@ -353,13 +396,11 @@ label portugal:
             bio "You {i}and{/i} your girlfriend swam??"
             ed "Well, yeah, it's not like she can walk."
 
-            pass
         "You're insane for alleging that you swam to Portugal from anywhere.":
             ed "Lawyer says what?"
             bio "What?"
             ed "Heh. Gottem."
             "Sigh. He freaking got you."
-            pass
     
     ed "So are we clear on how I got to the Kingdom of Portugal or are we still working out the mechanics of swimming?"
     bio "I'm done. Let's get back on track."
@@ -375,27 +416,125 @@ label portugal:
             ed "Correct. I {i}had{/i} a mermaid girlfriend. There's a difference."
             ed "Who would lie about having a mermaid ex?"
             bio "Many a sailor have lied about mermaids."
-            ed "Not this sailor, and not this century."
+            ed "No sailor this century would lie about having a mermaid girlfriend. Let alone a mermaid ex."
+            ed "That's just embarrassing."
+            bio "Point taken."
+    
+    ed "Once we landed, we split up." 
+    ed "I wasn't in the market to fish shop, and besides, I had heard that if you aren't at least a {cps=*0.7}little{/cps} bit bisexual in Lisbon, 
+    they would straight up kill you."
+    menu:
+        "In the 1400s...?":
+            $ homophobic = True
+            ed "Oh. I see. You think being bisexual wasn't invented yet."
+            bio "No,{w=0.2} I don't-{w=0.2} I wasn't-{w=0.2} I mean-{w=0.2}"
+            ed "Wowwwwww."
+            $ renpy.notify("Trait earned: homophobic!")
+            $ homophobicbeliefs.append("bisexuals existed before David Bowie")
+            "He shakes his head disapprovingly." #shit eating grin. fucking hater
+        "Oh!":
+            bio "You're bisexual!"
+            ed "Is it a surprise?"
+            bio "I thought you were just... a really sensitive guy."
+            ed "Yeah. We call those \"bisexuals.\""
+    
+    bio "So you're wandering the streets of Lisbon, waiting for your mermaid girlfriend to get fish." 
+    bio "And you come across some kind of powerful being, right? Another warlock, or maybe an old alchemy book?"
+    ed "Not quite..."
+    #show devil
+    devil "I'm the Devil."
+    ed "Now me, I'm an industrious guy. I see The Devil and I think, \"how can I profit off of such a one in a lifetime chance encounter?\""
+    ed "There was this new economic system emerging called \"capitalism\" and I was dying to test it out."
+    devil "I love taking advantage of emerging economic systems!"
+    bio "But didn't capitalism emerge in the 16th century?"
+    ed "Oh, you're gonna argue with the guy who was there? Is that it?"
+
+    menu:
+        "Remind him of the year":
+            bio "It was 1430."
+            ed "And I was about to be rolling in it the way I finessed the f**k outta that devil."
+            ed "You're gonna love this. I promise."
+            "You make a note to yourself to edit that out."
+            
+        "Ask him about the year":
+            bio "What year was it again?"
+            ed "Like, 1420-something. Why?"
+            bio "Just checking."
+            
+        "Let him have it":
+            "You mutter something under your breath about historical revisionism."
+
+    ed "So I see The Devil standing there on the street curb, and I know it's him because he's got these eyes like a husky." 
+    ed "Piercing doesn't even begin to describe it. They glowed." 
+    ed "So I see him standing there with his freaky and I mean STRANGE bright blue glowing eyes and I say,"
+
+    ed "\"How about we make a deal... a business deal.\"" 
+    ed "Also I had the slickest braids on at the time where are my braids. You gotta include the braids."
+    bio "Please continue."
+    ed "Right, so he's like,"
+    devil "I'm glad you noticed my eyes, they don't call me Big Dog for nothing bark bark am I right."
+    bio "I don't think he said that... no one would respect a man called Big Dog."
+    ed "How do you know the Devil wasn't a woman, by the way?"
+    menu:
+        "Because you said \"he\" earlier.":
+            ed "Women can't be he/hims?"
+            if homophobic == True:
+                "You don't even bother this time and just let him have it."
+            else:
+                bio "No, I- {w=0.1}"
+                ed "So they {i}can't{/i} be he/hims!?"
+                bio "They can, I just- {w=0.3}"
+                ed "You don't believe in gender-nonconforming women."
+                ed "Wowwwwwwww."
+                $ renpy.notify("Trait gained: homophobic!")
+                "You stop sputtering and compose yourself."
+                bio "I'm asserting myself as the interviewer and taking back control. Please continue."
+            $ homophobicbeliefs.append("women can't use he/him pronouns")
+        "Because men are the devil and you're the misogynist if you disagree.":
+            ed "Hm."
+            "He shut up real quick..."
+    
+    ed "So one long series of contracts and spells later, I made a deal with the devil. I got to be thirty forever."
+    bio "What did he get?"
+    ed "One of my PhDs, the one in fisherman's science. I worked really hard on it, but education comes and goes when you never age."
+    ed "What's wrong? You look disappointed."
+    bio "I have to admit that was a bit anticlimactic."
+    ed "I never claimed it was climactic. That was all you." 
+    bio "Some of the stories about you claim to be climactic. There's about one or two for every year you've been alive."
+    ed "Oh yeah? You know they're all fake, right?"
     
     menu exploits:
-        "What about the time":
-            pass
+        "What about the time you stopped what would have been \"the next Pompeii?\"":
+            ed "How could I do that?"
+            ed "I don't speak Italian." #lying
         "What about the one where you had two religions founded after you?":
-            ed "Both were started by ex-boyfriends, guess I just inspire that in people. Want to make the third?"
-            bio "Ah, well, I. Have. To be professional, you know! I can't answer that on the clock."
-            ed "How about off the record?"
-            "Oh hell no. We're moving on."
-            pass
-        "What about the Valkyrie Story":
-            pass
+            ed "Both were started by ex-boyfriends. I guess I just inspire that in people."
+            if endearing:
+                ed "Want to make the third?"
+                bio "Ah, well, I. Have. To be professional, you know! I can't answer that on the clock."
+                ed "How about off the record?"
+                "Your face is getting hot again...." 
+                "No..... his sweet tambour..." 
+                "You must focus....."
+        "What about the time you trapped an entire town in an endless fog?":
+            ed "Really? That story?"
+            ed "What are you, an authoritarian!?"
+            bio "You just admitted to being a capitalist."
+            ed "And game recognizes game."
+            "Touché."
+            bio "Not touché! I'm not an authoritarian!"
+            ed "Then don't quote those Valkyries at me again."
+            call offended
 
     return
 
 label portugalquiz:
+    bio "Well then. Let me just finish up my notes..."
     "You opened up your notepad and scribbled."
     menu:
         "Ed arrived in Portugal via..."
         "Boat":
+            $ yourFacts += 1
             pass
         "Land":
             pass
@@ -408,89 +547,236 @@ label portugalquiz:
         "1418":
             pass
         "1422":
+            $ yourFacts += 1
             pass
         "1430":
             pass
         "2023":
+            "If only he were a regular 30-year-old man and not a 631-year-old warlock."
+            "You might have been able to marry him."
             pass
-    menu:
-        "And he"
 
+    "You admit to yourself that this is a lot."
+    jump renaissance
     return
 
 label renaissance:
 
+    jump renaissancequiz
     return
 
-label quiz2:
+label renaissancequiz:
     "митя"
 
     menu:
         "Ed is ideologically aligned with..."
         "The monarchy":
+            $ renpy.block_rollback()
             pass
         "The owning class":
+            $ renpy.block_rollback()
             pass
         "The proletariat":
+            $ renpy.block_rollback()
             pass
         "Himself":
+            $ renpy.block_rollback()
             $ yourFacts +=1
             pass
         "Beautiful women everywhere":
+            $ renpy.block_rollback()
             $ yourFacts +=1
             ed "That includes you."
             bio "What!?"
-            menu:
-                "You quickly scratch that out and write..."
-                "Cats":
-                    pass
-                "Seals":
-                    pass
-                "in its place."
+            $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
+            "You quickly scratch that out and write [cuteanimal] in its place."
             pass
         "Are you kidding!? Our paper isn't political!":
+            $ renpy.block_rollback()
             "Yeah, that's what your boss says, but he knows how running cover for a warlock will reflect on it."
-            "He's not an idiot. He knows about... The Implication." #ominous tone.
+            "He's not an idiot. He knows about...{w=0.3}"
+            # play sound ominous 
+            extend "The Implications."
             pass
+    
+    jump modernera
     return
 
-label modernism:
-    return
-
-label y2k:
-    ed "This was when I went back and got a Ph.D in film studies."
-    ed "It was pretty easy since I was there for all of it."
-    bio "As we've established. But, you know, just because you were there doesn't mean you have to study it."
-
+label modernera:
+    ed "I"
+    if greeting == "excited":
+        ed "You said you were honored to meet me."
+        ed "Sir."
+        "You did say that."
+    
+    bio "So what got you interested in film?"
+    ed "You mean, \"interested enough to want to study it at a high level?\" Because no one gets degrees just because."
+    bio "I don't know how true that is."
+    ed "Well? You could be right."
+    ed "Maybe there's someone out there who wants a doctorate to affirm their gender."
+    ed "But for me, I became invested in film when I realized someone had brought one back in time to scare and confuse me."
+    ed "I was 14, and the movie was {i}Blue Velvet.{/i}"
     menu:
-        "So you did it just because?":
+        "Are you joking kidding me":
+            ed "About what?"
+            bio "The time travel."
+            ed "Is it that hard to believe?"
+            bio "It's pretty freaking hard to believe."
+            ed "Really? I haven't even told you about the Trickster God Wars." 
+            ed "Do you wanna hear about the Trickster God Wars?"
+            if endearing:
+                ed "I could tell you over dinner."
+
+            bio "I'll pass."
+                
+        "Was it a good movie though":
+            ed "It probably changed my life forever."
+            ed "So I would say it's pretty good."
             pass
-        "What got you interested in film?":
-            ed "You mean, \"interested enough to want to study it at a high level?\" Because no one gets degrees just because."
-            bio "I don't know how true that is."
-            ed "Well? You could be right."
-            ed "Maybe there's someone out there who wants a doctorate to affirm their gender."
-            ed "But for me, I became invested in film when I realized someone had brought one back in time to scare and confuse me."
-            ed "I was 14, and the movie was {i}Blue Velvet.{/i}"
+
+    ed "Much later, I went back and got a Ph.D in film studies."
+    ed "It was pretty easy since I was there for all of it."
+    bio "As we've established..."
+    "Sigh. Again with the Ph.Ds!"
+    $ degreeskip = False
+    menu:
+        "Tell him to hurry it up":
+            $ renpy.block_rollback()
+            bio "Ed, I don't know if we have this much time to dedicate to your postgraduate degrees."
+            ed "Really? Because I've been blowing a lot of hot air on s#!t that really doesn't matter."
+            ed "The Ph.Ds are the most important part."
+            "You decide to be frank."
+            bio "I'm pretty sure no one cares how many Ph.Ds you have."
+            ed "Damn, okay. Famous last words though."
+            $ degreeskip = True
+            jump afterPhd
+            
+        "Let him get them out of his system":
+            $ renpy.block_rollback()
             pass
-        "What got you interested in film?":
-            pass
+
+    ed "It was the late 90s, a while after I got my Ph.D in clinical psychology."
+    ed "I had just become board-certified at the time, too, and my private practice was doing pretty well."
+    ed "Since I had a bit of extra cash, I figured I could go back and do another program. One that was less sciencey."
+    ed "Like I said, I was there, so it wasn't suuuper difficult. But, my god, the papers, and the records?"
+    ed "I was like, \"Is this film studies or archaeology?\""
+    "Colleague" "It's called, \"doing research,\" Ed."
+    ed "But, you know, spending time in and out of libraries,"
+    ed "seeing patients,"
+    ed "robbing banks to pay for my girlfriend's HRT..."
+    menu:
+        "E-excuse me!?":
+            ed "Oh, so now it's weird to want to support your girlfriend's transition."
+            bio "I- {nw}"
+            if homophobic:
+                $ homophobicbelief = renpy.random.choice(homophobicbeliefs)
+                ed "I know what you're gonna say."
+                ed "\"But Ed, I was talking about the bank robbing part!\""
+                bio "I wasn't! And I don't sound like that!"
+                ed "Likely story from someone who doesn't believe [homophobicbelief]."
+                "Come on, girl! Get it together. He cannot keep baiting you like this!"
+                #achievement: women's wrongs
+            else:
+                ed "Are you transphobic?"
+                bio "I'm not!"
+                ed "Wowwwwwwwww."
+
+        "You mean like...?":
+            bio "Like Al Pacino in Dog Day Afternoon?" (multiple=2)
+            ed "Like Al Pacino in Dog Day Afternoon." (multiple=2)
+            ed "Oh. I {i}like{/i} you."  #smile
+            ed "This one has taste."
+            "SWOON..."
+
+            #affection up
+
+    label afterPhd:
+        ed "Long story short, I had an {i}amazing{/i} time in New York City."
+    ed "Until I had to leave."
+    bio "You {i}had{/i} to leave? Why?"
+    ed "7/11."
+    bio "When that psychic girl collapsed that building, huh?"
+    ed "Yep."
+    bio "You know she still doesn't feel bad about that."
+    ed "Oh I know."
+    ed "Believe you me... I know."
+    ed "Anyway, I knew it was about to get crazy over here, so I moved to London."
+    
+    if not degreeskip:
+        ed "I got my most recent Ph.D a few years later, in Africana Studies."
+        ed "And I thought it was a very illuminating experience, but now I don't know how I feel about gynecology?"
+        bio "What do those two things have to do with each other...?"
+        ed "...You're a smart woman. I'm sure you can figure out why."
+   
+
     return
+
 
 label interviewconclusion:
-    bio "But... I think in all your stories, you've never told me the \"why.\" You've gone on about the how..."
-    bio "Why did you do it?"
-    ed "Why did I do it?"
-    ed "...for love."
 
-    
 
+    ed "There. That should be enough to write a pretty basic profile."
+    bio "Basic? You don't mean to imply that there's more."
+    ed "There absolutely is, but if I went into it, I'm certain we'd be here all night."
+    "You wouldn't mind spending all night with him."
+    if not endearing:
+        ed "But you have a deadline, so."
+        pass
+    ed "Was there anything else you needed from me?"
+    bio "Yes, well, I just have one final question."
+    bio "In all your stories, you've gone on about the what, the how..."
+    bio "Why did you do it? Why did you decide to become an immortal wizard?"
+    ed "I was already a wizard before I became immortal."
+    bio "Right, of course. But still."
+    bio "Was it for all those fun adventures? Money?"
+    bio "You were trying to change the world?"
+    bio "What was the reason?"
+    bio "Or, at least, what's the reason you want the world to know?"
+
+    ed "Why did I do it, huh...?"
+    ed "Well, that's easy."
+    ed "I, um..."
+    ed "I did it for love."
+    bio "Love...?"
+    bio "Really?"
+    ed "Yes."
+    ed "That's not weird... is it?"
+
+    menu:
+        "It's a little weird":
+            ed "..."
+            ed "I guess it is, coming from a philanderer like me."
+            
+        "It's not weird at all":
+            ed "Good. ...I was a little worried you would make fun of me."
+            
+    bio "Why do you say you did it for love?"
+    ed "It goes back to my first girlfriend."
+    ed "...Actually, she was my fiancée."
+    ed "When we shipwrecked, I actually died. {w=0.3} Well,{w=0.3} \"died.\""
+    ed "I never told her about the immortality thing."
+
+    if yourFacts >= factstotal:
+        if endearing:
+            if nameroute:
+                $ secretending = True
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass    
+
+    if secretending:
+        jump sneakdevildeal
+    else:
+        pass
     jump finaltest
-
-
 
     return
 
+
+#endings
 label sneakdevildeal:
     #criteria for reaching the deal:
     # you've asked him about his name
@@ -617,6 +903,9 @@ label reject:
     ed "You'll never work in this field again."
     bio "How- how can you be so sure?"
     ed "Oh I'm sure. Of this, I am{w=0.2} {i}very{/i} certain."
+
+    "And with that, he shuffles off."
+    "You should head back, too."
     
     jump finaltest
 
