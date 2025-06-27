@@ -49,7 +49,6 @@ default homophobicbeliefs = []
 default starsign = False
 default finesse = False
 
-
 #endregion
 
 #region Resources

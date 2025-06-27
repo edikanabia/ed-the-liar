@@ -1611,7 +1611,21 @@ style slider_slider:
     xsize 900
 
 screen bookbutton():
-    imagebutton auto "/screens/bookbutton_%s.png" action [ToggleScreen("bookbutton"), Show("compendium"), Play("sound", "/sfx/book.ogg")] #play sound
+    imagebutton:
+        auto "/screens/bookbutton_%s.png" 
+        xalign 0.01 
+        yalign 0.02 
+        tooltip "Open book"
+        action [ToggleScreen("bookbutton"), Show("compendium"), Play("sound", "/sfx/book.ogg")]
+    $ tooltip = GetTooltip()
+    if tooltip:
+        nearrect:
+            focus "tooltip"
+            frame:
+                xalign 0.5
+                text "[tooltip]"
+        
+    
 
 
 screen compendium(closed="True"):
@@ -1625,5 +1639,17 @@ screen compendium(closed="True"):
     elif closed=="True":
         imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [Show("compendium", closed="False")]
         pass
-    imagebutton auto "/screens/closebutton_%s.png" action [ToggleScreen("compendium"), Show("bookbutton")]
-
+    imagebutton: 
+        auto "/screens/closebutton_%s.png" 
+        xalign 0.01 
+        yalign 0.02 
+        tooltip "Close book"
+        action [ToggleScreen("compendium"), Show("bookbutton")] #play sound book closes
+        
+    $ tooltip = GetTooltip()
+    if tooltip:
+        nearrect:
+            focus "tooltip"
+            frame:
+                xalign 0.5
+                text "[tooltip]"
