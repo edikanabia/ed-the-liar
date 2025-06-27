@@ -1609,3 +1609,21 @@ style slider_vbox:
 style slider_slider:
     variant "small"
     xsize 900
+
+screen bookbutton():
+    imagebutton auto "/screens/bookbutton_%s.png" action [ToggleScreen("bookbutton"), Show("compendium"), Play("sound", "/sfx/book.ogg")] #play sound
+
+
+screen compendium(closed="True"):
+    modal True
+    add "gui/overlay/confirm.png"
+    tag book
+
+    showif closed=="False":
+        imagebutton idle "/screens/valkyrie_compendium_open.png" xalign 0.5 yalign 0.5 action [ Show("compendium", closed="True")]
+        pass
+    elif closed=="True":
+        imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [Show("compendium", closed="False")]
+        pass
+    imagebutton auto "/screens/closebutton_%s.png" action [ToggleScreen("compendium"), Show("bookbutton")]
+

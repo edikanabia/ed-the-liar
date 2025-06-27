@@ -33,7 +33,7 @@ default factscollect = [] #named facts that are picked at random at the end to g
 #endregion
 
 
-#region Story Flags
+#region Story Flags and Game Mechanics
 default affection = 0
 default favorlost = False
 default e_firsttime = True
@@ -47,6 +47,9 @@ default ed_observation = False
 default homophobic = False
 default homophobicbeliefs = []
 default starsign = False
+default finesse = False
+
+
 #endregion
 
 #region Resources
@@ -55,7 +58,7 @@ default starsign = False
 
 #endregion
 
-#
+
 
 # The game starts here.
 
@@ -82,7 +85,9 @@ label intro:
     "You're finally going to get the truth from the man himself.{w=0.1} So there's nothing to worry about!" 
     #lines below this (cut if I run out of time)
     "Of course,{w=0.1} you also brought the most factual encyclopedia known to magickind as supplementary material{w=0.1}—just in case." 
-    "It's the Valkyrie Order's Compendium of Known Agitators{w=0.1}—but you're sure you won't need it." #show the valkyrie reference button  
+    "It's the Valkyrie Order's Compendium of Known Agitators."
+    show screen bookbutton with dissolve
+    "But you're sure you won't need it." #show the valkyrie reference button  
 
     jump icebreaker
     return
@@ -469,6 +474,7 @@ label portugal:
 
     menu:
         "Remind him of the year":
+            $ finesse = True
             bio "It was 1430."
             ed "And I was about to be rolling in it the way I finessed the #!*% outta that devil."
             ed "You're gonna love this.{w=0.1} I promise."
@@ -544,46 +550,14 @@ label portugal:
             ed "Game recognizes game."
             "Touché."
             bio "Not touché!{w=0.1} I'm not an authoritarian!"
-            ed "Then don't quote authoritarians at me. That tale is Valkyrie slander."
+            ed "Then don't quote authoritarians at me.{w=0.1} That tale is Valkyrie slander."
             call offended
-    return
-
-label portugalquiz:
-    bio "Well then. Let me just touch up my notes..."
-    "You opened up your notepad and scribbled."
-    menu:
-        "Ed arrived in Portugal via..."
-        "Boat":
-            $ yourFacts += 1
-            pass
-        "Land":
-            pass
-        "Mermaid":
-            pass
-        "He swam using those strong arms and legs":
-            "Chill out,{w=0.1} lil bro.{w=0.1} You can't even see them."
-    $ pine = False
-    menu year:
-        "He met the Devil the year he turned thirty, which was..."
-        "1418":
-            pass
-        "1422":
-            $ yourFacts += 1
-            pass
-        "1430":
-            pass
-        "2023" if pine == False:
-            "If only he were a regular 30-year-old man and not a 631-year-old warlock."
-            "You might have been able to marry him."
-            $ pine = True
-            jump year
 
     "You admit to yourself that this is a lot."
     "Although,{w=0.1} it's to be expected from someone with over 600 years of adventures."
     "Still,{w=0.1} husky-looking devils...{w=0.1} mermaid girlfriends..."
     ed "Do you need a bit to take it all in?"
     ed "Because there's more."
-    
     jump renaissance
     return
 
@@ -591,51 +565,121 @@ label renaissance:
     ed "When you become immortal,{w=0.1} kicking around eating fish and talking to Portuguese mermaids starts to get real old after a while,{w=0.1} and my girlfriend could tell. "
     ed "She suggested we could swim down south,{w=0.1} stop by Rafat or Algiers on our way to Palermo..."
     ed "You know, make a vacation of it."
-
-    jump renaissancequiz
-    return
-
-label renaissancequiz:
+    bio "Aww, how sweet!"
+    ed "Plus The Devil kept stopping me in the street asking when our business investments were going to pay off, and I just couldn't be bothered with all that anymore."
+    devil "Capital dividends stock marketing economics investiture let's circle on back stakeholders sunk cost corporate consultant-{nw=0.3}"
+    ed "Listen,{w=0.1} Mr. The Devil?"
+    devil "Yes?"
+    ed "I just feel like we need to rethink our strategy."
+    devil "How do you mean?"
+    ed "Some of these projections,{w=0.1} they're just not synergistic."
+    devil "Not synergistic? ¡Dios mío!"
+    "Dios mío, you say."
     menu:
-        "Ed is ideologically aligned with..."
-        "The monarchy":
-            $ renpy.block_rollback()
+        "Interrupt":
+            bio "He said dios mío?"
+            ed "Yeah."
+            menu:
+                "But he's Portuguese?":
+                    ed "Okay, he was like, \"Meu Deus.\""
+                "But he's the Devil?":
+                    ed "Okay he was like... \"Diablo mío???\""
             pass
-        "The owning class":
-            $ renpy.block_rollback()
-            pass
-        "The proletariat":
-            $ renpy.block_rollback()
-            pass
-        "Himself":
-            $ renpy.block_rollback()
-            $ yourFacts +=1
-            pass
-        "Beautiful women everywhere":
-            $ renpy.block_rollback()
-            $ yourFacts +=1
-            ed "That includes you."
-            bio "What!?"
-            $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
-            "You quickly scratch that out and write [cuteanimal] in its place."
-            call endeared
-        "Are you kidding!? Our paper isn't political!":
-            $ renpy.block_rollback()
-            "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
-            "He's not an idiot.{w=0.1} He knows about...{w=0.3}"
-            # play sound ominous 
-            extend "The Implication."
+        "Do not":
+            "Eh. He's paraphrasing."
+
+    ed "Anyway I was like."
+    ed "\"We gotta do some corporate restructuring,{w=0.1}\" and stuff.{w=0.1} \"So you just sit tight...{w=0.1}maybe do some networking???\""
+    bio "Eugh."
+    "Even hearing corpo speak like that is making your mouth sticky."
+    ed "He nodded along like a dog-{nw=0.2}"
+    bio "Right, like a husky."
+    ed "And after he ran off I sold our assets and liquidated the company."
+    if finesse:
+        "You let out an \"ooooh\" under your breath."
+        ed "Right? I told you you'd love it."
     
-    jump modernera
+    menu:
+        "Compliment":
+            bio "You must have made a lot of cash from that."
+            ed "I made a lot of {i}gold...!{/i}"
+            pass
+        "Move on":
+            pass
+
+    if jacket:
+        "That must be how he can afford designer clothes..."
+
+    ed "So! I hop in my boat and we set sail. Eventually, I get to Sicily."
+    bio "Just you, or you and your girlfriend?"
+    ed "Uh... just me."
+
+    bio "What happened?"
+    "His face turns stony."
+    ed "We got separated."
+    menu:
+        "You mean she dumped you?":
+            ed "No.{w=0.1} We got physically separated."
+        "You mean you left her for another mermaid?":
+            ed "{w=0.1}...Who do you think I am?"
+            call offended
+        "Separated how?":
+            ed "We got into a really bad shipwreck."
+            ed "It was...{w=0.1} ugly."
+            bio "But you managed to survive,{w=0.1} right?"
+            "He scoffs."
+            ed "Evidently."
+    ed "Anyway."
+    ed "Once I arrived in Sicily, everything changed." 
+    ed "I was separated from my girlfriend, the Italian mermaids wouldn't talk to me, and my ship was destroyed." 
+    ed "I was alone and effectively homeless." 
+
+    menu:
+        "That's terrible!":
+            pass
+        "Why wouldn't the Italian mermaids talk to you?":
+            ed "The mafia."
+            bio "Really?"
+            ed "Those women are stone cold."
+            "He stares past you,{w=0.1} into the distance."
+            "But...{w=0.1} there was only wall behind you."
+            
+
+    
+    ed "Obviously, you have to keep your medical knowledge up-to-date.{nw=0.2}"
+    ed "But I offered to perform a C-section on my boyfriend's wife and he was all like,"
+    "Boyfriend" "What's that,{w=0.1} that's stupid."
+    "Boyfriend" "What do you mean you cut the baby out of the womb."
+    "Boyfriend" "Hell no."
+    ed "I'm like,{w=0.1} \"But this could be the baby that kills Macbeth.{w=0.1} {i}Trust{/i} me.\"{nw=0.2}"
+    ed "And he was like,{nw=0.2}"
+    "Boyfriend" "Nooooo hahaha nooooo no one can kill Macbeth!"
+    ed "Anyway she died of sepsis."
+    bio "How is-{nw}"
+    ed "And I thought to myself,{w=0.1} wow.{w=0.1} These guys have nothing on the Ottomans."
+    ed "So while I'm in Europe, I'm just gonna do what I do best:"
+    menu:
+        "Chase beautiful women":
+            pass
+        "Usurp the powers of other mages":
+            pass
+        "Clout chase":
+            pass
+    ed "See, they were already calling me doctor. But by 1650?{w=0.1}I wanna say?{w=0.1}—they introduced a new terminal degree."
+    ed "Of course I mean the Ph.D."
+    ed ""
+    
     return
 
 label modernera:
-    ed "I"
+
     if greeting == "excited":
         ed "You said you were honored to meet me."
         ed "Sir."
         "You did say that."
     
+
+
     bio "So what got you interested in film?"
     ed "I became interested in film when I realized someone had brought one back in time to scare and confuse me."
     menu:
@@ -655,7 +699,7 @@ label modernera:
             ed "It probably changed my life forever."
             ed "So I would say it's pretty good."
             bio "What was the movie?"
-            ed "1985's {i}Blue Velvet,{/i} directed by David Lynch."
+            ed "1986's {i}Blue Velvet,{/i} directed by David Lynch."
 
     ed "Much later,{w=0.1} I went back and got a Ph.D in film studies."
     ed "It was pretty easy since I was there for all of it."
@@ -668,11 +712,11 @@ label modernera:
     ed "Yes there's more I got more Ph.Ds."
     $ degreeskip = False
     menu:
-        "Sigh. Again with the Ph.Ds!"
+        "Sigh. Again with the Ph.Ds?"
         "Tell him to hurry it up":
             $ renpy.block_rollback()
             bio "Ed, I don't know if we have this much time to dedicate to all of your postgraduate degrees."
-            ed "Really? Because I've been blowing a lot of hot air on s#!t that really doesn't matter."
+            ed "Really? Because I've been blowing a lot of hot air on s**t that really doesn't matter." #id we could alter the style on "stuff" to look like a censor
             ed "The Ph.Ds are the most important part."
             "You decide to be frank."
             bio "Ed."
@@ -702,25 +746,21 @@ label modernera:
                 $ homophobicbelief = renpy.random.choice(homophobicbeliefs)
                 ed "I know what you're gonna say."
                 ed "\"But Ed, I was talking about the bank robbing part!\""
-                bio "I wasn't! And I don't sound like that!"
+                bio "I was! And I don't sound like that!"
                 ed "Likely story from someone who doesn't believe [homophobicbelief]."
                 "Come on, girl, get it together. He cannot keep baiting you like this!"
-                #achievement: women's wrongs
             else:
                 ed "Are you transphobic?"
                 bio "I'm not!"
                 $ renpy.notify("Trait earned: transphobic!")
                 ed "Wowwwwwwwww."
 
-
         "You mean like...?" if endearing:
-            bio "Like Al Pacino in Dog Day Afternoon?" (multiple=2)
-            ed "Like Al Pacino in Dog Day Afternoon." (multiple=2)
-            ed "Oh, I {i}like{/i} this one."  #smile
-            
+            bio "Like Al Pacino in {i}Dog Day Afternoon?{/i}" (multiple=2)
+            ed "Like Al Pacino in {i}Dog Day Afternoon.{/i}" (multiple=2)
+            "He leans back in his chair and points at you."
+            ed "Oh, I {i}like{/i} this one."  #smile 
             call endeared
-
-            #affection up
 
     label afterPhd:
         ed "Long story short, I had an {i}amazing{/i} time in New York City."
@@ -738,61 +778,166 @@ label modernera:
     if not degreeskip:
         ed "I got my most recent Ph.D a few years later,{w=0.1} in Africana Studies."
         ed "And I thought it was a very illuminating experience,{w=0.1} but now I don't know how I feel about gynecology?"
-        bio "What do those two things have to do with each other...?"
-        ed "...You're a smart woman.{w=0.1} I'm sure you can figure it out."
+        menu:
+            "Gynecology?":
+                bio "What exactly is the thought process behind that...?"
+                ed "That's beyond the scope of this conversation,{w=0.1} don't you think?"
+                ed "You're a smart woman.{w=0.1} I'm sure you can figure it out."
+            "I get what you mean":
+                pass
     ed "I taught there for the better part of two decades."
     bio "What made you decide to come back?"
     ed "Oh,{w=0.1} you know..."
     ed "{size=-10}...philandering.{/size}"
     menu:
         "Tell him to speak up":
-            pass
+            bio "Excuse me,{w=0.1} can you say that again?"
+            ed "That again."
+            "Sigh.{w=0.1} Of course."
+            bio "Of horse."
+            "He stares at you."
+            "You stare at him."
+            if stareflag >=2:
+                "He stares at-{nw}"
+                "ENOUGH!" 
+                $ renpy.notify("Trait gained: the lookerrrrrrrrr")
+                "NO MORE STARING!"
+                $ stareflag += 1
+            else:
+                "He stares at you."
+            "You move on."
         "He can keep his secrets":
-            pass
-    jump interviewconclusion
+            "You nod along even though you didn't really hear what he muttered."
+            "You have a feeling it was something embarassing like,{w=0.1} \"philandering,\"{nw=0.3}"
+            "which is a funny word for \"womanizing\" because it sort of implies he's attracted to men."
+            "Not that that's bad or anything.{w=0.1}" 
+            if homophobic:
+                $ renpy.notify("Trait gained: in denial!")
+            "It's not like you're homophobic."            
+    jump review
     return
 
 label review:
+
+    bio "Well then. Let me just touch up my notes..."
+    "You opened up your notepad and scribbled."
+    menu vocation:
+        "Though he is many things now, his original occupation was..."
+        "A fisherman":
+            pass
+        "A doctor":
+            pass
+        "A sailor":
+            pass
+        "A pain in the ass":
+            pass
+
+    menu travel:
+        "Ed arrived in Portugal via..."
+        "Boat":
+            $ yourFacts += 1
+            pass
+        "Land":
+            pass
+        "Mermaid":
+            pass
+        "He swam using those strong arms and legs":
+            "Chill out,{w=0.1} lil bro.{w=0.1} You can't even see them."
+
+    $ pine = False
+    menu year:
+        "He met the Devil the year he turned thirty, which was..."
+        "1418":
+            pass
+        "1422":
+            $ yourFacts += 1
+            pass
+        "1430":
+            pass
+        "2023" if pine == False:
+            "If only he were a regular 30-year-old man and not a 631-year-old warlock."
+            "You might have been able to marry him."
+            $ pine = True
+            jump year
+
+    menu scam:
+        "He ripped off the Devil after trying out"
+        "Capitalism":
+            pass
+        "Mercantilism":
+            pass
+
+    #alignment q
+    menu beliefs:
+        "Ed is ideologically aligned with..."
+        "The monarchy":
+            $ renpy.block_rollback()
+            pass
+        "The owning class":
+            $ renpy.block_rollback()
+            pass
+        "The proletariat":
+            $ renpy.block_rollback()
+            pass
+        "Himself":
+            $ renpy.block_rollback()
+            $ yourFacts +=1
+            pass
+        "Beautiful women everywhere":
+            $ renpy.block_rollback()
+            $ yourFacts +=1
+            ed "That includes you."
+            bio "What!?"
+            $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
+            "You quickly scratch that out and write [cuteanimal] in its place."
+            call endeared
+        "Are you kidding!? Our paper isn't political!":
+            $ renpy.block_rollback()
+            "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
+            "He's not an idiot.{w=0.1} He knows about...{nw=0.3}"
+            # play sound ominous 
+            extend "The Implication."
+
     #questions
     return
 
 label interviewconclusion:
 
 
-    ed "There. That should be enough to write a pretty basic profile."
+    ed "There.{w=0.1} That should be enough to write a pretty basic profile."
     bio "Basic? You don't mean to imply that there's more."
-    ed "There absolutely is, but if I went into it, I'm certain we'd be here all night."
-    "You wouldn't mind spending all night with him."
+    ed "There absolutely is,{w=0.1} but if I went into it,{w=0.1} I'm certain we'd be here all night."
+    "Truthfully,{w=0.1} you wouldn't mind spending all night with him."
     if not endearing:
-        ed "But you have a deadline, so."
+        ed "But you have a deadline,{w=0.1} so."
         pass
     ed "Was there anything else you needed from me?"
-    bio "Yes, well, I just have one final question."
-    bio "In all your stories, you've gone on about the what, the how..."
-    bio "Why did you do it? Why did you decide to become an immortal wizard?"
+    bio "Yes,{w=0.1} well,{w=0.1} I just have one final question."
+    bio "In all your stories,{w=0.1} you've gone on about the what, the how..."
+    bio "Why did you do it?{w=0.1} Why did you decide to become an immortal wizard?"
     ed "I was already a wizard before I became immortal."
-    bio "Right, of course. But still."
+    bio "Right,{w=0.1} of course.{w=0.1} But still."
     bio "Was it for all those fun adventures? Money?"
     bio "You were trying to change the world?"
     bio "What was the reason?"
-    bio "Or, at least, what's the reason you want the world to know?"
+    bio "Or,{w=0.1} at least,{w=0.1} what's the reason you want the world to know?"
 
-    ed "Why did I do it, huh...?"
-    ed "Well, that's easy."
-    ed "I, um..."
+    ed "Why did I do it,{w=0.1} huh...?"
+    ed "Well,{w=0.1} that's easy."
+    ed "I,{w=0.1} um..."
     ed "I did it for love."
     bio "Love...?"
     bio "Really?"
     ed "Yes."
-    ed "That's not weird... is it?"
+    ed "That's not weird...{w=0.1} is it?"
 
     menu:
         "It's a little weird":
             ed "..."
-            ed "I guess it is, coming from a philanderer like me."
+            ed "I guess it is,{w=0.1} coming from someone like me."
             
         "It's not weird at all":
-            ed "Good. ...I was a little worried you would make fun of me."
+            ed "Good.{w=0.2} ...I was a little worried you would make fun of me."
             
     bio "Why do you say you did it for love?"
     ed "It goes back to my first girlfriend."
@@ -829,14 +974,14 @@ label sneakdevildeal:
     $ dealtriggered = True
     #stop the music
     ed "Listen here."
-    ed "I like you. How come I've never heard of you before?"
-    bio "I suppose... it's just by chance. I mean, I've never had a lot of eyes on much of my work."
-    ed "But you're clearly good at what you do. You want people to know that about you, right?"
+    ed "I like you.{w=0.1} How come I've never heard of you before?"
+    bio "I suppose...{w=0.1} it's just by chance.{w=0.1} I mean,{w=0.1} I've never had a lot of eyes on much of my work."
+    ed "But you're clearly good at what you do.{w=0.1} You want people to know that about you,{w=0.1} right?"
     "That would be nice..."
     ed "Wouldn't it?"
-    bio "I... wouldn't have to answer to my good-for-nothing boss."
+    bio "I...{w=0.1} wouldn't have to answer to my good-for-nothing boss."
     ed "Exactly!"
-    ed "Look, I'll cut to the chase. I want to help you."
+    ed "Look,{w=0.1} I'll cut to the chase.{w=0.1} I want to help you."
 
     menu:
         "Accept his help":
@@ -846,15 +991,15 @@ label sneakdevildeal:
         "Ask a question":
             pass
 
-    bio "Oh! Really? I mean, I don't know... help me how?"
-    ed "Well... let me put it this way."
-    ed "I think that... this profile your paper is doing..."
-    ed "I think it's going to make a killing. I think it's gonna make waves."
-    ed "How do the kids say it? It's gonna do numbers?"
-    bio "Well, what makes you say that?"
-    ed "Just by the sheer quality. You're keen. Observant."
+    bio "Oh!{w=0.1} Really?{w=0.1} I mean,{w=0.1} I don't know...{w=0.1} help me how?"
+    ed "Well...{w=0.1} let me put it this way."
+    ed "I think that...{w=0.1} this profile your paper is doing..."
+    ed "I think it's going to make a killing.{w=0.1} I think it's gonna make waves."
+    ed "How do the kids say it?{w=0.1} It's gonna do numbers?"
+    bio "Well,{w=0.1} what makes you say that?"
+    ed "Just by the sheer quality.{w=0.1} You're keen.{w=0.1} Observant."
     ed "Honest."
-    "He's right, you know."
+    "He's right,{w=0.1} you know."
     menu:
         "Accept his help":
             jump accept
@@ -863,14 +1008,14 @@ label sneakdevildeal:
         "Ask another question":
             pass
     
-    bio "But... why me? There are far more prolific writers doing way worse than I am."
-    ed "There are far {i}worse{/i} writers doing much better than you are, too."
-    bio "I never said anything about worse writers."
-    ed "It's not what you said. It's what you didn't say."
-    ed "\"Prolific.\" Not learned, not talented. Prolific." 
-    ed "In other words: just talk. They talk too much."
-    ed "Not you, though."
-    ed "I like you, so I'll help you. Simple as that."
+    bio "But...{w=0.1} why me?{w=0.1} There are far more prolific writers doing way worse than I am."
+    ed "There are far {i}worse{/i} writers doing much better than you are,{w=0.1} too."
+    bio "{w=0.1}...I never said anything about worse writers."
+    ed "It's not what you said.{w=0.1} It's what you didn't say."
+    ed "\"Prolific.\"{w=0.1} Not learned,{w=0.1} not talented.{w=0.1} Prolific." 
+    ed "In other words:{w=0.1} just talk.{w=0.1} They talk too much."
+    ed "Not you,{w=0.1} though."
+    ed "I like you,{w=0.1} so I'll help you.{w=0.1} Simple as that."
 
     menu:
         "Accept his help":
@@ -882,8 +1027,8 @@ label sneakdevildeal:
 
     bio "And what do you get out of helping me?"
     ed "Hm..."
-    ed "The satisfaction, I guess. A bit of comfort?"
-    "Wow. How selfless..."
+    ed "The satisfaction,{w=0.1} I guess.{w=0.1} A bit of comfort?"
+    "Wow.{w=0.1} How selfless..."
 
     menu:
         "Accept his help":
@@ -894,9 +1039,9 @@ label sneakdevildeal:
             pass
 
     bio "How can I be sure I can trust you?"
-    ed "Of course. That's very important. You hate lies. And I've proven I love lying."
-    "You laugh idly. But it's not very funny."
-    ed "I'll give you my name. My real name."
+    ed "Of course.{w=0.1} That's very important.{w=0.1} You hate lies.{w=0.1} And I've proven I love lying."
+    "You laugh idly."
+    ed "I'll give you my name.{w=0.1} My real name."
 
     bio "And what do I give you?"
     ed "Your word that you will keep it a secret."
@@ -905,7 +1050,7 @@ label sneakdevildeal:
         "That seems fair":
             jump accept
         "No way, José":
-            "You don't call him José, by the way."
+            "You don't call him José,{w=0.1} by the way."
             jump reject
     
 
@@ -914,25 +1059,25 @@ label sneakdevildeal:
 label accept:
 
     "You let out the breath you've been holding."
-    bio "Sure! Why not."
+    bio "Sure!{w=0.1} Why not."
     ed "Good! Good. That means I can trust you with this."
     call realname
-    bio "So... what do I do now?"
+    bio "So...{w=0.1} what do I do now?"
     ed "You lock it in."
     menu:
         "Lock it in with a handshake":
-            "You stretched out your right hand for Ed to grab. He gives you a firm hanshake." 
+            "You stretched out your right hand for Ed to grab.{w=0.1} He gives you a firm hanshake." 
             "You felt your palm tingle."
         "Lock it in with a fistbump":
-            "You raised your fist to chest height. He raises his to meet yours. You bump fists."
+            "You raised your fist to chest height.{w=0.1} He raises his to meet yours.{w=0.1} You bump fists."
             "You felt a slight gust wind brush past your face and through your hair."
         "Lock it in with a kiss":
             "You had to stand on the tips of your toes to reach his face."
-            "He holds you steady by your waist as you lean into him. You close your eyes." 
+            "He holds you steady by your waist as you lean into him.{w=0.1} You close your eyes." 
             "Then, you feel his warm lips on yours."
             "...and once again."
             "You felt your heart flutter."
-    "As you leave the studio, something starts to nag at you from the back of your mind." # his house (the vampire castle)? a cafe? a hotel? wherever
+    "As you leave the studio,{w=0.1} something starts to nag at you from the back of your mind." # his house (the vampire castle)? a cafe? a hotel? wherever
     "He agreed when you said it would be nice..."
     "But you were sure you never said that aloud."
     jump finaltest
@@ -940,16 +1085,17 @@ label accept:
 
 label reject:
     $ ed_observation = True
-    bio "Sorry. I don't think I can accept your help."
-    ed "That's all right... that's all right."
+    bio "Sorry.{w=0.1} I don't think I can accept your help."
+    ed "That's all right...{w=0.1} that's all right."
     #the music and background return.
-    ed "I hope you remember how many Ph.Ds I have, though. Cuz if you don't, tuh? Well."
+    ed "I hope you remember how many Ph.Ds I have,{w=0.1} though.{w=0.1} Cuz if you don't, tuh?{w=0.1}"
+    ed "Well."
     ed "You'll never work in this field again."
-    bio "How- how can you be so sure?"
-    ed "Oh I'm sure. Of this, I am{w=0.2} {i}very{/i} certain."
+    bio "How-{w=0.1} how can you be so sure?"
+    ed "Oh I'm sure.{w=0.1} Of this, I am{w=0.2} {i}very{/i} certain."
 
-    "And with that, he shuffles off."
-    "You should head back, too."
+    "And with that,{w=0.1} he shuffles off."
+    "You should head back, too." #or if it takes place in the same office as yours you just don't
     
     jump finaltest
 
@@ -961,17 +1107,17 @@ label realname:
     ed "\"Akpan\" just means \"first-born son.\""
     bio "Wow..."
     bio "What does \"Aniedi\" mean?"
-    ed "..."
+    ed "I was told it meant..."
     ed "\"Who knows?\""
-    bio "Ah..."
+    bio "Hm..."
     return
 
 label finaltest:
     #scene
     if secretending == True:
 
-        "You wander into the office, almost in a trance."
-        "You don't even notice your boss calling out for your attention. He seems perplexed as you saunter to your desk."
+        "You wander into the office,{w=0.1} almost in a trance."
+        "You don't even notice your boss calling out for your attention.{w=0.1} He seems perplexed as you saunter to your desk."
         call endoftest
         jump dealend
         pass
@@ -979,12 +1125,12 @@ label finaltest:
         "You mull on the last conversation you had before you left."
         pass
     else:
-        "Pleased with your findings, you returned to the office with your head held high. You had a brilliant idea for the profile."
+        "Pleased with your findings,{w=0.1} you returned to the office with your head held high.{w=0.1} You had a brilliant idea for the profile."
         "You could even picture the final line of the article:"
-        "Even in a life full of tall tales, he kept a simple truth in his heart."
+        "Even in a life full of tall tales,{w=0.1} he kept a simple truth in his heart."
         pass
 
-    boss "There you are, you silly goosey goo! So what did you find out? Is he really the world's most credentialed man?"
+    boss "There you are,{w=0.1} you silly goosey goo!{w=0.1} So what did you find out?{w=0.1} Is he really the world's most credentialed man?"
     bio "Well he's... " #fact or falsehood
 
     #fun lil randomness segment (my specialty) -- it's three random facts you rattle off each time?
@@ -997,29 +1143,29 @@ label finaltest:
 
     boss "Kid."
     boss "You're tellin' me stuff we already heard!"
-    bio "Um... I was under the impression that we hadn't written the profile yet because of the sheer amount of misinformation surrounding the individual."
-    boss "No, no, we hadn't written the profile because we were waiting for the new keyboard to come in! Keep up!"
-    bio "Well, he sent me off with a tidbit I thought was really beautiful and true."
-    boss "Really? Let's hear it."
+    bio "Um...{w=0.1} I was under the impression that we hadn't written the profile yet because of the sheer amount of misinformation surrounding the individual."
+    boss "No,{w=0.1} no,{w=0.1} we hadn't written the profile because we were waiting for the new keyboard to come in!{w=0.1} Keep up!"
+    bio "Well,{w=0.1} he sent me off with a tidbit I thought was really beautiful and true."
+    boss "Really?{w=0.1} Let's hear it."
     bio "He told me he had never forgotten the reason he became immortal." 
-    bio "He told me he'd done it for love. And that the one thing he desired most was forgiveness."
-    boss "YAWNNNNNNNNNNNNNNNNNNNNN. Boring!"
+    bio "He told me he'd done it for love.{w=0.1} And that the one thing he desired most was forgiveness."
+    boss "YAWNNNNNNNNNNNNNNNNNNNNN.{w=0.1} Boring!"
     bio "I thought it was nice..."
     if dealtriggered == True:
         boss "I thought it was CORNY!"
-        bio "I have something else that...happened...if you'd rather hear about that?"
+        bio "I have something else that...{w=0.1}happened...{w=0.1}if you'd rather hear about that?"
 
-    boss "Nope! {w=0.2}Don't gaf. {w=0.3}SO! {w=0.3}How many Ph.Ds did he earn?"
-    bio "um{w=0.1}"
+    boss "Nope! {w=0.1}Don't gaf. {w=0.1}SO! {w=0.1}How many Ph.Ds did he earn?"
+    bio "um{nw=0.1}"
     bio "what?"
     "Your boss sighs."
-    boss "{cps=*.8}How many Ph.Ds did he earn?{/cps}"
+    boss "{cps=*0.5}How many Ph.Ds did he earn?{/cps}"
     bio "Are you serious?"
     boss "Very."
     bio "Well- {nw}"
     boss "Your job depends on it. Just so you know."
     $ finalanswer = renpy.input(prompt="How many Ph.Ds did Ed earn in his lifetime? (Enter numbers only.)", allow="1234567890")
-    boss "Okay, don't forget to write that in. I'm counting on you!"
+    boss "Okay,{w=0.1} don't forget to write that in.{w=0.1} I'm counting on you!"
     boss "Don't embarrass the paper!"
 
     call endoftest
@@ -1032,24 +1178,24 @@ label finaltest:
 
 label endoftest:
     "You sit down and write the article exactly as you envision it."
-    "When you're done, you submit it, and you go home."
+    "When you're done,{w=0.1} you submit it,{w=0.1} and you go home."
     return
 
 
 label goodend:
-    "Some weeks after the profile went live, you got a call from your boss."
-    boss "Hey, um."
-    boss "I wanted to say congratulations. The article is doing pretty well."
+    "Some weeks after the profile went live,{w=0.1} you got a call from your boss."
+    boss "Hey,{w=0.1} um."
+    boss "I wanted to say congratulations.{w=0.1} The article is doing pretty well."
     boss "People are saying some parts aren't true..."
     if yourFacts >= factstotal:
-        boss "That's cuz I, uh... {w=0.4}{i}embellished{/i}{w=0.4} your article a bit.{w=0.3} By the way." 
-        boss "Just here and there! To spruce things up a bit, y'know? Nothin' too crazy."
+        boss "That's cuz I,{w=0.1} uh... {w=0.4}{i}embellished{/i}{w=0.4} your article a bit.{w=0.3} By the way." 
+        boss "Just here and there!{w=0.1} To spruce things up a bit,{w=0.1} y'know?{w=0.1} Nothin' too crazy."
     else:
-        boss "Which is, y'know, to be expected for a guy with such a history. {w=0.3}Misinformation, like you said."
+        boss "Which is,{w=0.1} y'know,{w=0.1} to be expected for a guy with such a history. {w=0.3}Misinformation,{w=0.1} like you said."
         boss "I'm sure it was tough to get the truth out of him."
-    boss "I know how you feel about lying and inaccuracies. How it makes you feel queasy and all that."
-    boss "So, to clear your conscience, I went ahead and left your name off the byline."
-    boss "Don't worry, you'll get a bonus for the accurate reporting on the Ph.Ds."
+    boss "I know how you feel about lying and inaccuracies.{w=0.1} How it makes you feel queasy and all that."
+    boss "So,{w=0.1} to clear your conscience,{w=0.1} I went ahead and left your name off the byline."
+    boss "Don't worry,{w=0.1} you'll get a bonus for the accurate reporting on the Ph.Ds."
     boss "You're welcome!"
     "He hangs up."
     
@@ -1059,27 +1205,27 @@ label goodend:
     return
 
 label badend:
-    "Some weeks after the profile went live, you got a call from your boss."
-    boss "Hey, um."
+    "Some weeks after the profile went live,{w=0.1} you got a call from your boss."
+    boss "Hey,{w=0.1} um."
     if finalanswer == totalDoctorals:
         boss "Did you go and count the number of doctoral degrees or the number of Ph.Ds?"
-        boss "Cuz I asked for Ph.Ds... and I get that he has an M.D..."
+        boss "Cuz I asked for Ph.Ds...{w=0.1} and I get that he has an M.D..."
         boss "...but an M.D. isn't a Ph.D."
-    boss "So, you're fired. Totally super mega ultra fired. For embarrassing the paper."
+    boss "So,{w=0.1} you're fired.{w=0.1} Totally super mega ultra fired.{w=0.1} For embarrassing the paper."
     boss "Don't check Glitter."
     "Glitter is Magic Twitter."
-    "It also has a significantly higher proportion of gay stans. Vicious gay stans."
-    "It's the highest on the Internet, unfortunately for you."
-    "When your boss told you not to check Glitter, it's because he knew they were eviscerating you on there."
-    "So you log on to check, against your better judgement." 
-    "You immediately find the post. It's got one william likes. The quote gleets are eating you up."
-    "As it turns out, a Dr. Yetunde Olu, former colleague and ex-girlfriend of Ed, wrote a response piece"
-    "wherein she comments that she can excuse the occasional tall tale and even stops short of calling the piece laundering like many critics have,"
+    "It also has a significantly higher proportion of gay stans.{w=0.1} Vicious gay stans."
+    "It's the highest on the Internet,{w=0.1} unfortunately for you."
+    "When your boss told you not to check Glitter,{w=0.1} it's because he knew they were eviscerating you on there."
+    "So you log on to check,{w=0.1} against your better judgement." 
+    "You immediately find the post.{w=0.1} It's got one william likes.{w=0.1} The quote gleets are eating you up."
+    "As it turns out,{w=0.1} a Dr. Yetunde Olu,{w=0.1} former colleague and ex-girlfriend of Ed,{w=0.1} wrote a response piece{nw=0.2}"
+    "wherein she comments that she can excuse the occasional tall tale,{w=0.1} and even stops short of calling the piece laundering like many other critics have,{nw=0.2}"
     "but she draws the line at misrepresenting the nature of his involvement in academia."
-    "Among other things, she has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
+    "Among other things,{w=0.1} she has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
     "And it's not [finalanswer]."
     
-    "In the end, you, too, were a charlatan. A grifter. A hack. A useful idiot—at {i}best.{/i}" 
+    "In the end,{w=0.1} you,{w=0.1} too,{w=0.1} were a charlatan.{w=0.1} A grifter.{w=0.1} A hack.{w=0.1} A useful idiot{w=0.1}—at {i}best.{/i}" 
     if ed_observation == True:
         "It was just as Ed had predicted."
     "You can never work in this field again."
@@ -1088,23 +1234,23 @@ label badend:
 
 label dealend:
     "Some weeks after the profile went live, you got a call from your boss."
-    boss "Hey, um."
+    boss "Hey,{w=0.1} um."
     boss "I want to say I'm sorry."
     "Followed by an unusual pause."
-    boss "I'm sorry for doubting you, and-"
-    "Another pause. You hear shuffling on the other side of the line." 
+    boss "I'm sorry for doubting you,{w=0.1} and-{nw=0.2}"
+    "Another pause.{w=0.1} You hear shuffling on the other side of the line." 
     "You're sure you hear your boss say, \"okay\" over and over."
-    boss "And I've been withholding tens of thousands of dollars in backpay which I-{w=0.5} which I will deposit in your checking account." 
+    boss "And I've been withholding tens of thousands of dollars in backpay which I-{w=0.5} which I will deposit in your checking account.{nw=0.3}" 
     boss "Immediately."
     "He hangs up." 
-    "You've never heard him so stilted... and so scared...?" 
+    "You've never heard him so stilted...{w=0.1} and so scared...?" 
     "Just one more thing to pile on to the weird couple of weeks you've been having..."
-    "You thought back to the conversation you had with Ed, right before you left."
-    "It seems like he was right: your article did incredibly well!"
+    "You thought back to the conversation you had with Ed,{w=0.1} right before you left."
+    "It seems like he was right:{w=0.1} your article did incredibly well!"
     "But it also seems like no one who read it knows what it actually said." 
     "Everyone who talks to you about it says something wildly inaccurate."
     "And everyone says something different."
-    "You've read it over and over every night since it was published. It's exactly as you remember it—"
+    "You've read it over and over every night since it was published.{w=0.1} It's exactly as you remember it—"
     "no tall tales,"
     "no editorializing from your boss,"
     "no inexplicable gaps in the narrative."
