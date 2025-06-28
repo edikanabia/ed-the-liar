@@ -1628,24 +1628,25 @@ screen bookbutton():
     
 
 
-screen compendium(closed="True"):
+screen compendium(page="cover"):
     modal True
     add "gui/overlay/confirm.png"
     tag book
 
-    showif closed=="False":
-        imagebutton idle "/screens/valkyrie_compendium_open.png" xalign 0.5 yalign 0.5 action [ Show("compendium", closed="True")]
-        pass
-    elif closed=="True":
-        imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [Show("compendium", closed="False")]
-        pass
+    showif page=="cover":
+        imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [ Show("compendium", page="page1")]
+    elif page=="page1":
+        imagebutton idle "/screens/valkyrie_compendium_open.png" xalign 0.5 yalign 0.5 action [Show("compendium", page="page2")]
+    elif page=="page2":
+        imagebutton idle "/screens/valkyrie_compendium_open2.png" xalign 0.5 yalign 0.5 action [Show("compendium", page="cover")]
+        
     imagebutton: 
         auto "/screens/closebutton_%s.png" 
         xalign 0.01 
         yalign 0.02 
         tooltip "Close book"
         action [ToggleScreen("compendium"), Show("bookbutton")] #play sound book closes
-        
+
     $ tooltip = GetTooltip()
     if tooltip:
         nearrect:

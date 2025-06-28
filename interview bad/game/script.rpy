@@ -57,7 +57,9 @@ default finesse = False
 
 #endregion
 
-#region Transforms
+#region Transforms and Screen Variables
+
+default bookpage = "cover"
 
 #endregion
 
