@@ -7,7 +7,7 @@
 default bioName = "Biographer"
 
 define ed = Character("Ed") #dynamically change name from Immortal Wizard to Ed
-define bio = Character("You")
+define bio = Character("You", image="bio")
 define boss = Character("Boss")
 define umi = Character("Umi")
 define yetu = Character("Dr. Olu")
@@ -57,9 +57,54 @@ default finesse = False
 
 #endregion
 
+#region Images
+image ed = "../charasprites/ed neutral.png"
+image ed angry = "../charasprites/ed annoyed.png"
+image ed blush = "../charasprites/ed bashful.png"
+image ed lying = "../charasprites/ed lie.png"
+image ed fakeout = "../charasprites/ed liefake.png"
+image ed thinking = "../charasprites/ed thinking.png"
+image ed smug = "../charasprites/ed smug.png"
+image ed lookup = "../charasprites/ed sidelook.png"
+
+image side bio = "../charasprites/bio neutral.png"
+image side bio angry = "../charasprites/bio doubt.png"
+image side bio sad = "../charasprites/bio concern.png"
+image side bio blush = "../charasprites/bio flustered.png"
+image side bio happy = "../charasprites/bio happy.png"
+image side bio shocked = "../charasprites/bio shocked.png"
+
+#Minor Characters
+image devil = "../charasprites/devil_normal.png"
+image devil glow = "../charasprites/devil_glow.png"
+image layla = "../charasprites/layla_the_terrible.png"
+image petya = "../charasprites/petya_bloody.png"
+image colleague = "../charasprites/colleague.png"
+image microwave = "../charasprites/microwave.png"
+
+#BGs
+image bg coffeeshop = "/backgrounds/coffeeshop.png"
+image bg ship = "/backgrounds/ship.png"
+image bg movieset = "/backgrounds/movieset.png"
+
+
+#CGs
+image cg csection = "/cgs/cg_csection.png"
+
+
+
+#endregion
+
 #region Transforms and Screen Variables
 
-default bookpage = "cover"
+
+#endregion
+
+#region Audio
+#SFX
+
+#Music
+
 
 #endregion
 
@@ -73,6 +118,7 @@ label start:
     return
 
 label intro:
+    # play music officejob
     "You are a biographer of the magical,{w=0.2} mystical,{w=0.2} miraculous,{w=0.2} marvelous,{w=0.2} mythical,{w=0.2} and{cps=*.5}... {w=0.3}mmmm{/cps}{i}spellbinding{/i} people of this world."
     "Even though you fancy yourself rather credentialed,{w=0.2} what with the seventeen biographies under your belt,"
     "you are repeatedly upstaged by the charlatans in your field who insist upon filling their \"books\" with falsehoods and lies."
@@ -87,7 +133,7 @@ label intro:
     "Okay,{w=0.1} the deadline is this weekend and you're a {cps=*0.7}{i}little{/i}{/cps} worried."
     "But after a few weeks of phone calls,{w=0.1} dead-ends,{w=0.1} and couple of desperate summoning circles,{w=0.1} your boss finally arranged an interview with him."
     "You're finally going to get the truth from the man himself.{w=0.1} So there's nothing to worry about!" 
-    #lines below this (cut if I run out of time)
+
     "Of course,{w=0.1} you also brought the most factual encyclopedia known to magickind as supplementary material{w=0.1}—just in case." 
     "It's the Valkyrie Order's Compendium of Known Agitators."
     show screen bookbutton with dissolve
@@ -205,7 +251,7 @@ label upbringing:
     bio "Oh..."
     menu:
         "I'm so sorry":
-            # $ renpy.block_rollback()
+            
             ed "Don't be.{w=0.1} I'm evil."
             "You furrow your brow in concern,{w=0.1} or is it fear?"
             "You're not sure why it would be either because you already knew he was a warlock."
@@ -213,13 +259,13 @@ label upbringing:
             bio "Oh."
             bio "Well."
         "I'm not surprised":
-            # renpy.block_rollback()
+            
             "He chuckles at your blasé response."
             bio "At our paper,{w=0.1} we call warlocks with good childhoods priests."
             "He snorts,{w=0.1} then covers his mouth to keep the giggles at bay."
             ed "I mean,{w=0.1} it's true.{w=0.1} And they certainly aren't immortal."
             call endeared
-            
+    $ renpy.fix_rollback()
     jump interviewintro
     return
 
@@ -262,6 +308,23 @@ label offended:
         
     else:
         pass
+    return
+
+label takenote:
+    menu:
+        "Jot that down":
+            pass
+        "Leave it be":
+            pass
+    return
+
+label selecttrue(truth, lie):
+    menu:
+        "You decide to write down..."
+        "[truth]":
+            $ yourFacts +=1
+        "[lie]":
+            pass
     return
 
 label starsign:
@@ -371,6 +434,7 @@ label interviewintro:
     bio "It's one of my favorite questions."
     bio "Of all the fine,{w=0.1} magically-inclined folks I've interviewed,{w=0.1} I've always asked the same question,{w=0.1} but I've never gotten the same answer!"
     ed "Well, if you wanna hear about that..."
+    # stop music with fadeout 1.0
     "He uncrosses his legs,{w=0.1} leaning forward with his elbows now resting on his knees." 
     "You find yourself leaning forward as well,{w=0.1} pulled into his vortex,{w=0.1} his magnetic field." 
     "You are about to hear A Story."
@@ -379,11 +443,13 @@ label interviewintro:
 
 label portugal:
     #scene portugal
+    #queue music ed
     ed "I had just gotten my first Ph.D{w=0.1}—theology.{w=0.1} I wasn't religious,{w=0.1}but there weren't many options back in those days."
     bio "Which days?"
     menu:
         ed "It was when I turned thirty in 1430.{w=0.1} Pretty easy to remember,{w=0.1} right?"
         "I suppose so":
+            #call takenote("turned 30 in 1430", False)
             pass
         "You're how old, again?":
             ed "Thirty."
@@ -393,6 +459,7 @@ label portugal:
             bio "Oh.{w=0.1} Oh yeah."
             bio "Carry on."
 
+    $ renpy.fix_rollback()
     ed "My girlfriend at the time wanted to try out some different waters,{w=0.1} and especially different fish." 
     ed "So with my studies finished,{w=0.1} we figured it would be the perfect time to try somewhere new,{w=0.1} and we swam up to Portugal."
     bio "That sounds so romantic!"
@@ -411,20 +478,21 @@ label portugal:
 
     menu:
         "Isn't that... kind of far?":
-            ed "From North Africa?{w=0.1} No.{w=0.1} It's a coastal nation with pretty easy access to the sea."
+            ed "I mean...{w=0.1} It's a coastal nation with pretty easy access to the sea."
             bio "That's not what I meant."
             ed "Then what did you mean?"
             bio "That's...{w=0.1} well...{w=0.1} you swam by yourself?"
             ed "{w=0.1}...Did I not say I was with my girlfriend?"
             bio "You {i}and{/i} your girlfriend swam??"
-            ed "Well yeah it's not like she can walk."
+            ed "Well yeah it's not like she could walk."
 
         "You're insane for alleging that you swam to Portugal from anywhere.":
             ed "Lawyer says what?"
             bio "What?"
             ed "Heh.{w=0.1} Gottem."
             "Sigh.{w=0.1} He freaking got you."
-    
+    $ renpy.fix_rollback()
+
     ed "So are we clear on how I got to the Kingdom of Portugal or are we still working out the mechanics of swimming?"
     bio "I'm done.{w=0.1} Let's get back on track."
     "You're not done."
@@ -442,7 +510,8 @@ label portugal:
             ed "No fisherman this century would lie about having a mermaid girlfriend,{w=0.1} let alone a mermaid {i}ex.{/i}"
             ed "These days that's just plain embarrassing."
             bio "Point taken."
-    
+    $ renpy.fix_rollback()
+
     ed "Once we landed,{w=0.1} we split up." 
     ed "I wasn't in the market to fish shop,{w=0.1} and besides,{w=0.1} I had heard that if you aren't at least a {cps=*0.7}little{/cps} bit bisexual in Lisbon,{w=0.1} 
     they straight up kill you."
@@ -461,13 +530,13 @@ label portugal:
             ed "Is it a surprise?"
             bio "I thought you were just...{w=0.1} a really sensitive guy."
             ed "I can be both."
-            ed "Because I'm bisexual."
+            ed "After all, I'm bi, aren't I...?"
             call endeared
     
     bio "So you're wandering the streets of Lisbon,{w=0.1} waiting for your mermaid girlfriend to get fish." 
     bio "And you come across some kind of powerful being,{w=0.1} right?{w=0.1} Another warlock,{w=0.1} or maybe an old alchemy book?"
     ed "Not quite..."
-    #show devil
+    show devil
     devil "I'm the Devil."
     ed "Now me,{w=0.1} I'm an industrious guy.{w=0.1}" 
     ed "I see The Devil and I think,{w=0.3} \"how can I profit off of such a one in a lifetime chance encounter?\""
@@ -484,10 +553,12 @@ label portugal:
             ed "You're gonna love this.{w=0.1} I promise."
             "You make a note to yourself to edit that out of the transcript."
             
+            
         "Ask him about the year":
             bio "What year was it again?"
             ed "Like,{w=0.1} 1420-something.{w=0.1} Why?"
             bio "Just checking."
+            #call takenote("turned 30 in the 1420s", True)
             
         "Let him have it":
             "You mutter something under your breath about historical revisionism."
@@ -557,15 +628,20 @@ label portugal:
             ed "Then don't quote authoritarians at me.{w=0.1} That tale is Valkyrie slander."
             call offended
 
-    "You admit to yourself that this is a lot."
-    "Although,{w=0.1} it's to be expected from someone with over 600 years of adventures."
-    "Still,{w=0.1} husky-looking devils...{w=0.1} mermaid girlfriends..."
-    ed "Do you need a bit to take it all in?"
+    "You tap your notepad with your pen. It was...{w=0.1} a lot."
+    "But the specifics of the deal itself seem to be a bit thin."
+    
+    ed "Do you need a moment to take that all in?"
     ed "Because there's more."
+
+    "To get a clearer picture of your subject, you decide to let him continue."
+
     jump renaissance
     return
 
 label renaissance:
+    #scene
+
     ed "When you become immortal,{w=0.1} kicking around eating fish and talking to Portuguese mermaids starts to get real old after a while,{w=0.1} and my girlfriend could tell. "
     ed "She suggested we could swim down south,{w=0.1} stop by Rafat or Algiers on our way to Palermo..."
     ed "You know, make a vacation of it."
@@ -611,6 +687,8 @@ label renaissance:
         "Move on":
             pass
 
+    call selecttrue("Ed dabbled in mercantilism", "Ed dabbled in capitalism")
+
     if jacket:
         "That must be how he can afford designer clothes..."
 
@@ -635,8 +713,29 @@ label renaissance:
             ed "Evidently."
     ed "Anyway."
     ed "Once I arrived in Sicily, everything changed." 
-    ed "I was separated from my girlfriend, the Italian mermaids wouldn't talk to me, and my ship was destroyed." 
+    ed "Separated from my girlfriend, the Italian mermaids wouldn't talk to me, my ship was destroyed..." 
     ed "I was alone and effectively homeless." 
+
+    ed "I knew I needed to reinvent myself, so I decideed I would do what I do best:"
+    menu:
+        "Seduce beautiful women":
+            ed "Now I don't like your use of the word \"seduce,\" but I'm flattered you think I'm good at it."
+            pass
+        "Usurp the powers of other mages":
+            ed "FOR THE RECORD, there exists no evidence of me ever having done that."
+            ed "Even your book suspiciously leaves it off because they know that it's a rumor."
+            bio "You seem to know a lot about what's in my book. Have you read it?"
+            "...He doesn't seem to want to keep talking about it."
+            call offended
+        "Clout chase":
+            ed "That's right."
+            
+            pass
+    ed "See, they were already calling me doctor. But by 1650?{w=0.1}I wanna say?{w=0.1}—they introduced a new terminal degree."
+    bio "You don't mean the Ph.D."
+    ed "Of course, I mean the Ph.D. This one I got in engineering."
+    ed ""
+    
 
     menu:
         "That's terrible!":
@@ -648,10 +747,12 @@ label renaissance:
             "He stares past you,{w=0.1} into the distance."
             "But...{w=0.1} there was only wall behind you."
             
-
+    #integrate part where he says "they don't gaf about medicine in florence"
     
     ed "Obviously, you have to keep your medical knowledge up-to-date.{nw=0.2}"
-    ed "But I offered to perform a C-section on my boyfriend's wife and he was all like,"
+    ed "But they seriously do notttttt care about medicine in Florence."
+    ed "Like, there was this one guy I was dating. And his wife was going through labor, but the baby wouldn't come out, right?"
+    ed "So I offered to perform a C-section on her, and he was all like,"
     "Boyfriend" "What's that,{w=0.1} that's stupid."
     "Boyfriend" "What do you mean you cut the baby out of the womb."
     "Boyfriend" "Hell no."
@@ -661,21 +762,19 @@ label renaissance:
     ed "Anyway she died of sepsis."
     bio "How is-{nw}"
     ed "And I thought to myself,{w=0.1} wow.{w=0.1} These guys have nothing on the Ottomans."
-    ed "So while I'm in Europe, I'm just gonna do what I do best:"
-    menu:
-        "Chase beautiful women":
-            pass
-        "Usurp the powers of other mages":
-            pass
-        "Clout chase":
-            pass
-    ed "See, they were already calling me doctor. But by 1650?{w=0.1}I wanna say?{w=0.1}—they introduced a new terminal degree."
-    ed "Of course I mean the Ph.D."
-    ed ""
-    
+
+    # add the rest
+
     return
 
-label modernera:
+label vampirecastle:
+    return
+
+label classiclit:
+    return
+
+
+label film:
 
     if greeting == "excited":
         ed "You said you were honored to meet me."
@@ -703,8 +802,25 @@ label modernera:
             ed "It probably changed my life forever."
             ed "So I would say it's pretty good."
             bio "What was the movie?"
-            ed "1986's {i}Blue Velvet,{/i} directed by David Lynch."
+            ed "1986's {i}Blue Velvet{/i} (dir. David Lynch)."
 
+    #insert hannah's 20s script
+
+    ed "...Zendaya"
+
+    menu:
+        "Zendaya? Seriously?"
+        "You did not sleep with freaking Zendaya":
+            ed "ok maybe not zendaya maybe like pedro pascal"
+            
+            pass
+        "I believe it":
+            pass
+
+    return
+
+
+label currentday:
     ed "Much later,{w=0.1} I went back and got a Ph.D in film studies."
     ed "It was pretty easy since I was there for all of it."
     bio "So you just collect degrees, just because?"
