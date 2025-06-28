@@ -6,7 +6,7 @@
 #region Character
 default bioName = "Biographer"
 
-define ed = Character("Ed") #dynamically change name from Immortal Wizard to Ed
+define ed = Character("Ed", image="ed") #dynamically change name from Immortal Wizard to Ed
 define bio = Character("You", image="bio")
 define boss = Character("Boss")
 define umi = Character("Umi")
@@ -87,7 +87,8 @@ image bg coffeeshop = "/backgrounds/coffeeshop.png"
 image bg ship = "/backgrounds/ship.png"
 image bg movieset = "/backgrounds/movieset.png"
 
-
+image bg black = Solid("000")
+image bg white = Solid("fff")
 #CGs
 image cg csection = "/cgs/cg_csection.png"
 
@@ -96,7 +97,39 @@ image cg csection = "/cgs/cg_csection.png"
 #endregion
 
 #region Transforms and Screen Variables
+transform person_a:
+    xalign 0.15
+    yalign 1.0
 
+transform person_b:
+    xalign 0.3
+    yalign 1.0
+
+transform person_c:
+    xalign 0.5
+    yalign 1.0
+
+transform person_d:
+    xalign 0.7
+    yalign 1.0
+
+transform person_e:
+    xalign 0.82
+    yalign 1.0
+
+
+
+transform move_to_right:
+    linear 0.8 xalign 0.85
+    yalign 1.0
+    
+transform move_to_center:
+    linear 0.8 xalign 0.5 
+    yalign 1.0
+
+transform move_to_left:
+    linear 0.8 xalign 0.1
+    yalign 1.0
 
 #endregion
 
@@ -126,6 +159,7 @@ label intro:
     "There's a lot of that in the magical community, and you find it nauseating."
     "You would rather die than take part!"
 
+    show bg coffeeshop with dissolve
     "But today is different.{w=0.1} Today, you're meeting with one of the most notorious magicians in the magical world."
     "No, not the dusty one...{w=0.1} The other one.{w=0.1} Your paper is doing a profile on the Immortal Agent of Chaos."
     "It's nearly complete,{w=0.1} except for the fact that it's nowhere near finished."
@@ -143,16 +177,16 @@ label intro:
     return
 
 label icebreaker:
-    #show ed and scene
+    show ed with dissolve
     "He sits in front of you expectantly."
     menu greeting:
         "You decide to greet him..."
         "Cordially":
             $ greeting = "cordial"
-            bio "Thank you for taking the time to meet with me today."
+            bio happy"Thank you for taking the time to meet with me today."
             "He casually waves you off."
             ed "I didn't have anything better to do."
-            bio "Really?"
+            bio -happy "Really?"
             ed "Nope.{w=0.1} Take as much time as you need.{w=0.1} As much time as you need..." 
             #play sound wink
             "!?" #wink
@@ -209,17 +243,19 @@ label demography:
             $ renpy.block_rollback()
             ed "No. {w=0.1}Obviously."
             bio "You're joking,{w=0.1} right?"
-            ed "Madam."
-            ed "I think if you stick around you will find that I am a very funny guy."
-            ed "But I don't joke about my name."
+            ed lookup "Madam."
+            ed thinking "I think if you stick around you will find that I am a very funny guy..."
+            ed lookup "But I don't joke about my name."
             bio "Well...{w=0.1} what is your real name?"
-            ed "We can...{nw=0.3}" 
+            ed -lookup "We can...{nw=0.3}" 
             #play sound wink
+            show ed smug
             extend "save that one for later, can we?" 
             # so you've initiated the impress him route 
             # what with him lowkey flirting with you and all, he'll tell you his real name if you charm him
             # but of course, out of respect, you won't publish it.
             bio "Oh,{w=0.1} all right..."
+            show ed -smug
             $ nameroute = True
         "Keep it to yourself":
             $ renpy.block_rollback()
@@ -247,16 +283,16 @@ label demography:
 label upbringing:
     $ upbringing = True
     bio "What was your upbringing like?"
-    ed "Harrowing."
+    ed thinkin "Harrowing."
     bio "Oh..."
     menu:
         "I'm so sorry":
             
-            ed "Don't be.{w=0.1} I'm evil."
+            ed smug "Don't be.{w=0.1} I'm evil."
             "You furrow your brow in concern,{w=0.1} or is it fear?"
             "You're not sure why it would be either because you already knew he was a warlock."
-            ed "That was supposed to be a joke."
-            bio "Oh."
+            ed -smug "That was supposed to be a joke."
+            bio shocked "Oh."
             bio "Well."
         "I'm not surprised":
             
@@ -310,9 +346,15 @@ label offended:
         pass
     return
 
-label takenote:
+label takenote(factoid, factuality):
     menu:
+        "You consider noting [factoid]."
         "Jot that down":
+            if factuality==True:
+                $ yourFacts += 1
+                $ factscollect.append(factoid)
+            else:
+                pass
             pass
         "Leave it be":
             pass
@@ -323,7 +365,9 @@ label selecttrue(truth, lie):
         "You decide to write down..."
         "[truth]":
             $ yourFacts +=1
+            $ factscollect.append(truth)
         "[lie]":
+            $ factscollect.append(lie)
             pass
     return
 
@@ -442,7 +486,8 @@ label interviewintro:
     return
 
 label portugal:
-    #scene portugal
+    show ed at move_to_left
+    show bg ship with dissolve
     #queue music ed
     ed "I had just gotten my first Ph.D{w=0.1}—theology.{w=0.1} I wasn't religious,{w=0.1}but there weren't many options back in those days."
     bio "Which days?"
@@ -532,11 +577,14 @@ label portugal:
             ed "I can be both."
             ed "After all, I'm bi, aren't I...?"
             call endeared
+            call takenote("Ed is bisexual", True)
     
     bio "So you're wandering the streets of Lisbon,{w=0.1} waiting for your mermaid girlfriend to get fish." 
     bio "And you come across some kind of powerful being,{w=0.1} right?{w=0.1} Another warlock,{w=0.1} or maybe an old alchemy book?"
     ed "Not quite..."
-    show devil
+
+    show devil at person_d with dissolve
+
     devil "I'm the Devil."
     ed "Now me,{w=0.1} I'm an industrious guy.{w=0.1}" 
     ed "I see The Devil and I think,{w=0.3} \"how can I profit off of such a one in a lifetime chance encounter?\""
@@ -558,13 +606,14 @@ label portugal:
             bio "What year was it again?"
             ed "Like,{w=0.1} 1420-something.{w=0.1} Why?"
             bio "Just checking."
-            #call takenote("turned 30 in the 1420s", True)
+            call selecttrue("Ed turned 30 in the 1420s", "Ed turned 30 in 1430")
             
         "Let him have it":
             "You mutter something under your breath about historical revisionism."
 
     ed "So I see The Devil standing there on the street curb,{w=0.1} and I know it's him because he's got these eyes like a husky." 
-    ed "Piercing doesn't even begin to describe it{w=0.1}—they were glowing!" 
+    ed "Piercing doesn't even begin to describe it{w=0.1}—they were glowing!"
+    show devil glow
     ed "So I see him standing there with his freaky{w=0.1}and I mean STRANGE bright blue glowing eyes and I say,"
 
     ed "\"How about we make a deal...{w=0.1} a business deal.\"" 
@@ -694,16 +743,17 @@ label renaissance:
 
     ed "So! I hop in my boat and we set sail. Eventually, I get to Sicily."
     bio "Just you, or you and your girlfriend?"
-    ed "Uh... just me."
+
+    ed "Uh...{w=0.2} just me."
 
     bio "What happened?"
-    "His face turns stony."
-    ed "We got separated."
+
+    ed thinking "We got separated."
     menu:
         "You mean she dumped you?":
             ed "No.{w=0.1} We got physically separated."
         "You mean you left her for another mermaid?":
-            ed "{w=0.1}...Who do you think I am?"
+            ed angry "{w=0.1}...Who do you think I am?"
             call offended
         "Separated how?":
             ed "We got into a really bad shipwreck."
@@ -713,13 +763,27 @@ label renaissance:
             ed "Evidently."
     ed "Anyway."
     ed "Once I arrived in Sicily, everything changed." 
-    ed "Separated from my girlfriend, the Italian mermaids wouldn't talk to me, my ship was destroyed..." 
-    ed "I was alone and effectively homeless." 
+    ed "I couldn't find my girlfriend,the Italian mermaids wouldn't talk to me, my ship was destroyed..." 
+    ed "I was alone and effectively homeless."
 
-    ed "I knew I needed to reinvent myself, so I decideed I would do what I do best:"
+    $ mermaidmafia = False
+    menu:
+        "That's terrible!":
+            pass
+        "Why wouldn't the Italian mermaids talk to you?":
+            $ mermaidmafia = True
+            ed "The mafia."
+            bio "Really?"
+            ed "Those women are stone cold."
+            "He stares past you,{w=0.1} into the distance."
+            "But...{w=0.1} there was only wall behind you."
+
+    ed "Once I managed to calm down and take a better look at my situation, I took the money I had liberated from The Devil."
+    ed "I knew I needed to reinvent myself, so I decided I would do what I do best:"
     menu:
         "Seduce beautiful women":
             ed "Now I don't like your use of the word \"seduce,\" but I'm flattered you think I'm good at it."
+            ed "But not quite."
             pass
         "Usurp the powers of other mages":
             ed "FOR THE RECORD, there exists no evidence of me ever having done that."
@@ -729,30 +793,31 @@ label renaissance:
             call offended
         "Clout chase":
             ed "That's right."
-            
             pass
-    ed "See, they were already calling me doctor. But by 1650?{w=0.1}I wanna say?{w=0.1}—they introduced a new terminal degree."
-    bio "You don't mean the Ph.D."
-    ed "Of course, I mean the Ph.D. This one I got in engineering."
-    ed ""
-    
+    ed "I needed to get an education."
+    ed "See, there was some sickness going around Europe at the time—something to do with rats?"
+    ed "Others called it a plague."
+    bio "Some would even call it... the Bubonic Plague?{nw=0.1}"
+    ed "Eh! Maybe. {i}I{/i} called it{w=0.2} an opportunity."
+    ed "Soon enough I had that MD under my belt. But while my academic life flourished, my romantic life flatlined."
 
     menu:
-        "That's terrible!":
+        "I had no idea you were such a romantic...!":
+            "When he looks up to make eye contact with you, you don't catch a whiff of humor or wit or perhaps even whimsy."
+            "He looks depressed."
+        "Say nothing":
             pass
-        "Why wouldn't the Italian mermaids talk to you?":
-            ed "The mafia."
-            bio "Really?"
-            ed "Those women are stone cold."
-            "He stares past you,{w=0.1} into the distance."
-            "But...{w=0.1} there was only wall behind you."
-            
-    #integrate part where he says "they don't gaf about medicine in florence"
-    
-    ed "Obviously, you have to keep your medical knowledge up-to-date.{nw=0.2}"
-    ed "But they seriously do notttttt care about medicine in Florence."
-    ed "Like, there was this one guy I was dating. And his wife was going through labor, but the baby wouldn't come out, right?"
+
+    ed "With the mermaid mafia having ruined any of my attempts to fraternize with both the mermaids and mermen, and the townspeople not wanting to hang around somebody who just treated their neighbor for the plague, 
+    I headed up to the big city where all the magic was happening:" 
+    ed "Florence."
+
+    ed "The thing they don't tell you about Florence is that absolutely nobody GAF about doctors in that city."
+    ed "I walked right in and those people were partying it UP, music, art, messy lesbian drama out on the streets."
+    ed "Let me give you an example." 
+    ed "I meet this one guy. And his wife was going through labor, but the baby wouldn't come out, right?"
     ed "So I offered to perform a C-section on her, and he was all like,"
+    show cg csection with dissolve
     "Boyfriend" "What's that,{w=0.1} that's stupid."
     "Boyfriend" "What do you mean you cut the baby out of the womb."
     "Boyfriend" "Hell no."
@@ -760,10 +825,181 @@ label renaissance:
     ed "And he was like,{nw=0.2}"
     "Boyfriend" "Nooooo hahaha nooooo no one can kill Macbeth!"
     ed "Anyway she died of sepsis."
+    hide cg with dissolve
     bio "How is-{nw}"
     ed "And I thought to myself,{w=0.1} wow.{w=0.1} These guys have nothing on the Ottomans."
+    ed "Whatever the people thought the plague was, they were convinced it wasn't in Florence." 
+    ed "It was The Decameron in there."
 
-    # add the rest
+    menu:
+        "Move on":
+            pass
+        "The whole point of the Decameron was that they {i}left{/i} Florence.":
+            ed "Hm. You say this, and yet you did not meet and talk with Giovanni Boccaccio."
+            menu:
+                "You met and talked with Giovanni Boccaccio!?":
+                    ed "No. I did not."
+                "Who???":
+                    ed "Exactly."
+    
+    ed "Sure, I could have opened my own practice, or even found a clinic to work for, but I was lonely, and enough time had passed." 
+    ed "I was ready to be desirable again."
+    ed "As I said before, doctors were out. What was in was inventing. So naturally I knew I needed to invent." 
+    ed "I decided to take my studies to the engineering school, where I earned my next Ph.D."
+    "You get the feeling the timeline is off on both the plague and the Ph.Ds."
+    ed "It was a lot of hard work, sleepless nights...! And the mathematics and the prototypes...{nw=0.1}"
+    "You cannot let him get distracted by his postgraduate studies, so you decide to prompt him a bit."
+    bio "Well, surely the access to engineering gave you social clout, right? How did that work out for you?"
+    ed "Oh, very well. People had the expectation when you met that you would eventually start inventing for them." 
+    ed "And who am I if not someone who delivers?"
+    bio happy "I don't know. You tell me!"
+
+    ed "Well!"
+    ed "First I caught the attention of a tailor Lenù. We had fun together."
+    ed "She often complained about the knives tailors used because they snagged the fabric and I thought: \"what if I combined two knives together?\""
+    ed "And the scissors were born."
+
+    bio "I thought Da Vinci invented those?"
+    ed "Leonardo owed me money, so I let him have the patent." 
+    call takenote("the scissors were invented by the Dark Mage Ed", False)
+
+    bio "What did your tailor girlfriend think of the scissors?"
+    ed "Oh, she {i}loved{/i} them; her work flowed so much faster, she was the pride of tailors everywhere. But..." 
+    ed "The problem with dating in Florence is that once you make the invention they've been waiting for, the relationship is pretty much over."
+    bio sad "What? That's so sad..."
+    ed "That's just the way it was."
+    ed "From Lenù, I had a lot of contacts in the textile industry. Once they saw my scissors, they were practically jumping on top of me to get their own invention."
+    ed "I eventually wound up dating Lila, who owned a fabric workshop." 
+    ed "She was sweet, and her dream was to make cloth of intricate patterns that could rival even the paintings of the city." 
+    ed "After thinking long and hard about it, I invented a loom that could weave any image into cloth."
+    ed "Got that one from Anansi at a trickster convention. Funny guy, but you do {i}not{/i} want to get into a drinking competition with him."
+    ed "In a way, you could say I brought the gift of weaving to mankind."
+    bio "Where have I heard that before...?"
+
+    call takenote("", False)
+
+    ed "Now, my greatest invention was not made for love or to impress someone." 
+    ed "My greatest invention was made for self-satisfaction." 
+    ed "I wanted to see if I could even do it."
+    ed "A box that could heat anything inside it using electromagnetic radiation."
+    bio "The microwave?"
+    ed "The one and only."
+    $ microwaveseen = False
+    menu:
+        "That's so cool":
+
+            pass
+        "Don't buy it for a second":
+            ed "Behold my most prized possession."
+            show microwave:
+                xalign 0.8
+                yalign 0.5
+            #play sound thunk
+            bio shocked "..."
+            bio "You're kidding."
+            "You reluctantly credit Ed with the invention of the microwave."
+            $ microwaveseen = True
+            hide microwave
+
+    $ yourFacts += 1
+    $ factscollect.append("Ed invented the microwave just because he could")
+
+    ed "It took a lot of trial and error, but I'd made a working prototype." 
+    ed "I was ready to show it off to the world when disaster struck."
+    menu disaster:
+        "Fire?":
+            pass
+        "Volcano?":
+            pass
+        "Political instability?":
+            pass
+
+    ed "No... the mermaid mafia."
+    $ issueraised = False
+    menu:
+        "Interrupt":
+            $ issueraised = True
+            bio "How did the mermaid mafia get-{nw}"
+            ed "Hold on, hold on, I'm explaining."
+        "Do not":
+            pass    
+    
+    label afterdisaster:
+        ed "They were jealous of my inventions, of the good I was bringing to humanity."
+    ed "So one night they snuck into my house and raided it of all my inventions... my beautiful inventions..."
+    ed "This was worse than the Library of Alexandria getting burned... they stole my prototypes and threw them in the sea."
+    
+    if not issueraised:
+        menu:
+            "Interrupt":
+                $ issueraised = True
+                bio "But there's no-{nw}"
+                ed "Hey, hey, hey, I'm having a moment here."
+            "Not yet":
+                pass
+
+    ed "If that wasn't enough, they also pulled out their grubby little claws and ripped everything to shreds." 
+    ed "Except for the bottles of nail polish, which I also invented by the way. They kept those for themselves."
+
+    if microwaveseen:
+        bio "If they tore apart everything, how did you keep your microwave?"
+        ed "At the time, I was workshopping a new magic... They call it void-hopping now, but I mainly used it for storage."
+        ed "This is how I've been able to keep my lifeforce safe from fatal accidents, but it's also where I kept my microwave."
+        ed blush "His name is Michael."
+        ed -blush "Unfortunately, at the time, my void dimension was only big enough to fit a few things."
+        ed thinking "I couldn't rescue the other inventions."
+        "Seems awfully convenient."
+
+    ed "I was furious, but what was I supposed to do?" 
+    ed "I couldn't drag them out of the water, and I knew if I fell in, they'd tear me apart like they did the prototypes..."
+    ed "I started chucking rocks into the ocean, hoping to hit some of them." 
+    ed "I was yelling at the beach, grabbing whatever stones I could find and launching them at the mermaids."
+
+
+    if not issueraised:
+        menu:
+            "Interrupt":
+                $ issueraised = True
+                bio "I just don't know if-{nw}"
+                ed "Hang on, I gotta finish this thought."
+            "Keep holding it in":
+                pass
+
+
+    if not issueraised:
+        menu:
+            "Interrupt":
+                $ issueraised = True
+                bio "But there's no-{nw}"
+                ed "Wait wait wait, I'm almost done."
+            "Just a little longer":
+                pass
+
+    ed "The city guard didn't like that. I was causing a public disturbance, and the mermaids were lining their pockets anyway." 
+    ed "Corruption everywhere... mermaids at my back... my exes had no use for me... it was time to get the hell out of Italy."
+    
+    if not issueraised:
+        ed "...Are you all right?"
+        ed "You look like you have a burning question."
+        menu:
+            "Just one small problem":
+                $ issueraised = True
+                bio "Florence is landlocked."
+                ed "..."
+                bio "They couldn't throw your inventions into the sea."
+                bio "Because there was no sea."
+                ed "It was..." 
+                ed "It was a river."
+                ed "I swear it happened.{nw=0.1}"
+                ed "It happened, I swear.{nw=0.1}"
+                ed "I tell a lot of tall tales, but that was real!{nw=0.1}"
+                ed "It was real, I promise!{nw=0.1}"
+                ed "I just got it mixed up!{nw=0.1}"
+                ed "I can't help it, I'm old!{nw=0.1}"
+                ed "I'm sorry.{w=0.1} I'm sorry.{w=0.5} I'm sorry."
+    
+            "Not at all":
+                pass
 
     return
 
@@ -944,12 +1180,14 @@ label review:
     menu vocation:
         "Though he is many things now, his original occupation was..."
         "A fisherman":
+            $ yourFacts +=1
             pass
-        "A doctor":
+        "A scholar":
             pass
         "A sailor":
             pass
         "A pain in the ass":
+            ed "Hey."
             pass
 
     menu travel:
@@ -980,43 +1218,79 @@ label review:
             $ pine = True
             jump year
 
-    menu scam:
-        "He ripped off the Devil after trying out"
-        "Capitalism":
-            pass
-        "Mercantilism":
-            pass
-
     #alignment q
     menu beliefs:
         "Ed is ideologically aligned with..."
         "The monarchy":
-            $ renpy.block_rollback()
             pass
         "The owning class":
-            $ renpy.block_rollback()
             pass
         "The proletariat":
-            $ renpy.block_rollback()
             pass
         "Himself":
-            $ renpy.block_rollback()
             $ yourFacts +=1
             pass
         "Beautiful women everywhere":
-            $ renpy.block_rollback()
             $ yourFacts +=1
             ed "That includes you."
             bio "What!?"
             $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
-            "You quickly scratch that out and write [cuteanimal] in its place."
+            "You quickly scratch that out and write \"[cuteanimal]\" in its place."
             call endeared
         "Are you kidding!? Our paper isn't political!":
-            $ renpy.block_rollback()
             "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
             "He's not an idiot.{w=0.1} He knows about...{nw=0.3}"
             # play sound ominous 
             extend "The Implication."
+
+    menu crimes:
+        "During your talk, Ed casually admits to..."
+        "Framing someone for murder":
+            $ yourFacts += 1
+            ed "Hey, uh, don't write that in there."
+            ed "I have enough problems as it stands."
+            "Now it's your turn to be smug."
+            bio happy "No promises."
+        "Trapping a town in an endless fog":
+            pass
+        "Impersonating a vampire hunter":
+            pass
+        "Insider trading":
+            pass
+
+    ed "Hey, can you include a segment about my Ph.D.s?"
+    "You sigh."
+    bio "Fine."
+    menu phds:
+        "You decide you will offhandedly mention his Ph.D. in..."
+        "Fishing Science":
+            pass
+        "Theology":
+            $ yourFacts += 1
+            pass
+        "Screenwriting":
+            pass
+        "Library Science":
+            pass
+
+    "Finally..."
+    menu thecost:
+        "What did his immortality cost him?"
+        "Two dollars":
+            pass
+        "A Ph.D.":
+            pass
+        "His lily-white reputation":
+            pass
+        "Human connection":
+            "You look at the bags under his eyes."
+            "You think to yourself, \"Eye{i}bags?{/i} More like eye luggage.\""
+            "You snort, then shake your head for laughing at your own joke."
+            "Then you write, \"more than he could have ever imagined.\""
+            $ yourFacts += 1
+
+        
+    $ renpy.fix_rollback()
 
     #questions
     return

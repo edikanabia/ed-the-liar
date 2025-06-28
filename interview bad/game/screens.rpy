@@ -1634,11 +1634,11 @@ screen compendium(page="cover"):
     tag book
 
     showif page=="cover":
-        imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [ Show("compendium", page="page1")]
+        imagebutton idle "/screens/valkyrie_compendium_closed.png" xalign 0.5 yalign 0.5 action [Play("sound", "/sfx/book.ogg"), Show("compendium", page="page1")]
     elif page=="page1":
-        imagebutton idle "/screens/valkyrie_compendium_open.png" xalign 0.5 yalign 0.5 action [Show("compendium", page="page2")]
+        imagebutton idle "/screens/valkyrie_compendium_open.png" xalign 0.5 yalign 0.5 action [Play("sound", "/sfx/book.ogg"), Show("compendium", page="page2")]
     elif page=="page2":
-        imagebutton idle "/screens/valkyrie_compendium_open2.png" xalign 0.5 yalign 0.5 action [Show("compendium", page="cover")]
+        imagebutton idle "/screens/valkyrie_compendium_open2.png" xalign 0.5 yalign 0.5 action [Play("sound", "/sfx/book.ogg"), Show("compendium", page="cover")]
         
     imagebutton: 
         auto "/screens/closebutton_%s.png" 
