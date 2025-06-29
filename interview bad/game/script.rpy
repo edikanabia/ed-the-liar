@@ -156,7 +156,7 @@ transform move_to_left:
 # The game starts here.
 
 label start:
-
+    jump intro
 
     return
 
