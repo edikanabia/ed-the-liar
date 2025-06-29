@@ -49,10 +49,11 @@ default homophobic = False
 default homophobicbeliefs = []
 default starsign = False
 default finesse = False
+default vampireevilseen = False
 
 default ed_dn = "The Agent of Chaos"
 default petya_dn = "Петя"
-
+default commonality = False
 #endregion
 
 #region Resources
@@ -291,7 +292,7 @@ label demography:
 label upbringing:
     $ upbringing = True
     bio "What was your upbringing like?"
-    ed thinkin "Harrowing."
+    ed thinking "Harrowing."
     bio "Oh..."
     menu:
         "I'm so sorry":
@@ -356,7 +357,7 @@ label offended:
 
 label takenote(factoid, factuality):
     menu:
-        "You consider noting [factoid]."
+        "You consider noting that [factoid]."
         "Jot that down":
             if factuality==True:
                 $ yourFacts += 1
@@ -503,7 +504,6 @@ label portugal:
     menu:
         ed "It was when I turned thirty in 1430.{w=0.1} Pretty easy to remember,{w=0.1} right?"
         "I suppose so":
-            #call takenote("turned 30 in 1430", False)
             pass
         "You're how old, again?":
             ed "Thirty."
@@ -870,7 +870,7 @@ label renaissance:
 
     bio "I thought Da Vinci invented those?"
     ed "Leonardo owed me money, so I let him have the patent." 
-    call takenote("the scissors were invented by the Dark Mage Ed", False)
+    call takenote("scissors were invented by the Dark Mage Ed", False)
 
     bio "What did your tailor girlfriend think of the scissors?"
     ed "Oh, she {i}loved{/i} them; her work flowed so much faster, she was the pride of tailors everywhere. But..." 
@@ -962,11 +962,10 @@ label renaissance:
         ed -blush "Unfortunately, at the time, my void dimension was only big enough to fit a few things."
         ed thinking "I couldn't rescue the other inventions."
         "Seems awfully convenient."
+        "But the proof is in the microwave."
 
     ed "I was furious, but what was I supposed to do?" 
     ed "I couldn't drag them out of the water, and I knew if I fell in, they'd tear me apart like they did the prototypes..."
-
-
 
     if not issueraised:
         menu:
@@ -979,6 +978,7 @@ label renaissance:
 
     ed "I started chucking rocks into the ocean, hoping to hit some of them." 
     ed "I was yelling at the beach, grabbing whatever stones I could find and launching them at the mermaids."
+
     if not issueraised:
         menu:
             "Interrupt":
@@ -989,7 +989,9 @@ label renaissance:
                 pass
 
     ed "The city guard didn't like that. I was causing a public disturbance, and the mermaids were lining their pockets anyway." 
-    ed "Corruption everywhere... mermaids at my back... my exes had no use for me... it was time to get the hell out of Italy."
+    ed "Corruption everywhere... mermaids at my back... my exes had no use for me..." 
+    ed "It was time to get the hell out of Italy."
+    ed "There. I'm done."
     
     if not issueraised:
         ed "...Are you all right?"
@@ -1018,7 +1020,7 @@ label renaissance:
                 pass
     # hide the florence bg
 
-    ed "Do you want me to keep going?"
+    ed "Do you want me to keep going? I could talk about something else."
     "You're starting to get a feel for the kind of person Ed is." 
     "Scrappy, resourceful, and in constant pursuit of knowledge."
     "And a bit of a flirt."
@@ -1060,7 +1062,7 @@ label vampirecastle:
         "I think they suck blood.":
             ed "You think, huh?"
             ed "What else do you think in that pretty little head of yours...?"
-            "He's about to make you swoon again. He can't keep getting away with it!"
+            bio blush "..."
             call endeared
     
     ed "Anyway, she was about to start ramping things up around there."
@@ -1068,11 +1070,12 @@ label vampirecastle:
     ed "Not what I'm called."
     "Layla" "You're always going on about all those Ph.D.s you have..." 
     "Layla" "Surely a man with a big strong brain such as yours pines for another one, yes?"
-    ed blush "Darn... I can't say no to another Ph.D."
+    ed blush "Darn... I can't say no to another Ph.D..."
     ed -blush "The hot new science of the times was chemistry and Layla was willing to pay out." 
     ed "All I had to do was \"donate\" some of my blood from time to time." 
     ed "Otherwise, I had the best books, highest quality equipment, and some of the best teachers at my disposal."
-    bio "So this is another story about your Ph.D.s."
+    bio "So this is another story about your Ph.D.s?"
+    ed "Is-{nw=0.1}"
     ed "Is this not an interview about my Ph.D.s?"
     "No."
     "It is not."
@@ -1115,6 +1118,7 @@ label vampirecastle:
                     call offended
                     pass
                 "For aiding and abetting a vampire?":
+                    $ vampireevilseen = True
                     "He sighs."
                     ed thinking "You know, they're not all bad..."
             $ renpy.fix_rollback()
@@ -1137,7 +1141,7 @@ label vampirecastle:
     ed shock1 "..."
     ed shock2 "..."
     ed "Okay that's enough."
-    ed "What Layla didn't know was when I wasn't in the lab, I was building and collecting weapons."
+    ed -shock2 "What Layla didn't know was when I wasn't in the lab, I was building and collecting weapons."
     if endearing:
         ed "And working out. I was also working out a lot."
         bio blush "Wow..."
@@ -1160,11 +1164,15 @@ label vampirecastle:
             pass
     $ renpy.fix_rollback()
 
+    show bg coffeeshop with dissolve
+    show ed at move_to_center
+    #move ed back to center
     "You take diligent notes of his vampire exploits."
 
     ed "Hey."
     "You look up from your notebook."
-    ed "Do your job. You've been letting me yap too much with no direction."
+    ed lookup "Do your job. You've been letting me yap too much with no direction."
+    show ed -lookup with dissolve
     "He's right. He's ready for your next question."
     "...only, you spent your best question already. And his answer kind of sucked."
     "You reach back into the recesses of your mind for an interview question that could inspire a tale as riveting as the one he just told..."
@@ -1172,10 +1180,10 @@ label vampirecastle:
     "What was that!?"
     "You want to press your fists into your forehead, but you've got to keep your composure."
     "Luckily, it looks like something in his brain is turning..."
-    ed "You want to hear about my English Literature degree."
-    bio "I don't want to hear about the degree but the setting sounds primed for adventures."
+    ed lookup "You want to hear about my English Literature degree."
+    bio "I don't want to hear about the degree at all. But the setting sounds primed for adventures."
     bio "You could talk about that."
-    ed "All right, no problem..."
+    ed thinking "All right, no problem..."
 
     jump classiclit
     return
@@ -1217,7 +1225,7 @@ label classiclit:
                     pass
                 "Oh they were doin' it":
                     if endearing:
-                        bio happy "You liked him a lot, didn't you?"
+                        bio happy "You liked him {i}a lot{/i}, didn't you?"
                         ed blush "Yeah. I did."
                     else:
                         "You bite your lip a little too hard."
@@ -1258,30 +1266,101 @@ label classiclit:
     ed "He completely and utterly lost his marbles."
     show petya at person_d
     petya "Ed, you gotta help me man. I messed up."
-    ed "What in the world!?"
+    ed angry "What in the world!?"
     petya "I don't even know what happened... I lost control of myself..."
     petya "Y-you told me I should stand up for myself, but I... I went too far... he's..."
+    ed "{size=+20}[petya_dn].{/size}"
     ed "{size=+20}I never told you to kill anybody.{/size}"
     petya "I know, I know, but..."
     petya "You gotta help me. Please? It'll be just like old times!"
     ed "I couldn't say no to that, mainly because I was worried that if I didn't do anything, he was going to find a way to rope me in anyway." 
     ed "So I figured it was better to take control of the situation myself."
     bio sad "What did you end up doing???"
-    ed "We framed the murder on someone else."
-    ed "Later that night, we packed up and fled the country."
+    ed smug "We framed the murder on someone else."
+    bio shocked "WHAT."
+    ed fakeout "Some goofball studying this newfangled thing called computer science?"
+    ed smug "He didn't know what hit him."
+    bio "WHEN WAS THIS."
+    ed -lookup "Later that night, we packed up and fled the country."
+    bio "OH MY GOD?"
+    ed "What's the problem? You didn't seem to have a problem with all those vampires I slaughtered."
+    menu:
+        "This is different":
+            ed "How so?"
+            menu:
+                "Vampires are evil":
+                    ed "Well,"
+                    ed blush "not all of them are."
+                    if vampireevilseen:
+                        ed -blush "Didn't I say that?"
 
+                "You have a license to hunt vampires":
+                    ed "Ooh, good point."
+                    ed smug "You're clever."
+                    call endeared
+                    pass
+            pass
+        "I guess you're right":
+            pass
+
+    bio "Okay, fine. What happened afterwards? A relationship tested through the flames should be able to survive, right?"
+    ed "Not really. I guess we could only relate to each other through that brief period." 
+    ed "We were on the run together for a litle while, but we decided to split up." 
+    ed "I tried to keep in contact with him, but after a few letters, I never heard from him again."
 
     if itwasinfo:
-        # bio says something more empathetic here
+        bio "I can hardly imagine why. You helped him through so much."
+        ed "If I'm being honest, I'm not too proud of what I helped him with!"
+        "He's laughing like it's a joke, but..."
         pass
     else:
-        bio "I can see why."
-        ed "How do you mean?"
-        bio "You drove him to madness."
+        bio "I can see why. You basically drove him to madness."
+        ed lookup "Huh? What makes you say that?"
+        bio sad "If I can be frank for a bit, he was already a nervous wreck."
+        bio "He didn't need you filling his head with magic and sweet nothings."
+        ed angry "E... excuse me...?"
         call offended
 
-
-    "Suddenly, a theme is leaping out to you. A thread stringing these stories together."
+    ed "Anyway, if I had to relate it back to the question, {nw=0.3}"
+    "You had nearly forgotten about the question (probably because it sucked).{nw=0.3}"
+    ed "the degree itself wasn't too tough since I had already seen Shakespeare's plays in person."
+    ed "What I really struggled with was..."
+    ed "I don't know..."
+    ed "Sometimes I close my eyes and I see [petya_dn]'s sad wet little eyes."
+    ed "And his hands and face covered in blood."
+    bio "In like a creepy way?"
+    ed "No, it's definitely attractive."
+    menu:
+        "So you were struggling with your sexuality" if homophobic:
+            ed angry "No, what the-{nw=0.3}"
+            ed "What's your damage?"
+            call offended
+            pass
+        "It sounds like your recent partners weren't very nice":
+            ed "They weren't."
+            if endearing:
+                ed "They were kind of awful..."
+                ed "But every time they left I felt like..."
+                ed "I felt like I had a gaping hole in my heart."
+                "You tilt your head in interest."
+                "You wish you could fill that hole..."
+                ed "Don't go getting ideas about filling any holes."
+                bio blush "ED!"
+            pass
+    ed "Anyway. That's what comes to mind..."
+    bio "All right."
+    "You start to notice a theme emerging in the tales he's spinning."
+    #conditional that checks for the amount of facts
+    "Though you're having trouble telling fact from fiction."
+    "It could be a mere fluke, so you decide to prompt one last time, just in case it doesn't show."
+    "But you're sure it will."
+    bio "What moment would you say is emblematic of your biggest fear?"
+    ed "What?"
+    ed "Why not just ask me my biggest fear?"
+    bio happy "Because I have a feeling I already know what it is!"
+    bio -happy "Also, you wouldn't answer a question like that."
+    ed "True."
+    ed "Okay, here goes."
 
     jump film
     return
@@ -1289,47 +1368,136 @@ label classiclit:
 
 label film:
 
-    if greeting == "excited":
-        ed "You said you were honored to meet me."
-        ed "Sir."
-        "You did say that."
-    
+    ed "I moved to Los Angeles."
+    menu:
+        "I've heard enough":
+            $ renpy.block_rollback()
+            ed "Really? Okay."
+            "You look at him, expecting him to continue after chuckling along with you. But he doesn't laugh."
+            "In fact, he seems to have taken you quite literally and refuses to speak more about his time in L.A."
+            "You stare at him."
+            "He stares at you."
+            "You stare at him..."
+            "He stares at you."
+            if stareflag >=1:
+                "You don't care if you've done this song and dance before."
+            "This is really the end of the interview."
+            "You thank him for his time, and you leave the coffee shop."
+            jump finaltest
 
+        "Oh the inhumanity":
+            ed "Where was I supposed to go? Ohio?"
+            "You nod your head in concession."
 
+        "Go on":
+            pass
+
+    ed "I had spent decades in countries with rotten weather when I decided I'd finally had enough." 
+    ed "I {i}needed{/i} to go somewhere with warm winters." 
+    ed "Besides, the talkies had just come out and I wanted to have some fun."
+    bio "At the movies."
+    ed "Yeah."
     bio "So what got you interested in film?"
-    ed "I became interested in film when I realized someone had brought one back in time to scare and confuse me."
+    ed "In truth, I became interested in film when I realized someone had brought one back in time to scare and confuse me."
     menu:
         "Are you joking kidding me":
             ed "About what?"
-            bio "The time travel."
-            ed "Is it that hard to believe?"
+            bio angry "The time travel."
+            ed fakeout "Is it that hard to believe?"
             bio "It's pretty freaking hard to believe."
-            ed "Really?{w=0.1} I haven't even told you about the Trickster God Wars." 
-            ed "Do you wanna hear about the Trickster God Wars?"
+            ed -fakeout "Really?{w=0.1} Cuz I haven't even told you about the Trickster God Wars." 
+            ed lookup "Do you wanna hear about the Trickster God Wars?"
             bio "I'll pass."
             if endearing:
                 ed "That's okay.{w=0.1} Some other time, then."
-                ed "Maybe over dinner."
+                ed smug "Maybe over dinner."
+
                 
         "Was it a good movie though":
             ed "It probably changed my life forever."
-            ed "So I would say it's pretty good."
+            ed blush "So I would say it's pretty good."
             bio "What was the movie?"
-            ed "1986's {i}Blue Velvet{/i} (dir. David Lynch)."
+            ed fakeout "1986's {i}Blue Velvet{/i} (dir. David Lynch)."
 
-    #insert hannah's 20s script
+    call takenote("Ed was shown a movie before they ever existed", True)     
 
-    ed "...Zendaya"
+    ed "So my first day in the city, I was approached by someone on my walk to the grocery store."
+    ed "I had just the look Hollywood was going for. Handsome but approachable, charming and soft."
+    ed "I'd compliment the ladies and the men on screen. I had the potential to be a star and I figured—yeah, why not."
+    ed "My first role was as a man in a ballroom who is sitting at a table waiting for his date." 
+    ed "The lead actress comes up to me and asks if my seat is free. I prop my arm around my chair and smile at her and say,"
+    ed "\"Not right now, darling, but I might have some space later.\""
 
+    ed "I delivered that line and my fate was sealed." 
+    ed "Critics raved, \"Who is that background actor with a single voiced line? Really pulls the whole film together,\" and audiences couldn't get enough of me."
+    ed "Suddenly I was the hottest guy anyone had seen or heard of in the motion picture business."
+    ed "The best friend in a screwball comedy, the uncle in a serious play adaptation, the romantic lead—{nw=0.1}"
+    ed "the roles just kept on coming. And I was killing it with all of them!"
+    ed "Everyone praised my ability to command a scene, the ease of which I held myself,{nw=0.1}" 
+    ed "the casual and charming way that I talked about the 1700s like I had been there for it." 
+    ed "Everyone {i}loved{/i} me."
+    bio "They all {i}loved{/i} you, you say?"
+    ed "Yeah, they loved me a bit too much, because here's where it starts to cause problems."
+
+    ed "I lived in a modestly-sized house tucked away in the Hollywood Hills, with a view of the ocean." 
+    ed "I mostly kept out of the public eye and hardly engaged with my fans." 
+    ed "In a way, you could say I played hard to get. I thought it added to my gentlemanly charm."
+    ed "Then come the after work drinks and cast wrap-up parties."
+    ed "Day in and day out, I am surrounded by beautiful women and handsome men as far as the eye could see."
+    ed "So I cave. And I buy people a few drinks here and there, and invite some of them over to my house..."
+    bio angry "Some people?"
     menu:
-        "Zendaya? Seriously?"
-        "You did not sleep with freaking Zendaya":
-            ed "ok maybe not zendaya maybe like pedro pascal"
-            
+        "He was throwing modestly-sized informal gatherings in his humble abode":
+            "Methinks you trust this man a tad too much!"
             pass
+        "He was throwing some crazy parties in that mansion, yo":
+            $ yourFacts += 1
+            pass
+    "He shifts in his seat a little bit. You get the feeling he may have undersold some details..."
+    "You brace yourself for what's about to come next."
+    bio "So who were these people who had you in their favor? Anyone I know?"
+    ed "Hm, well..."
+    ed "Rock Hudson, Anna May Wong, Katherine Hepburn, Eartha Kitt, James Dean,{nw=0.2}"
+    bio "Wow,{w=0.1} that's-{nw}"
+    ed "Josephine Baker, Rita Hayworth, Paul Robeson, Anthony Perkins, Paul Newman...{nw=0.3}"
+    ed lying "...Zendaya{nw=0.2}"
+
+    "Zendaya? Seriously?"
+    menu:
+        "You did not sleep with freaking Zendaya":
+            ed "ok maybe not zendaya maybe like {w=0.4} pedro pascal{nw}"
+            bio angry "Ed.{nw=0.3}"
+            ed "Okay."
+            ed blush "The other ones were real.{nw}"
+            bio "I know."
+            ed "Okay."
+            ed "Just making sure."
+            $ yourFacts +=1
+
         "I believe it":
             pass
     
+    ed "I was having so much fun loving{w=0.1}—and being loved{w=0.1}—that I nearly forgot about the fact that it was the early 20th century in North America, and actions like that have Consequences." 
+    ed "You see, the first divorce you cause is kind of funny. By the third, you start getting invited to the courthouse..."
+    ed "It's pretty hard to be the cause of over fifteen divorces and not get the attention of your boss."
+    bio "{i}Fifteen!?{/i}"
+    ed "The studio heads were pissed." 
+    ed "If I hadn't been with their wives, I had been with their wives sisters,{w=0.1} or their wives sisters' husbands."
+    ed "Or perhaps all of them at once."
+    bio "No s**t they were pissed. I would be, too!"
+    ed "Yeah, but they couldn't fire me because I was loved by the public too much, and no one was worried about communists infiltrating Hollywood yet."
+    ed "So it's not like I was going to be blacklisted."
+    ed "Besides, if I got banned from a set I could just get one of my many lovers to sneak me back in."
+    bio "In spite of it all, you still wound up on top."
+    ed "That is until the suits decided enough was enough." 
+    ed "Thirty eight divorces strong, I had to be stopped."
+    ed "If they couldn't fire me, and they couldn't ban me from the studios, they decided to take drastic measures: {p=0.1}they had to go to the United States government." 
+    ed "Movies were going too far and a governing body had to be put in place to stop them."
+    bio "You mean you caused the creation of the Hays Code!?"
+    ed "Well? Joke's on them. I retired with my millions and spent the rest of the 20th century unburdened and unbothered."
+    bio "And alone."
+    ed thinking "..."
+
     jump currentday
     return
 
@@ -1342,7 +1510,7 @@ label currentday:
     bio "No one? I don't know how true that is."
     ed "You know what...? You could be right."
     ed "Maybe there's someone out there who wants a doctorate to affirm their gender."
-    bio "So you got your Ph.D."
+    bio "So you got your Ph.D. Again."
     ed "Yes there's more I got more Ph.Ds."
     $ degreeskip = False
     menu:
@@ -1355,7 +1523,8 @@ label currentday:
             "You decide to be frank."
             bio "Ed."
             bio "No one cares how many Ph.Ds you have."
-            ed "Damn, okay. Famous last words though." #looks at the camera. 
+            ed "Damn, okay." 
+            ed smug "Famous last words though." #looks at the camera. 
             $ degreeskip = True
             jump afterPhd
             
@@ -1363,12 +1532,14 @@ label currentday:
             $ renpy.block_rollback()
             pass
 
-    ed "It was the late 90s, a while after I got my Ph.D in clinical psychology."
-    ed "I had just become board-certified at the time, too, and my private practice was doing pretty well."
+    ed "It was the late 90s, a while after I got my Ph.D. in clinical psychology."
+    ed "I had just become a board-certified physician at the time, too, and my private practice was doing pretty well."
     ed "Since I had a bit of extra cash, I figured I could go back and do another program. One that was less sciencey."
     ed "Like I said, I was there, so it wasn't suuuper difficult. But, my god, the papers, and the records?"
     ed "I was like, \"Is this film studies or archaeology?\""
+    show colleague at person_d
     "Colleague" "It's called, \"doing research,\" Ed."
+    hide colleague
     ed "But, you know, spending time in and out of libraries,"
     ed "seeing patients,"
     ed "robbing banks to pay for my girlfriend's HRT..."
@@ -1410,7 +1581,7 @@ label currentday:
     ed "Anyway,{w=0.1} I knew it was about to get crazy over here,{w=0.1} so I moved to London."
     
     if not degreeskip:
-        ed "I got my most recent Ph.D a few years later,{w=0.1} in Africana Studies."
+        ed "I got my most recent Ph.D. a few years later,{w=0.1} in Africana Studies."
         ed "And I thought it was a very illuminating experience,{w=0.1} but now I don't know how I feel about gynecology?"
         menu:
             "Gynecology?":
@@ -1419,8 +1590,31 @@ label currentday:
                 ed "You're a smart woman.{w=0.1} I'm sure you can figure it out."
             "I get what you mean":
                 pass
-    ed "I taught there for the better part of two decades."
-    bio "What made you decide to come back?"
+    ed "I taught there for the better part of two decades, and ended up working very closely with another professor who was also a witch."
+    ed "She was deep in ghost research, which was a field of magic I had barely touched for a number of reasons."
+    ed "...Reasons I would hope are obvious."
+    ed "Early on in our stint together, keeping the magic a secret got to be really quite difficult."
+    ed "You know, it's a university, so people ask questions."
+    ed "\"Can I have the key to the printing closet.\" \"Why do you need library access after hours.\" \"Aren't you the guy from Star War.\"" 
+    ed "Things like that."
+    ed "So we put on fake wedding bands. That made them mainly ask when we got married."
+    bio "But you wouldn't pretend to marry someone you didn't like."
+    ed "Oh boy. Don't even joke about that."
+    "It took a while, but the theme finally re-emerged..."
+    ed "I floated the idea around, but I wasn't anywhere close to her level."
+    ed "She said I was too immature for her."
+    ed "She's a regular 30-something."
+    bio "She's a 30-something, right now?"
+    ed "Yes."
+    bio "So young!"
+    ed "Yes, it's embarrassing."
+    bio "When did that happen?"
+    ed "Only a few years ago."
+    bio happy "You're taking it like a champ."
+    ed "I- {nw=0.1}"
+    ed "Thank you."
+
+    bio "What made you decide to come back from England?"
     ed "Oh,{w=0.1} you know..."
     ed "{size=-10}...philandering.{/size}"
     menu:
@@ -1428,7 +1622,7 @@ label currentday:
             bio "Excuse me,{w=0.1} can you say that again?"
             ed "That again."
             "Sigh.{w=0.1} Of course."
-            bio "Of horse."
+            bio happy "Of horse."
             "He stares at you."
             "You stare at him."
             if stareflag >=2:
@@ -1447,7 +1641,24 @@ label currentday:
             "Not that that's bad or anything.{w=0.1}" 
             if homophobic:
                 $ renpy.notify("Trait gained: in denial!")
-            "It's not like you're homophobic."            
+            "It's not like you're homophobic."
+
+    
+    ed "So."
+    ed "Based on that."
+    ed "What would you say my biggest fear is?"
+    menu:
+        "Commitment":
+            pass
+        "Abandonment":
+            pass
+        "Insincerity":
+            pass
+        "All of the above":
+            pass
+    $ renpy.fix_rollback()
+    ed "You seem really sure about that."
+    bio "Mm-hm."         
     jump review
     return
 
@@ -1508,10 +1719,10 @@ label review:
         "Himself":
             $ yourFacts +=1
             pass
-        "Beautiful women everywhere":
+        "The girl reading this":
             $ yourFacts +=1
             ed "That includes you."
-            bio "What!?"
+            bio blush "What!?"
             $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
             "You quickly scratch that out and write \"[cuteanimal]\" in its place."
             call endeared
@@ -1563,39 +1774,57 @@ label review:
         "Human connection":
             "You look at the bags under his eyes."
             "You think to yourself, \"Eye{i}bags?{/i} More like eye luggage.\""
-            "You snort, then shake your head for laughing at your own joke."
+            "You snort, and then shake your head for laughing at your own joke."
             "Then you write, \"more than he could have ever imagined.\""
             $ yourFacts += 1
 
         
     $ renpy.fix_rollback()
 
-    #questions
+    "You got the strange feeling that you and him were headed toward the same idea."
+    menu commonthread:
+        "The one thing all of his stories had in common was..."
+        "Crazy-ass moments in world history":
+            "At the moment, though, you were a bit distracted by the surface-level elements."
+            pass
+        "A romantic partner":
+            $ commonality = True
+            pass
+        "A postgraduate degree":
+            "Okay, like, yeah, but, like, not that."
+            jump commonthread
+        "A supernatural component":
+            "At the moment, though, you were a bit distracted by the surface-level elements."
+            pass
+    $ renpy.fix_rollback()
+
+    jump interviewconclusion
+
     return
 
 label interviewconclusion:
 
 
-    ed "There.{w=0.1} That should be enough to write a pretty basic profile."
+    ed "Well?{w=0.1} That should be enough to write a pretty basic profile."
     bio "Basic? You don't mean to imply that there's more."
-    ed "There absolutely is,{w=0.1} but if I went into it,{w=0.1} I'm certain we'd be here all night."
+    ed "There {i}absolutely{/i} is,{w=0.1} but if I went into it,{w=0.1} I'm certain we'd be here all night."
     "Truthfully,{w=0.1} you wouldn't mind spending all night with him."
     if not endearing:
         ed "But you have a deadline,{w=0.1} so."
         pass
     ed "Was there anything else you needed from me?"
     bio "Yes,{w=0.1} well,{w=0.1} I just have one final question."
-    bio "In all your stories,{w=0.1} you've gone on about the what, the how..."
+    bio "In all your stories,{w=0.1} you've gone on about the who, the what, the how..."
     bio "Why did you do it?{w=0.1} Why did you decide to become an immortal wizard?"
     ed "I was already a wizard before I became immortal."
-    bio "Right,{w=0.1} of course.{w=0.1} But still."
-    bio "Was it for all those fun adventures? Money?"
-    bio "You were trying to change the world?"
-    bio "What was the reason?"
+    bio "Right,{w=0.1} of course.{w=0.1} But still. What motivates you?"
+    bio "Is it all those fun adventures? Money?"
+    bio "Were you trying to change the world?"
+    bio "What's the reason?"
     bio "Or,{w=0.1} at least,{w=0.1} what's the reason you want the world to know?"
 
     ed "Why did I do it,{w=0.1} huh...?"
-    ed "Well,{w=0.1} that's easy."
+    ed "That's a great question."
     ed "I,{w=0.1} um..."
     ed "I did it for love."
     bio "Love...?"
@@ -1610,12 +1839,15 @@ label interviewconclusion:
             
         "It's not weird at all":
             ed "Good.{w=0.2} ...I was a little worried you would make fun of me."
-            
-    bio "Why do you say you did it for love?"
+    if commonality:
+        bio "I noticed you had a partner for every story."
+        bio "Or, at least someone you were very fond of, that you seem to miss, even now."
+    else:
+        bio "Why do you say you did it for love?"
     ed "It goes back to my first girlfriend."
     ed "...Actually, she was my fiancée."
     ed "When we shipwrecked, I actually died. {w=0.3} Well,{w=0.3} \"died.\""
-    ed "I never told her about the immortality thing."
+    ed "I never told her about the immortality."
 
     if yourFacts >= factstotal:
         if endearing:
