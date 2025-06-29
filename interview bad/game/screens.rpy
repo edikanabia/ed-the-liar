@@ -1623,7 +1623,7 @@ screen bookbutton():
             focus "tooltip"
             frame:
                 xalign 0.5
-                text "[tooltip]"
+                text "[tooltip]" color "#ebd5c0"
         
     
 
@@ -1653,4 +1653,4 @@ screen compendium(page="cover"):
             focus "tooltip"
             frame:
                 xalign 0.5
-                text "[tooltip]"
+                text "[tooltip]" color "#ebd5c0"
