@@ -6,7 +6,7 @@
 #region Character
 default bioName = "Biographer"
 
-define ed = Character("ed_dn", image="ed") #dynamically change name from Immortal Wizard to Ed
+define ed = Character("ed_dn", image="ed", dynamic=True) #dynamically change name from Immortal Wizard to Ed
 define bio = Character("You", image="bio")
 define boss = Character("Boss")
 define umi = Character("Umi")
@@ -19,7 +19,7 @@ define petya = Character("petya_dn", dynamic=True)
 
 define totalPhds = "7"
 define totalDoctorals = "8"
-define factstotal = 0
+define factstotal = 8
 
 #endregion
 
@@ -54,6 +54,8 @@ default vampireevilseen = False
 default ed_dn = "The Agent of Chaos"
 default petya_dn = "Петя"
 default commonality = False
+
+default earlyend = False
 #endregion
 
 #region Resources
@@ -1372,6 +1374,7 @@ label film:
     menu:
         "I've heard enough":
             $ renpy.block_rollback()
+            $ earlyend = True
             ed "Really? Okay."
             "You look at him, expecting him to continue after chuckling along with you. But he doesn't laugh."
             "In fact, he seems to have taken you quite literally and refuses to speak more about his time in L.A."
@@ -1383,7 +1386,7 @@ label film:
                 "You don't care if you've done this song and dance before."
             "This is really the end of the interview."
             "You thank him for his time, and you leave the coffee shop."
-            jump finaltest
+            jump gooseygoo
 
         "Oh the inhumanity":
             ed "Where was I supposed to go? Ohio?"
@@ -1503,7 +1506,7 @@ label film:
 
 
 label currentday:
-    ed "Much later,{w=0.1} I went back and got a Ph.D in film studies."
+    ed "Much later,{w=0.1} I went and got a Ph.D in film studies."
     ed "It was pretty easy since I was there for all of it."
     bio "So you just collect degrees, just because?"
     ed "What? No. No one does that."
@@ -1603,7 +1606,7 @@ label currentday:
     "It took a while, but the theme finally re-emerged..."
     ed "I floated the idea around, but I wasn't anywhere close to her level."
     ed "She said I was too immature for her."
-    ed "She's a regular 30-something."
+    ed "She's a regular 30-something!"
     bio "She's a 30-something, right now?"
     ed "Yes."
     bio "So young!"
@@ -1847,7 +1850,23 @@ label interviewconclusion:
     ed "It goes back to my first girlfriend."
     ed "...Actually, she was my fiancée."
     ed "When we shipwrecked, I actually died. {w=0.3} Well,{w=0.3} \"died.\""
-    ed "I never told her about the immortality."
+    ed "I never told her about the immortality, so she never knew I was still alive."
+    ed "I think that in the intervening years, I didn't want to replace her..."
+    ed "So all of my relationships ended up being really short-lived."
+    bio "Because you thought you would find her again?"
+    ed "Right."
+    bio "But you ended up never meeting her again."
+    ed "No, that's not true."
+    ed "When we reunited, she had married someone else."
+    bio "Oh..."
+
+    ed "Then she told me,\"You're like how I was when I met you.\""
+    bio "That kind of makes sense. Mermaids live for much longer than humans do."
+    bio "Ohhhh. I think I understand it now..."
+    ed "Yeah."
+    ed "I only see why she tried to talk me out of the deal after I'd done it."
+    ed "But she wasn't upset with me or anything. She just kind of... laughed."
+    ed "She told me that"
 
     if yourFacts >= factstotal:
         if endearing:
@@ -2026,39 +2045,55 @@ label finaltest:
         jump dealend
     elif ed_observation == True:
         "You mull on the last conversation you had before you left."
+        "He was needlessly cryptic... wasn't he?"
+        "But you're sure nothing will come of it."
         pass
     else:
         "Pleased with your findings,{w=0.1} you returned to the office with your head held high.{w=0.1} You had a brilliant idea for the profile."
         "You could even picture the final line of the article:"
-        "Even in a life full of tall tales,{w=0.1} he kept a simple truth in his heart."
+        "{i}Even in a life full of tall tales,{w=0.1} he kept a simple truth in his heart.{/i}"
         pass
-
-    boss "There you are,{w=0.1} you silly goosey goo!{w=0.1} So what did you find out?{w=0.1} Is he really the world's most credentialed man?"
-    bio "Well he's... " #fact or falsehood
-
-    #fun lil randomness segment (my specialty) -- it's three random facts you rattle off each time?
-    #if statement shows boss's response to each fact
-    bio "And he also..."
-    #boss response
+    label gooseygoo:
+        boss "There you are,{w=0.1} you silly goosey goo!{w=0.1} So what did you find out?{w=0.1} Is he really the world's most credentialed man?"
+    bio "Well... "
+    $ rattle = False
+    if yourFacts <=2:
+        bio "I certainly talked to the man."
+    elif yourFacts >2:
+        $ rattle = True
+        $ tidbit = renpy.random_choice(factscollect)
+        bio "I found out that [tidbit]."
+        $ factscollect.remove(tidbit)
+        $ tidbit = renpy.random_choice(factscollect)
+        bio "I also learned that [tidbit]..."  
+        $ factscollect.remove(tidbit)
+        $ tidbit = renpy.random_choice(factscollect)
+        bio "And I'm pretty sure [tidbit]."       
     
     if starsign:
         bio "Did you know he's actually a Libra and not a Virgo?"
 
-    boss "Kid."
-    boss "You're tellin' me stuff we already heard!"
+    if rattle:
+        boss "Kid."
+        boss "You're tellin' me stuff we already heard!"
+    else:
+        boss "What's that supposed to mean? So you were striking up friendly chatter instead of writing the article?"
+    
     bio "Um...{w=0.1} I was under the impression that we hadn't written the profile yet because of the sheer amount of misinformation surrounding the individual."
-    boss "No,{w=0.1} no,{w=0.1} we hadn't written the profile because we were waiting for the new keyboard to come in!{w=0.1} Keep up!"
-    bio "Well,{w=0.1} he sent me off with a tidbit I thought was really beautiful and true."
-    boss "Really?{w=0.1} Let's hear it."
-    bio "He told me he had never forgotten the reason he became immortal." 
-    bio "He told me he'd done it for love.{w=0.1} And that the one thing he desired most was forgiveness."
-    boss "YAWNNNNNNNNNNNNNNNNNNNNN.{w=0.1} Boring!"
-    bio "I thought it was nice..."
-    if dealtriggered == True:
-        boss "I thought it was CORNY!"
-        bio "I have something else that...{w=0.1}happened...{w=0.1}if you'd rather hear about that?"
+    boss "No,{w=0.1} no,{w=0.1} we hadn't written the profile because we were waiting for the new keyboard to come in.{w=0.1} Keep up!"
+    if not earlyend:
+        bio "Well,{w=0.1} he sent me off with a tidbit I thought was really beautiful and true."
+        boss "Really?{w=0.1} Let's hear it."
+        bio "He told me he had never forgotten the reason he became immortal." 
+        bio "He told me he'd done it for love.{w=0.1} That was the one thing he desired most."
+        boss "YAWNNNNNNNNNNNNNNNNNNNNN.{w=0.1} Boring!"
+        bio "I thought it was nice..."
+        if dealtriggered == True:
+            boss "I thought it was CORNY!"
+            bio "I have something else that...{w=0.1}happened...{w=0.1}if you'd rather hear about that?"
 
-    boss "Nope! {w=0.1}Don't gaf. {w=0.1}SO! {w=0.1}How many Ph.Ds did he earn?"
+        boss "Nope! {w=0.1}Don't gaf.{nw=0.1}"
+    boss "SO! {w=0.1}How many Ph.Ds did he earn?"
     bio "um{nw=0.1}"
     bio "what?"
     "Your boss sighs."
@@ -2066,7 +2101,7 @@ label finaltest:
     bio "Are you serious?"
     boss "Very."
     bio "Well- {nw}"
-    boss "Your job depends on it. Just so you know."
+    boss "Your job depends on it. {w=0.1}Just so you know."
     $ finalanswer = renpy.input(prompt="How many Ph.Ds did Ed earn in his lifetime? (Enter numbers only.)", allow="1234567890")
     boss "Okay,{w=0.1} don't forget to write that in.{w=0.1} I'm counting on you!"
     boss "Don't embarrass the paper!"
