@@ -39,6 +39,8 @@ default affection = 0
 default favorlost = False
 default e_firsttime = True
 default o_firsttime = True
+define affectionthreshold = 2
+
 
 default stareflag = 0
 default greeting = ""
@@ -341,7 +343,7 @@ label endeared:
     else:
         pass
     
-    if affection > 0:
+    if affection > affectionthreshold:
         $ endearing = True
 
     return
@@ -349,10 +351,9 @@ label endeared:
 label offended:
     $ affection -= 1
     if affection <= 0:
-        $ endearing = False
         $ affection = 0
     
-    if affection <= 0 and e_firsttime == False:
+    if affection <= affectionthreshold and e_firsttime == False:
         "You've definitely lost your favor with him."
         $ endearing = False
         $ favorlost = True
@@ -362,7 +363,7 @@ label offended:
         "He seems offended."
         if affection > 0:
             "Let's try to avoid that."
-    elif affection == 1:
+    elif affection == affectionthreshold+1:
         "He's starting to get testy.{w=0.1} Try not to offend him again..."
         
     else:
@@ -1143,18 +1144,18 @@ label vampirecastle:
     show layla at person_d with dissolve
     "Layla" "Darling Edmund how was chemistry."
     ed blush "It was great. Unlike alchemy. Which was wrong."
-    show ed blush
-    "Layla" "Yeah okay whatever."
     show ed -blush
-    "Layla" "As you know, I have clientele that visits this castle from afar." 
+    "Layla" "Yeah okay whatever."
+    "Layla" "As you know, I have regular clientele that visit this castle from afar." 
     "Layla" "They come in search of a very particular product."
     "Layla" "One they can usually only get from beyond the seas, which we've been importing for some time..."
     "Layla" "...but which would be not just more economical but hugely lucrative to synthesize in-house."
     ed blush "You mean they don't have to pillage Afghanistan to mine lapis lazuli anymore?"
-    "Layla" "What? No. It's drugs. I'm talking about drugs."
     show ed -blush
+    "Layla" "What? No. It's drugs. I'm talking about drugs."
     "Layla" "Idiot."
-    hide layla with dissolve
+    show layla:
+        linear 0.8 offscreenright
     #she slides off screen to the right
     bio -sad "Drugs for vampires, huh?"
     menu:
@@ -1162,9 +1163,10 @@ label vampirecastle:
             ed lookup "Look. This German guy came up with this cutting edge wacky stimulant class called amphetamines."
             ed angry "But these vampires were so old, they didn't even know what heroin was."
             ed -angry "So I mainly made that."
+            ed "So not really????"
             
         "Why did you agree to make drugs":
-            ed "I already had an active warrant out for my arrest."
+            ed "By this time I already had an active warrant out for my arrest."
             ed smug "It's not like my record could get any worse."
             menu:
                 "For vampire hunting without a license?":
@@ -1182,7 +1184,7 @@ label vampirecastle:
 
     ed thinking "The more drugs I made, the more vampires came. The more vampires came, the rowdier they got."
     ed "And after certain crowd came in, Eskender stopped visiting."
-    ed "Now, this new group didn't just stare." 
+    ed lookup "Now, this new group didn't just stare." 
     ed angry "They were obsessed with asking me when I was going to become a vampire so it would \"fix\" my complexion."
     menu:
         "Yikes":
@@ -1191,7 +1193,7 @@ label vampirecastle:
             ed -angry "\"Yikes on bikes...\""
             ed blush "Adorable."
             call endeared
-    ed thinking "It was becoming unbearable, and I had started drafting up plans to leave it all." 
+    ed thinking "It was becoming unbearable, and I had started drafting up plans to leave it all behind..." 
     ed "Until one day."
     show layla at person_d with dissolve
     "Layla" "What if we rounded up all of the humans and started breeding them like cattle?"
@@ -1329,18 +1331,18 @@ label classiclit:
     ed blush "Yes, you get it!"
     ed fakeout "But soon, [petya_dn] started getting worse. He wasn't sleeping, he barely ate anything, and he stopped coming to our dinner nights." 
     ed "One of his classmates had plagiarized a section from one of his papers, and that was a breaking point." 
-    ed "He completely and utterly lost his marbles."
+    ed thinking "He completely and utterly lost his marbles."
     show petya at person_d
     petya "Ed, you gotta help me man. I messed up."
     ed lookup "What in the world!?"
     petya "I don't even know what happened... I lost control of myself..."
     petya "Y-you told me I should stand up for myself, but I... I went too far... he's..."
-    ed "{size=+20}[petya_dn].{/size}"
+    ed thinking "{size=+20}[petya_dn].{/size}"
     ed "{size=+20}I never told you to kill anybody.{/size}"
     petya "I know, I know, but..."
     petya "You gotta help me. Please? It'll be just like old times!"
     hide petya with dissolve
-    ed "I couldn't say no to that, mainly because I was worried that if I didn't do anything, he was going to find a way to rope me in anyway." 
+    ed -thinking "I couldn't say no to that, mainly because I was worried that if I didn't do anything, he was going to find a way to rope me in anyway." 
     ed thinking "So I figured it was better to take control of the situation myself..."
     bio sad "What did you end up doing???"
     ed smug "We framed the murder on someone else."
@@ -1371,7 +1373,8 @@ label classiclit:
         "I guess you're right":
             pass
 
-    bio sad "Okay, fine. What happened afterwards? A relationship tested through the flames should be able to survive, right?"
+    bio sad "Okay, fine. What happened afterwards?"
+    bio happy "A relationship tested through the flames should be able to survive, right?"
     ed "Not really. I guess we could only relate to each other through that brief period." 
     ed "We were on the run together for a litle while, but we decided to split up." 
     ed "I tried to keep in contact with him, but after a few letters, I never heard from him again."
@@ -1382,14 +1385,15 @@ label classiclit:
         "He's laughing like it's a joke, but..."
         pass
     else:
-        bio "I can see why. You basically drove him to madness."
+        bio -happy "I can see why. You basically drove him to madness."
         ed lookup "Huh? What makes you say that?"
-        bio sad "If I can be frank for a bit, he was already a nervous wreck."
+        bio angry "If I can be frank for a bit, he was already a nervous wreck."
         bio "He didn't need you filling his head with magic and sweet nothings."
         ed angry "E... excuse me...?"
         call offended
 
     ed "Anyway, if I had to relate it back to the question, {nw=0.3}"
+    bio "Oh! That.{nw=0.4}"
     "You had nearly forgotten about the question (probably because it sucked).{nw=0.3}"
     ed "the degree itself wasn't too tough since I had already seen Shakespeare's plays in person."
     ed "What I really struggled with was..."
@@ -1401,7 +1405,7 @@ label classiclit:
     menu:
         "So you were struggling with your sexuality" if homophobic:
             ed angry "No, what the-{nw=0.3}"
-            ed "What's your damage?"
+            ed lookup "What's your damage?"
             call offended
             pass
         "It sounds like your recent partners weren't very nice":
@@ -1462,23 +1466,23 @@ label film:
             jump gooseygoo
 
         "Oh the inhumanity":
-            ed lookup "Where was I supposed to go? Ohio?"
+            ed -lookup "Where was I supposed to go? Ohio?"
             "You nod your head in concession."
 
         "Go on":
             pass
 
-    ed "I had spent decades in countries with rotten weather when I decided I'd finally had enough." 
-    ed "I {i}needed{/i} to go somewhere with warm winters." 
+    ed thinking "I had spent decades in countries with rotten weather when I decided I'd finally had enough." 
+    ed lookup "I {i}needed{/i} to go somewhere with warm winters." 
     show bg movieset with dissolve
-    ed "Besides, the talkies had just come out and I wanted to have some fun."
+    ed blush "Besides, the talkies had just come out and I wanted to have some fun."
     bio "At the movies."
     ed "Yeah."
-    bio "So what got you interested in film?"
-    ed "In truth, I became interested in film when I realized someone had brought one back in time to scare and confuse me."
+    bio happy "So what got you interested in film?"
+    ed -blush "In truth, I became interested in film when I realized someone had brought one back in time to scare and confuse me."
     menu:
         "Are you joking kidding me":
-            ed "About what?"
+            ed lookup "About what?"
             bio angry "The time travel."
             ed fakeout "Is it that hard to believe?"
             bio "It's pretty freaking hard to believe."
@@ -1495,12 +1499,21 @@ label film:
             ed blush "So I would say it's pretty good."
             bio "What was the movie?"
             ed fakeout "1986's {i}Blue Velvet{/i} (dir. David Lynch)."
+            bio "Oh, wow!"
+            bio "I'd love to watch it with you some day."
+            if endearing:
+                ed thinking "Hm..."
+                ed -thinking "Maybe {i}Challengers{/i} would be more your speed."
+                
+            else:
+                ed lookup "Oh."
+                ed fakeout "(Does she know...?)"
 
     call takenote("Ed was shown a movie before they ever existed", True)     
 
-    ed "So my first day in the city, I was approached by someone on my walk to the grocery store."
+    ed lookup "So my first day in the city, I was approached by someone on my walk to the grocery store."
     ed "I had just the look Hollywood was going for. Handsome but approachable, charming and soft."
-    ed "I'd compliment the ladies and the men on screen. I had the potential to be a star and I figured—yeah, why not."
+    ed -lookup "I'd compliment the ladies and the men on screen. I had the potential to be a star and I figured—yeah, why not."
     ed "My first role was as a man in a ballroom who is sitting at a table waiting for his date." 
     ed "The lead actress comes up to me and asks if my seat is free. I prop my arm around my chair and smile at her and say,"
     ed "\"Not right now, darling, but I might have some space later.\""
@@ -1537,7 +1550,7 @@ label film:
     ed "Rock Hudson, Anna May Wong, Katherine Hepburn, Eartha Kitt, James Dean,{nw=0.2}"
     bio "Wow,{w=0.1} that's-{nw}"
     ed "Josephine Baker, Rita Hayworth, Paul Robeson, Anthony Perkins, Paul Newman...{nw=0.3}"
-    ed lying "...Zendaya{nw=0.2}"
+    ed lying "...Zendaya{nw=0.5}"
 
     "Zendaya? Seriously?"
     menu:

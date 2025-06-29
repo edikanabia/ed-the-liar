@@ -29,3 +29,6 @@ traceback.txt
 files.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/renpy
+interview bad/game/script.rpy.bak
+interviewbad-1.0-dists/interviewbad-1.0-mac.zip
+interviewbad-1.0-dists/interviewbad-1.0-pc.zip
