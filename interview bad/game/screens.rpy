@@ -137,6 +137,14 @@ style window:
 
     background Image("gui/textbox.png", xalign=0.5, yalign=1.0)
 
+style block2_multiple2_say_window:
+    xalign 1.0
+    xfill True
+    yalign 0.643
+    ysize gui.textbox_height
+
+    background Image("gui/textbox.png", xalign=0.5, yalign=0.0)  
+
 style namebox:
     xpos gui.name_xpos
     xanchor gui.name_xalign
@@ -160,6 +168,8 @@ style say_dialogue:
     ypos gui.dialogue_ypos
 
     adjust_spacing False
+
+  
 
 ## Input screen ################################################################
 ##
