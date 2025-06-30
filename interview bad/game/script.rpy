@@ -1842,7 +1842,7 @@ label currentday:
                     show bg black with dissolve
                     "You tried to close your eyes so you wouldn't have to look at his smug, irritating grin."
                     "But when you did, all you could see was him hitting the most ridiculous victory dance you could imagine."
-                    show ed with dissolve at center
+                    show ed at center with dissolve
                     "You can't beat this guy."
 
             else:
