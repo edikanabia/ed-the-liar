@@ -1626,7 +1626,7 @@ screen bookbutton():
         xalign 0.01 
         yalign 0.02 
         tooltip "Open book"
-        action [ToggleScreen("bookbutton"), Show("compendium"), Play("sound", "/sfx/book.ogg")]
+        action [ToggleScreen("bookbutton"), Show("compendium"), Play("sound", "/sfx/book_open.ogg")]
     $ tooltip = GetTooltip()
     if tooltip:
         nearrect:
@@ -1655,7 +1655,7 @@ screen compendium(page="cover"):
         xalign 0.01 
         yalign 0.02 
         tooltip "Close book"
-        action [ToggleScreen("compendium"), Show("bookbutton")] #play sound book closes
+        action [ToggleScreen("compendium"), Play("sound", "/sfx/book_away.ogg"),Show("bookbutton")]
 
     $ tooltip = GetTooltip()
     if tooltip:

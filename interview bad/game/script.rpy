@@ -167,9 +167,13 @@ define circlewipe = ImageDissolve("/transitions/circle_wipe.png", 1.0,2)
 
 #region Audio
 #SFX
+define audio.thunk = "/sfx/thunk.ogg"
+define audio.explosion = "/sfx/explosion.ogg"
+define audio.microwave = "/sfx/microwave_beep+hum_long.ogg"
 
 #Music
-
+define audio.cambridge1 = "/bgm/petya_intro.ogg"
+define audio.cambridge2 = "/bgm/petya_loop.ogg"
 
 #endregion
 
@@ -546,7 +550,6 @@ label portugal:
             bio -angry "Oh.{w=0.1} Oh yeah."
             bio sad "Carry on."
 
-    $ renpy.fix_rollback()
     ed "My girlfriend at the time wanted to try out some different waters,{w=0.1} and especially different fish." 
     ed "So with my studies finished,{w=0.1} we figured it would be the perfect time to try somewhere new,{w=0.1} and we swam up to Portugal."
     bio happy "That sounds so romantic!"
@@ -708,16 +711,16 @@ label portugal:
             show ed -lying
         "What about the one where you had two religions founded after you?":
             ed thinking "Both were started by ex-boyfriends.{w=0.1} I guess I just inspire that in people."
-            if endearing:
-                ed lookup "Want to make the third?"
-                bio blush "Ah,{w=0.1} well,{w=0.1} I.{w=0.1} Have.{w=0.1} To be professional,{w=0.1} you know!{w=0.1} I can't answer that on the clock."
-                "He leans in."
-                ed wink "How about off the record?"
-                show ed smug
-                "Your face is getting hot again...." 
-                "No.....{w=0.1} his sweet tambour...{w=0.1}" 
-                "You must focus....."
-                show ed -smug
+            ed lookup "Want to make the third?"
+            bio blush "Ah,{w=0.1} well,{w=0.1} I.{w=0.1} Have.{w=0.1} To be professional,{w=0.1} you know!{w=0.1} I can't answer that on the clock."
+            "He leans in."
+            ed wink "How about off the record?"
+            show ed smug
+            "Your face is getting hot again...." 
+            "No.....{w=0.1} his sweet tambour...{w=0.1}" 
+            "You must focus....."
+            call endeared
+            show ed -smug
 
         "What about the time you trapped an entire town in an endless fog?":
             ed angry "Really?{w=0.1} {i}That{/i} story?"
@@ -966,16 +969,22 @@ label renaissance:
             if not endearing:
                 ed -lookup "That's fine. You don't have to."
                 jump aftermicrowave
+            show ed smug:
+                linear 0.2 xalign 0.3
             ed smug "Behold my most prized possession."
             show microwave:
                 xalign 0.8
                 yalign 0.5
-            #play sound thunk
+            play sound thunk
             bio shocked "..."
-            bio "You're kidding."
+            play sound microwave
+            $ renpy.pause(9.0)
+            bio sad "You're kidding."
             "You reluctantly credit Ed with the invention of the microwave."
             $ microwaveseen = True
-            hide microwave
+            hide microwave with dissolve
+            stop sound fadeout 0.5
+            show ed at move_to_center
 
     $ yourFacts += 1
     $ factscollect.append("Ed invented the microwave just because he could")
@@ -1513,9 +1522,9 @@ label classiclit:
     menu fear:
         "What is your body count" if bodycountcount <=0:
             $ bodycountcount += 1
-            ed shock1 "I,{nw=0.5}"
+            ed shock1 "I, {nw=0.7}"
             show ed shock2
-            extend "like,{nw=0.5}"
+            extend "like, {nw=0.7}"
             show ed shock1
             extend "feel really objectified by that question."
             call offended
@@ -1524,10 +1533,10 @@ label classiclit:
             bio sad "Sorry. Let me try that again..."
             jump fear
         
-        "Why are you afraid of being single" if bodycountcount< 0:
+        "Why are you afraid of being single" if bodycountcount > 0:
             ed angry "You're two-for-two on jackass behavior in the same in-game menu."
             bio sad "I'm trying to hint at something."
-            ed -angry "You could be a little more subtle."
+            ed lookup "You could be a little more subtle."
             call offended
             "That didn't net you an answer."
             "You try to reword your prompt so that it's less confrontational."
@@ -1558,10 +1567,10 @@ label classiclit:
     ed lookup "Why not just ask me my biggest fear?"
     bio happy "Because I have a feeling I already know what it is!"
     bio -happy "Also, if I've got you pegged correctly, you wouldn't answer a question like that, now would you?"
-    ed thinking "True."
+    ed blush "True."
     if endearing:
         "You thought you saw him light up for a fraction of a second."
-    ed -thinking "Okay, here goes."
+    ed -blush "Okay, here goes."
 
     jump film
     return
@@ -1834,16 +1843,17 @@ label currentday:
                     ed thinking "..."
                     "See? It worked again!{nw=0.3}"
                     #pause music
-                    #play sound explosion
+                    play sound explosion
                     ed smug "[everywoman]."
                     bio shocked "..."
                     "..."
                     hide ed with dissolve
                     show bg black with dissolve
                     "You tried to close your eyes so you wouldn't have to look at his smug, irritating grin."
+                    #if it were up to me I would 3D model Ed so I can make him hit the griddy just for this bit
                     "But when you did, all you could see was him hitting the most ridiculous victory dance you could imagine."
-                    show ed at center with dissolve
                     "You can't beat this guy."
+                    show ed at center with dissolve
 
             else:
                 ed "Are you transphobic?"
