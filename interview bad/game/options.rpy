@@ -84,12 +84,12 @@ define config.intra_transition = dissolve
 
 ## A transition that is used after a game has been loaded.
 
-define config.after_load_transition = Fade(0.5, 0.2, 0.5)
+define config.after_load_transition = None
 
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = None
+define config.end_game_transition = Fade(0.5, 0.2, 0.5)
 
 
 ## A variable to set the transition used when the game starts does not exist.
@@ -121,7 +121,7 @@ define config.say_attribute_transition = Dissolve(0.1)
 ## Controls the default text speed. The default, 0, is infinite, while any other
 ## number is the number of characters per second to type out.
 
-default preferences.text_cps = 0
+default preferences.text_cps = 40
 
 
 ## The default auto-forward delay. Larger numbers lead to longer waits, with 0
@@ -129,6 +129,9 @@ default preferences.text_cps = 0
 
 default preferences.afm_time = 15
 
+## Character and Text Styling ########################################
+# Replaces bold/italic text styling with the appropriate font
+define config.font_replacement_map["/gui/fonts/RobotoSerif-VariableFont_GRAD,opsz,wdth,wght.ttf", False, True] = ("/gui/fonts/RobotoSerif-Italic-VariableFont_GRAD,opsz,wdth,wght.ttf", False, False)
 
 ## Save directory ##############################################################
 ##
@@ -207,4 +210,4 @@ init python:
 ## The username and project name associated with an itch.io project, separated
 ## by a slash.
 
-# define build.itch_project = "renpytom/test-project"
+# define build.itch_project = "dustymagician/interview-bad"

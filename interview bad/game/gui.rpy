@@ -25,7 +25,7 @@ define config.check_conflicting_properties = True
 ## The colors of text in the interface.
 
 ## An accent color used throughout the interface to label and highlight text.
-define gui.accent_color = '#ebd5c0'
+define gui.accent_color = '#dd9d62'
 
 ## The color used for a text button when it is neither selected nor hovered.
 define gui.idle_color = '#8d7866'
@@ -50,7 +50,7 @@ define gui.muted_color = '#510000'
 define gui.hover_muted_color = '#7a0000'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = '#000000'
+define gui.text_color = '#2c140e'
 define gui.interface_text_color = '#ffe4af'
 
 
@@ -120,7 +120,7 @@ define gui.namebox_height = None
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(48, 2, 16, 8)
+define gui.namebox_borders = Borders(48, 4, 16, 10)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -254,7 +254,7 @@ define gui.navigation_xpos = 60
 define gui.skip_ypos = 15
 
 ## The vertical position of the notify screen.
-define gui.notify_ypos = 68
+define gui.notify_ypos = 110
 
 ## The spacing between menu choices.
 define gui.choice_spacing = 33

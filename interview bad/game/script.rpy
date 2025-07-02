@@ -28,6 +28,7 @@ default yourFacts = 0
 default nameroute = False
 default endearing = False
 default secretending = False
+default dealtriggered = False
 
 default factscollect = [] #named facts that are picked at random at the end to go over
 
@@ -163,6 +164,13 @@ transform move_to_left:
 
 define circlewipe = ImageDissolve("/transitions/circle_wipe.png", 1.0,2)
 
+image laylaappears:
+    Solid("#9e1a0c")
+    pause 2.0
+    "/backgrounds/vampire.png" with Dissolve(2.0)
+
+
+
 #endregion
 
 #region Audio
@@ -170,8 +178,19 @@ define circlewipe = ImageDissolve("/transitions/circle_wipe.png", 1.0,2)
 define audio.thunk = "/sfx/thunk.ogg"
 define audio.explosion = "/sfx/explosion.ogg"
 define audio.microwave = "/sfx/microwave_beep+hum_long.ogg"
+define audio.slidewhistledownup = "/sfx/slide_whistle_up-down.ogg"
+define audio.slidewhistledown = "/sfx/slide_whistle_down.ogg"
+define audio.wink = "sfx/wink.ogg"
+define audio.ominous = "sfx/ominous.ogg"
+define audio.appear = "sfx/layla_appears.ogg"
+define audio.ringtone = "sfx/ringtone.ogg"
+define audio.pickup = "sfx/sine_b_short.ogg"
+define audio.hangup = "sfx/call_end.ogg"
+define audio.horse = "sfx/horse_neigh.ogg"
+define audio.scribble = "sfx/scribble.ogg"
 
 #Music
+#define audio.ed = "/bgm/ed.ogg"
 define audio.cambridge1 = "/bgm/petya_intro.ogg"
 define audio.cambridge2 = "/bgm/petya_loop.ogg"
 
@@ -225,7 +244,8 @@ label icebreaker:
             ed "Nope.{w=0.1} Take as much time as you need.{w=0.1} As much time as you need..." 
             #play sound wink
             show ed wink
-            "!?" #wink
+            play sound wink
+            "!?{nw=0.5}" #wink
             show ed -wink
             "You feel a lot more confident now!{w=0.1} But..."
             "It seems unlikely that someone as busy as he is has \"nothing better to do.\"{w=0.1} He's not messing with you,{w=0.1} {cps=*0.5}or...?{/cps}"
@@ -243,7 +263,7 @@ label icebreaker:
 
     show bg black with dissolve
     "Is he...{nw=0.1}" 
-    #play sound ominous
+    play sound ominous
     extend "lying?"
     show bg coffeeshop with dissolve
 
@@ -350,21 +370,24 @@ label upbringing:
 
 label endeared:
     $ affection += 1
-    if e_firsttime == True and affection >=1:
-        "..."
-        "You feel like you've endeared yourself to him."
-        $ e_firsttime = False
-
-    elif favorlost == True and affection >= 1:
-        "..."
-        "You feel like you've regained his favor."
-        $ favorlost = False
-    
-    else:
-        pass
     
     if affection > affectionthreshold:
         $ endearing = True
+        if not favorlost:
+            "..."
+            "You feel like you've endeared yourself to him."
+        else:
+            "..."
+            "You feel like you've regained his favor."
+    
+    if e_firsttime == True:
+            "..."
+            "He seems to be charmed by your response..."
+            $ e_firsttime = False
+    
+    else:
+        pass
+
 
     return
 
@@ -524,7 +547,7 @@ label interviewintro:
     bio "It's one of my favorite questions."
     bio "Of all the fine,{w=0.1} magically-inclined folks I've interviewed,{w=0.1} I've always asked the same question,{w=0.1} but I've never gotten the same answer!"
     ed -thinking "Well, if you wanna hear about that..."
-    # stop music with fadeout 1.0
+    stop music fadeout 1.0
     "He uncrosses his legs,{w=0.1} leaning forward with his elbows now resting on his knees." 
     "You find yourself leaning forward as well,{w=0.1} pulled into his vortex,{w=0.1} his magnetic field." 
     "You are about to hear A Story."
@@ -582,7 +605,6 @@ label portugal:
             bio shocked "What?"
             ed smug "Heh.{w=0.1} Gottem."
             "Sigh.{w=0.1} He freaking got you."
-    $ renpy.fix_rollback()
 
     ed -smug "So are we clear on how I got to the Kingdom of Portugal or are we still working out the mechanics of swimming?"
     bio -shocked "I'm done.{w=0.1} Let's get back on track."
@@ -714,6 +736,7 @@ label portugal:
             ed lookup "Want to make the third?"
             bio blush "Ah,{w=0.1} well,{w=0.1} I.{w=0.1} Have.{w=0.1} To be professional,{w=0.1} you know!{w=0.1} I can't answer that on the clock."
             "He leans in."
+            play sound wink
             ed wink "How about off the record?"
             show ed smug
             "Your face is getting hot again...." 
@@ -751,7 +774,7 @@ label renaissance:
     ed "When you become immortal,{w=0.1} kicking around eating fish and talking to Portuguese mermaids starts to get real old after a while,{w=0.1} and my girlfriend could tell. "
     ed "She suggested we could swim down south,{w=0.1} stop by Rafat or Algiers on our way to Palermo..."
     ed "You know, make a vacation of it."
-    bio "Aww, how sweet!"
+    bio happy "Aww, how sweet!"
     ed angry "Plus The Devil kept stopping me in the street asking when our business investments were going to pay off, and I just couldn't be bothered with all that anymore."
     show ed:
         linear 0.3 xalign 0.2
@@ -978,7 +1001,9 @@ label renaissance:
             play sound thunk
             bio shocked "..."
             play sound microwave
+            window hide
             $ renpy.pause(9.0)
+            window auto
             bio sad "You're kidding."
             "You reluctantly credit Ed with the invention of the microwave."
             $ microwaveseen = True
@@ -1128,27 +1153,55 @@ label vampirecastle:
     ed "I moved around Europe for a while, kept up to date with my medical knowledge in areas that cared about the plague."
     ed "Had some fun with Ottoman mermaids (way chiller than the Italian ones), and wizards in Saxony."
     ed thinking "I had been wandering for some time in the Eastern or Central or perhaps even Northern regions of the continent—who's to say." 
+    hide ed with dissolve
     show bg castle with dissolve
     ed "It had been years since I had any time for quiet or study, and I had heard rumblings about a very quiet castle out in the middle of nowhere."
     ed "I thought perhaps I could get a job and live a few peaceful years in the countryside."
     ed fakeout "Some guy named Napoleon was taking over half of Europe and frankly, I didn't want to get involved." 
-    show ed at move_to_left
-    ed -fakeout "When I arrived it was a cold and chilly night, a little eerie. When I knocked on the entrance to the castle, only one person answered."
-    # play sound thunder
-    # play music organ noloop
-    show layla:
-        offscreenright
-        linear 1.5 person_d
+    ed -fakeout "When I arrived it was a cold and chilly night, a little eerie."
+    ed "When I knocked on the entrance to the castle, only one person answered..."
+    window hide
+    play sound appear
+    $ renpy.pause(0.771, hard=True)
+    show laylaappears
+    show layla at person_e:
+        matrixcolor BrightnessMatrix(-1.0)
+        pause 2.0
+        linear 2.0 matrixcolor BrightnessMatrix(0.0)
+        
+    show ed at person_a:
+        matrixcolor OpacityMatrix(0.0)
+        pause 2.0
+        linear 2.0 matrixcolor OpacityMatrix(1.0)
+    
+    $ renpy.pause(4.0, hard=True)
+    window auto
     "Layla the Terrible" "Oh, hello why aren't you a tall drink of water."
     bio -happy "Did she really say that???"
-    ed fakeout "Would you rather she say something like, {nw=0.5}"
-    # play sound slidewhistle
+    ed fakeout "Would you rather she say something like,"
+    window hide
+
+    play sound slidewhistledown
     show layla:
         linear 0.5 offscreenright
         pause 1.0
-        linear 1.5 person_d
-    # play music organ noloop
-    $ renpy.pause(3.0)
+    $ renpy.pause(1.3)
+
+    play sound appear
+    $ renpy.pause(0.771, hard=True)
+    show laylaappears
+    show layla at person_e:
+        matrixcolor BrightnessMatrix(-1.0)
+        pause 2.0
+        linear 2.0 matrixcolor BrightnessMatrix(0.0)
+        
+    show ed at person_a:
+        matrixcolor OpacityMatrix(0.0)
+        pause 2.0
+        linear 2.0 matrixcolor OpacityMatrix(1.0)
+    
+    $ renpy.pause(4.0, hard=True)
+    window auto
     "Layla" "Come (wink wink) into my castle sexy warlock I will feed you grapes while I suck your blood."
     "Ew."
     bio sad "I really wouldn't."
@@ -1294,12 +1347,12 @@ label vampirecastle:
             ed "I took those to repatriate."
             ed "Other than money, I had to take my research."
             ed -thinking "There was a little recipe I was working on that produced a brilliant blue pigment..."
+            play sound wink
             ed wink "You might know her."
             show ed -wink
             call takenote("Ed discovered ultramarine blue", True)
             pass
-    $ renpy.fix_rollback()
-
+    hide laylaappears with dissolve
     show bg coffeeshop with dissolve
     #move ed back to center
     "You take diligent notes of his vampire exploits."
@@ -1337,7 +1390,8 @@ label classiclit:
     #move ed to the left again
     ed "When I enrolled at the university, they gave me the option to have an apartment out by myself." #it's never named but my guess is it's cambridge
     ed "But I was tired of living in countryside inns and small hostels after leaving the vampire castle, so I instead took the option to get a roommate."
-    #play music roommate
+    play music cambridge1
+    queue music cambridge2
     ed "My roommate... Пётр Александрович Соколов." 
     ed angry "He really thought he was going to be somebody important and would make everyone call him by his full name."
     ed blush "...but he let me call him [petya_dn]."
@@ -1353,20 +1407,25 @@ label classiclit:
         "I'm guessing you were close":
             $ petya_dn = "Petya"
             ed -blush "Close is certainly a way you could describe me and [petya_dn]."
+            $ relationship = ""
             menu:
-                ed lookup "How close we talkin'?"
+                "How close are you thinking?"
                 "I mean they were roommates":
+                    $ relationship = "roommate"
                     if homophobic:
                         ed "Sure."
                     else:
                         ed "It was closer than that."
                 "Probably best friends?":
+                    $ relationship = "best friend"
                     if homophobic:
                         ed "Sure."
                     else:
                         ed "...It was closer than that."
                     pass
                 "Oh they were doin' it":
+                    $ relationship = "boyfriend"
+                    $ yourFacts += 1
                     if endearing:
                         bio "I'm just curious if you two... were ever..."
                         bio happy "You know, if it wasn't just books you were studying."
@@ -1378,7 +1437,7 @@ label classiclit:
                         $ renpy.notify("Trait gained: fujoshi!")
                         "But to Ed, it looks like you're salivating over the thought of him and his roommate."
                         "To your credit, he doesn't seem to care."
-                    "You make a note of Ed's pretentious Russian boyfriend."
+            "You make a note of Ed's pretentious Russian [relationship]."
     $ renpy.fix_rollback()
 
     ed "Anyhow..."
@@ -1460,9 +1519,10 @@ label classiclit:
 
     show ed at move_to_center
     bio sad "Okay, fine. What happened afterwards?"
+    stop music fadeout 1.5
     bio happy "A relationship tested through the flames should be able to survive, right?"
-    ed "Not really. I guess we could only relate to each other through that brief period."
     show bg black with dissolve
+    ed "Not really. I guess we could only relate to each other through that brief period."
     ed "We were on the run together for a little while, but we decided to split up." 
     ed thinking "I tried to keep in contact with him, but after a few letters, I never heard from him again."
 
@@ -1480,7 +1540,7 @@ label classiclit:
         call offended
         show ed -angry
 
-    ed "Anyway, if I had to relate it back to the question, {nw=0.3}"
+    ed "Anyway, if I had to relate it back to the question,"
     bio happy "Oh! Right."
     bio sad "That."
     "You had nearly forgotten about the question (probably because it sucked)."
@@ -1551,9 +1611,14 @@ label classiclit:
             ed lookup "No offense to you."
             bio "None taken."
             bio -happy "The paper has a slant."
-            ed -lookup "Yeah, a big one. It's harming your credibility."
+            
             if yourFacts >= 4:
-                ed "Your writing is waste on that joint."
+                ed -lookup "Yeah, a big one. It's harming your credibility."
+            elif endearing:
+                bio "What interests you in this dubious, unreliable paper, though?"
+                ed @smug "You."
+                bio @blush "Oh...!"
+
             bio happy "You said something interesting just now, though..."
             "You return to the big gap you left for the immortality deal. You're starting to recontextualize it in your head..."
             "You add \"wants to be around other people\" to the comically short list of bullet points{w=0.2}—right underneath the part where he ran the scam."
@@ -1643,6 +1708,7 @@ label film:
                 ed lookup "Don't take this the wrong way, but I wouldn't watch that movie with you."
                 ed thinking "...not yet, at least."
                 ed -thinking "Maybe {nw=0.5}"
+                play sound wink
                 show ed wink
                 extend "{i}Challengers{/i} would be more your speed."
                 show ed -wink
@@ -1665,7 +1731,8 @@ label film:
             ed lying "He got it from me."
             bio angry "Did he now?"
             ed lookup "Yeah, he was quoted as once having said,{nw=0.1}"
-            show ed wink 
+            show ed wink
+            play sound wink
             extend "\"That man Ed is probably greatest to ever do it.\""
             bio "That is not what he said."
             ed lookup "Yeah."
@@ -1724,7 +1791,8 @@ label film:
     "Zendaya? Seriously?"
     menu:
         "You did not sleep with freaking Zendaya":
-            # pause music
+            $ renpy.music.set_pause(True)
+            $ renpy.music.set_volume(0.0)
             ed -lying "ok maybe not zendaya maybe like {w=0.4} pedro pascal{nw}"
             bio angry "Ed.{nw=0.3}"
             ed thinking "Okay."
@@ -1733,6 +1801,8 @@ label film:
             ed -blush "Okay."
             ed thinking "Just making sure."
             $ yourFacts +=1
+            $ renpy.music.set_pause(False)
+            $ renpy.music.set_volume(1.0, 0.5)
             # play music fadein 1.0
 
         "I believe it":
@@ -1746,6 +1816,7 @@ label film:
     bio shocked "{i}Fifteen!?{/i}"
     ed "The studio heads were pissed." 
     ed fakeout "If I hadn't been with their wives, I had been with their wives sisters,{w=0.1} or their wives sisters' husbands."
+    play sound wink
     ed wink "Or perhaps all of them at once."
     bio shocked "No s**t they were pissed. I would be, too!"
     ed -wink "Yeah, but they couldn't fire me because I was loved by the public too much, and no one was worried about communists infiltrating Hollywood yet."
@@ -1797,7 +1868,7 @@ label currentday:
             ed thinking "Damn, okay." 
             ed -thinking "Famous last words though."
             $ degreeskip = True
-            #play sound slidewhistledownup
+            play sound slidewhistledownup
             show bg coffeeshop with circlewipe
             jump afterPhd
             
@@ -1846,13 +1917,13 @@ label currentday:
                     play sound explosion
                     ed smug "[everywoman]."
                     bio shocked "..."
-                    "..."
                     hide ed with dissolve
                     show bg black with dissolve
                     "You tried to close your eyes so you wouldn't have to look at his smug, irritating grin."
                     #if it were up to me I would 3D model Ed so I can make him hit the griddy just for this bit
                     "But when you did, all you could see was him hitting the most ridiculous victory dance you could imagine."
                     "You can't beat this guy."
+                    #resume music fadein 0.5
                     show ed at center with dissolve
 
             else:
@@ -1933,12 +2004,14 @@ label currentday:
             bio "Excuse me,{w=0.1} can you say that again?"
             ed smug "That again."
             "Sigh.{w=0.1} Of course."
+            play sound horse
             bio happy "Of horse."
             show ed lookup with dissolve
             "He stares at you."
             "You stare at him."
             if stareflag >=2:
                 "He stares at-{nw}"
+                play sound explosion
                 "ENOUGH!" 
                 $ renpy.notify("Trait gained: the lookerrrrrrrrr")
                 "NO MORE STARING!"
@@ -2072,7 +2145,7 @@ label review:
         "Are you kidding!? Our paper isn't political!":
             "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
             "He's not an idiot.{w=0.1} He knows about...{nw=0.3}"
-            # play sound ominous 
+            play sound ominous 
             extend "The Implication."
     $ renpy.fix_rollback()
 
@@ -2085,21 +2158,19 @@ label review:
         "Fishing Science":
             show ed blush with dissolve
             bio angry "What!? What's so funny?"
-            ed "That's not a real degree."
+            ed lookup "That's not a real degree."
             bio shocked "What!?"
-            show ed -blush
+            ed "I made it up."
+            bio sad "Unbelievable.."
             pass
         "Theology":
-            $ yourFacts += 1
             pass
         "English Literature":
-            $ yourFacts += 1
             pass
         "Library Science":
             "Did he study in the library or work in the library...?"
             "You can't remember."
             pass
-    $ renpy.fix_rollback()
     
     "Finally, after a long afternoon of..."
     bio sad "What would you even call your stories? Swashbuckling?"
@@ -2273,6 +2344,7 @@ label interviewconclusion:
                     show ed lookup with dissolve
                     ed "Hey."
                     ed "Do you think you could meet with me again?"
+                    ed "Exactly the same as you are now?"
                     ed thinking "I have a proposal for you." # HINT TOWARD THE SECRET ENDING I HOPE YOU SAVED UR GAME.
                     bio blush "Yeah of course!"
                     "You accepted without thinking..."
@@ -2438,17 +2510,17 @@ label reject:
     $ ed_observation = True
     show bg coffeeshop with dissolve
     bio sad "Sorry.{w=0.1} I don't think I can accept your help."
-    ed "That's all right...{w=0.1} that's all right."
+    ed thinking "That's all right...{w=0.1} that's all right."
     #the music and background return.
-    ed "I hope you remember how many Ph.Ds I have,{w=0.1} though.{w=0.1} Cuz if you don't, tuh?{w=0.1}"
-    ed "Well."
-    ed "You'll never work in this field again."
+    ed lookup "I hope you remember how many Ph.Ds I have,{w=0.1} though.{w=0.1} Cuz if you don't, tuh?{w=0.1}"
+    ed thinking "Well."
+    ed @smug "You'll never work in this field again."
     bio "How-{w=0.1} how can you be so sure?"
-    ed "Oh I'm sure.{w=0.1} Of this, I am{w=0.2} {i}very{/i} certain."
-
+    ed lookup "Oh I'm sure.{w=0.2} Of this, I am{w=0.5} {i}very{/i} certain."
+    hide ed with dissolve
     "And with that,{w=0.1} he shuffles off."
     "You should head back, too." #or if it takes place in the same office as yours you just don't
-    
+    $ secretending = False
     jump finaltest
 
     return
@@ -2503,7 +2575,7 @@ label finaltest:
         bio "And I'm pretty sure [tidbit]."       
     
     if starsign:
-        bio "Did you know he's actually a Libra and not a Virgo?"
+        bio @happy "Did you know he's actually a Libra and not a Virgo?"
 
     if rattle:
         boss "Kid."
@@ -2511,29 +2583,29 @@ label finaltest:
     else:
         boss "What's that supposed to mean? So you were striking up friendly chatter instead of writing the article?"
     
-    bio "Um...{w=0.1} I was under the impression that we hadn't written the profile yet because of the sheer amount of misinformation surrounding the individual."
+    bio @sad "Um...{w=0.1} I was under the impression that we hadn't written the profile yet because of the sheer amount of misinformation surrounding the individual."
     boss "No,{w=0.1} no,{w=0.1} we hadn't written the profile because we were waiting for the new keyboard to come in.{w=0.1} Keep up!"
     if not earlyend:
         bio "Well,{w=0.1} he sent me off with a tidbit I thought was really beautiful and true."
         boss "Really?{w=0.1} Let's hear it."
         bio "He told me he had never forgotten the reason he became immortal." 
-        bio "He told me he'd done it for love.{w=0.1} That was the one thing he desired most."
+        bio happy "He told me he'd done it for love.{w=0.1} That was the one thing he desired most."
         boss "YAWNNNNNNNNNNNNNNNNNNNNN.{w=0.1} Boring!"
-        bio "I thought it was nice..."
+        bio sad "I thought it was nice..."
         if dealtriggered == True:
             boss "I thought it was CORNY!"
-            bio "I have something else that...{w=0.1}happened...{w=0.1}if you'd rather hear about that?"
+            bio -sad "I have something else that...{w=0.1}happened...{w=0.1}if you'd rather hear about that?"
 
-        boss "Nope! {w=0.1}Don't gaf.{nw=0.1}"
+        boss "Nope! {w=0.1}Don't gaf.{nw=0.5}"
     boss "SO! {w=0.1}How many Ph.Ds did he earn?"
     bio "um{nw=0.5}"
     #stop music
-    bio "what?"
+    bio sad "what?"
     "Your boss sighs."
-    boss "{cps=*0.5}How many Ph.Ds did he earn?{/cps}"
-    bio "Are you serious?"
+    boss "{i}{cps=*0.5}How many Ph.Ds did he earn?{/cps}{/i}"
+    bio shocked "Are you serious?"
     boss "Very."
-    bio "Well- {nw}"
+    bio sad "Well- {nw=0.1}"
     boss "Your job depends on it. {w=0.1}Just so you know."
     $ finalanswer = renpy.input(prompt="How many Ph.Ds did Ed earn in his lifetime? (Enter numbers only.)", allow="1234567890")
     boss "Okay,{w=0.1} don't forget to write that in.{w=0.1} I'm counting on you!"
@@ -2548,7 +2620,7 @@ label finaltest:
     return
 
 label endoftest:
-    #play sound scribble
+    play sound scribble
     "You sit down and write the article exactly as you envision it."
     "When you're done,{w=0.1} you submit it,{w=0.1} and you go home."
     return
@@ -2557,8 +2629,9 @@ label endoftest:
 label goodend:
     scene bg black
     $ all_endings_reached = False
-    #play sound ringtone
+    play sound ringtone loop
     "Some weeks after the profile went live,{w=0.1} you got a call from your boss."
+    play sound pickup noloop
     boss "Hey,{w=0.1} um."
     boss "I wanted to say congratulations.{w=0.1} The article is doing pretty well."
     boss "People are saying some parts aren't true..."
@@ -2572,7 +2645,7 @@ label goodend:
     boss "So,{w=0.1} to clear your conscience,{w=0.1} I went ahead and left your name off the byline."
     boss "Don't worry,{w=0.1} you'll get a bonus for the accurate reporting on the Ph.Ds."
     boss "You're welcome!"
-    #play sound hangup
+    play sound hangup
     "He hangs up."
     
     "You reached the good ending...?"
@@ -2590,8 +2663,9 @@ label goodend:
 
 label badend:
     scene bg black
-    #play sound ringtone
+    play sound ringtone loop
     "Some weeks after the profile went live,{w=0.1} you got a call from your boss."
+    play sound pickup noloop
     boss "Hey,{w=0.1} um."
     if finalanswer == totalDoctorals:
         boss "Did you go and count the number of doctoral degrees or the number of Ph.Ds?"
@@ -2599,7 +2673,7 @@ label badend:
         boss "...but an M.D. isn't a Ph.D."
     boss "So,{w=0.1} you're fired.{w=0.1} Totally super mega ultra fired.{w=0.1} For embarrassing the paper."
     boss "Don't check Glitter."
-    #play sound hangup
+    play sound hangup
     "He hangs up."
     "Glitter is Magic Twitter."
     "It also has a significantly higher proportion of gay stans.{w=0.1} Vicious gay stans."
@@ -2607,10 +2681,11 @@ label badend:
     "When your boss told you not to check Glitter,{w=0.1} it's because he knew they were eviscerating you on there."
     "So you log on to check,{w=0.1} against your better judgement." 
     "You immediately find the post.{w=0.1} It's got one william likes.{w=0.1} The quote gleets are eating you up."
-    "As it turns out,{w=0.1} a Dr. Yetunde Olu,{w=0.1} former colleague and ex-girlfriend of Ed,{w=0.1} wrote a response piece{nw=0.2}"
-    "wherein she comments that she can excuse the occasional tall tale,{w=0.1} and even stops short of calling the piece laundering like many other critics have,{nw=0.2}"
+    "As it turns out,{w=0.1} a Dr. Yetunde Olu,{w=0.1} former colleague and ex-girlfriend of Ed,{w=0.1} wrote a response piece"
+    "wherein she comments that she can excuse the occasional tall tale,{w=0.1} and even stops short of calling the piece laundering like many other critics have,"
     "but she draws the line at misrepresenting the nature of his involvement in academia."
-    "Among other things,{w=0.1} she has revealed {i}exactly{/i} how many Ph.Ds he's earned." 
+    "Among other things,{w=0.1} she has revealed {i}exactly{/i} how many Ph.Ds he's earned."
+    play sound explosion
     "And it's not [finalanswer]."
     
     "In the end,{w=0.1} you,{w=0.1} too,{w=0.1} were a charlatan.{w=0.1} A grifter.{w=0.1} A hack.{w=0.1} A useful idiot{w=0.1}—at {i}best.{/i}" 
@@ -2624,8 +2699,9 @@ label badend:
 
 label dealend:
     scene bg black
-    #play sound ringtone
+    play sound ringtone loop
     "Some weeks after the profile went live, you got a call from your boss."
+    play sound pickup noloop
     boss "Hey,{w=0.1} um."
     boss "I want to say I'm sorry."
     "Followed by an unusual pause."
@@ -2634,7 +2710,7 @@ label dealend:
     "You're sure you hear your boss say, \"okay\" over and over."
     boss "And I've been withholding tens of thousands of dollars in backpay which I-{w=0.5} which I will deposit in your checking account.{nw=0.3}" 
     boss "Immediately."
-    #play sound hangup
+    play sound hangup
     "He hangs up."
     "You've never heard him so stilted...{w=0.1} and so scared...?" 
     "Just one more thing to pile on to the weird couple of weeks you've been having..."
@@ -2650,7 +2726,7 @@ label dealend:
     "It should be a completely factual profile..."
     "You continue your career as a magical biographer."
     "But you can't shake the queasy feeling you get from telling a lie for as long as you live."
-    #play sound ominous
+    play sound ominous
     "You reached the secret ending...!"
     $ persistent.secret_ending_reached = True
     $ persistent.completed_playthroughs += 1

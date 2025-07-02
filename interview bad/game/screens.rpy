@@ -14,7 +14,7 @@ style default:
     language gui.language
 
 style input:
-    properties gui.text_properties("input", accent=True)
+    properties gui.text_properties("input", accent=False)
     adjust_spacing False
 
 style hyperlink_text:
