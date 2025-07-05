@@ -14,17 +14,16 @@ image ctcindicator:
 # name of the character.
 
 #region Character
-define ctctc = Character(ctc="ctcindicator", ctc_position="fixed")
 
 default bioName = "Biographer"
 
-define ed = Character("ed_dn", image="ed", dynamic=True) #dynamically change name from Immortal Wizard to Ed
-define bio = Character("You", image="bio")
-define boss = Character("Boss")
+define ed = Character("ed_dn", image="ed", dynamic=True, ctc="ctcindicator", ctc_position="fixed") #dynamically change name from Immortal Wizard to Ed
+define bio = Character("You", image="bio", ctc="ctcindicator", ctc_position="fixed")
+define boss = Character("Boss", ctc="ctcindicator", ctc_position="fixed")
 define narrator = Character(ctc="ctcindicator", ctc_position="fixed")
 define yetu = Character("Dr. Olu")
-define devil = Character("The Devil")
-define petya = Character("petya_dn", dynamic=True)
+define devil = Character("The Devil", ctc="ctcindicator", ctc_position="fixed")
+define petya = Character("petya_dn", dynamic=True, ctc="ctcindicator", ctc_position="fixed")
 #endregion
 
 #region Ending Flags
