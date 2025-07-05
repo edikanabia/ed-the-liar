@@ -23,13 +23,24 @@ define gui.show_name = False
 
 ## The version of the game.
 
-define config.version = "1.0"
+define config.version = "1.1"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
 ## triple-quotes, and leave a blank line between paragraphs.
 
 define gui.about = _p("""
+A game for Crossroads Jam 2.
+Credits:
+Concept: starafire, dustymagician
+Story, Scenario: evercee
+Character Art: starafire
+Background Art: Kat Britt
+UI Design: starafire
+Art, Story, UI Support: dustymagician
+Music and Sound: dustymagician
+Programming: dustymagician
+
 """)
 
 
@@ -62,7 +73,7 @@ define config.has_voice = False
 ## the player is at the main menu. This file will continue playing into the
 ## game, until it is stopped or another file is played.
 
- define config.main_menu_music = "main-menu-theme.ogg"
+define config.main_menu_music = "/bgm/main-menu-theme.ogg"
 
 
 ## Transitions #################################################################
@@ -210,4 +221,4 @@ init python:
 ## The username and project name associated with an itch.io project, separated
 ## by a slash.
 
-# define build.itch_project = "dustymagician/interview-bad"
+define build.itch_project = "dustymagician/interview-bad"

@@ -188,18 +188,20 @@ define audio.pickup = "sfx/sine_b_short.ogg"
 define audio.hangup = "sfx/call_end.ogg"
 define audio.horse = "sfx/horse_neigh.ogg"
 define audio.scribble = "sfx/scribble.ogg"
-define audio.piano = "sfx.piano_dissonance.ogg"
+define audio.piano = "sfx/piano_dissonance.ogg"
 
 #Music
-#define audio.ed1 = "/bgm/ed_intro.ogg"
-#define audio.ed2 = "/bgm/ed_loop.ogg"
-#define audio.bio = "/bgm/reporter.ogg"
-#define audio.bio2 = "/bgm/reporter_drums.ogg"
-#define audio.lovesong = "/bgm/love_song.ogg"
-#define audio.ending = "/bgm/ending.ogg"
-#define audio.castle1 = "/bgm/vampirecastle1.ogg"
-#define audio.castle2 = "/bgm/vampirecastle2.ogg"
-#define audio.castle3 = "/bgm/vampirecastle3.ogg"
+define audio.ed1 = "/bgm/ed_intro.ogg"
+define audio.ed2 = "/bgm/ed_loop.ogg"
+define audio.bio1 = "/bgm/reporter.ogg"
+define audio.bio2 = "/bgm/reporter_drums.ogg"
+define audio.lovesong = "/bgm/love_song.ogg"
+define audio.ending = "/bgm/ending.ogg"
+define audio.castle1 = "/bgm/vampirecastle1.ogg"
+define audio.castle2 = "/bgm/vampirecastle2.ogg"
+define audio.castle3 = "/bgm/vampirecastle3.ogg"
+define audio.losangeles1 = "/bgm/smart_woman1.ogg"
+define audio.losangeles2 = "/bgm/smart_woman2.ogg"
 define audio.cambridge1 = "/bgm/petya_intro.ogg"
 define audio.cambridge2 = "/bgm/petya_loop.ogg"
 
@@ -215,7 +217,7 @@ label start:
     return
 
 label intro:
-    # queue music officejob
+    queue music bio1
     "You are a biographer of the magical,{w=0.2} mystical,{w=0.2} miraculous,{w=0.2} marvelous,{w=0.2} mythical,{w=0.2} and{cps=*.5}... {w=0.3}mmmm{/cps}{i}spellbinding{/i} people of this world."
     "Even though you fancy yourself rather credentialed,{w=0.2} what with the seventeen biographies under your belt,"
     "you are repeatedly upstaged by the charlatans in your field who insist upon filling their \"books\" with falsehoods and lies."
@@ -292,6 +294,7 @@ label icebreaker:
                 "Clear your throat":
                     "You clear your throat (again)."
     show ed -lookup
+    queue music bio2
     "The magician leans back in his chair and crosses one leg over another,{w=0.1} resting his hands on one knee."
     "...Seeing him relax makes you relax,{w=0.1} as well."
 
@@ -310,7 +313,6 @@ label demography:
     "You are thinking about something already..."
     menu:
         "Is that really your real name?":
-            $ renpy.block_rollback()
             ed "No. {w=0.1}Obviously."
             bio "You're joking,{w=0.1} right?"
             ed lookup "Madam."
@@ -328,8 +330,8 @@ label demography:
             show ed -blush
             $ nameroute = True
         "Keep it to yourself":
-            $ renpy.block_rollback()
             "\"Ed\" cannot possibly be his real name.{w=0.1} But you're sure he has his reasons..."
+    $ renpy.fix_rollback()
     
     "You think about your deadline again and realize you need to cut back on some of your questions."
     bio "I need to cut back on some of these questions."
@@ -374,13 +376,20 @@ label upbringing:
             "He snorts,{w=0.1} then covers his mouth to keep the giggles at bay."
             ed blush "I mean,{w=0.1} it's true.{w=0.1} And they certainly aren't immortal."
             call endeared
-    $ renpy.fix_rollback()
     jump interviewintro
     return
 
 label endeared:
     $ affection += 1
     
+    if e_firsttime == True:
+            "..."
+            "He seems to be charmed by your response..."
+            $ e_firsttime = False
+    
+    else:
+        pass
+
     if affection > affectionthreshold:
         $ endearing = True
         if not favorlost:
@@ -390,13 +399,7 @@ label endeared:
             "..."
             "You feel like you've regained his favor."
     
-    if e_firsttime == True:
-            "..."
-            "He seems to be charmed by your response..."
-            $ e_firsttime = False
-    
-    else:
-        pass
+
 
 
     return
@@ -412,6 +415,7 @@ label offended:
         $ favorlost = True
         
     elif o_firsttime == True:
+        $ o_firsttime = False
         "..."
         "He seems offended."
         if affection > 0:
@@ -567,7 +571,8 @@ label interviewintro:
 label portugal:
     show ed at move_to_left
     show bg ship with dissolve
-    #queue music ed
+    play music ["<silence 1.0>", ed1]
+    queue music ed2
     ed "I had just gotten my first Ph.D{w=0.1}—theology.{w=0.1} I wasn't religious,{w=0.1}but there weren't many options back in those days."
     bio "Which days?"
     menu:
@@ -1008,6 +1013,8 @@ label renaissance:
             show microwave:
                 xalign 0.8
                 yalign 0.5
+            $ renpy.music.set_pause(True)
+            $ renpy.music.set_volume(0.0)
             play sound thunk
             bio shocked "..."
             play sound microwave
@@ -1019,6 +1026,8 @@ label renaissance:
             $ microwaveseen = True
             hide microwave with dissolve
             stop sound fadeout 0.5
+            $ renpy.music.set_pause(False)
+            $ renpy.music.set_volume(1.0, 1.0)
             show ed at move_to_center
 
     $ yourFacts += 1
@@ -1170,7 +1179,7 @@ label renaissance:
                 pass
 
     bio happy "Go ahead."
-
+    stop music fadeout 1.0
     jump vampirecastle
     return
 
@@ -1232,18 +1241,17 @@ label vampirecastle:
     show bg castle
     "Layla" "Come {nw=0.3}"
     play sound wink
-    extend "(wink wink) {nw=0.3}"
-    extend "into my castle sexy warlock I will feed you grapes while I suck your blood."
+    extend "(wink wink) {w=0.3}into my castle sexy warlock I will feed you grapes while I suck your blood."
     "Ew."
     bio sad "I really wouldn't."
     ed thinking "Okay then. So when I arr-{nw=0.2}"
     bio shocked "Wait, {color=#f00}suck your {i}blood?{/i}{/color}"
     ed lookup "What?"
     ed -lookup "Oh, yeah. She was a vampire."
-    #play sound nyoom
     show layla:
         easeout 0.3 offscreenright
     show ed at move_to_center
+    play music castle1
     ed "When I arrived, Layla had just bought that castle."
     ed "She had big plans for it: a massive library, elaborate dining room, giant vat of blood in the kitchen."
     ed fakeout "Yeah she had vampires all over the place, but it wasn't {i}too{/i} bad in the beginning..."
@@ -1264,6 +1272,8 @@ label vampirecastle:
     ed lookup "Anyway, she was about to start ramping things up around there. Unfortunately for me."
     show layla:
         linear 0.5 person_d
+    queue music castle2
+    queue music castle3
     "Layla" "Edward I have a proposal for you."
     ed thinking "Not what I'm called."
     "Layla" "You're always going on about all those Ph.D.s you have..." 
@@ -1290,12 +1300,13 @@ label vampirecastle:
     ed "I was hoping to apply the knowledge to my backgrounds in medicine or engineering. But Layla had other plans..."
     show layla at person_d
     play sound explosion
-    # stop music
+    stop music
     $ renpy.pause(3.0)
     "Layla" "Darling Edmund how was chemistry."
     ed blush "It was great." 
     ed -blush "Unlike alchemy. Which was wrong."
     show ed lookup
+    play music castle3
     "Layla" "Yeah okay whatever."
     "Layla" "As you know, I have regular clientele that visit this castle from afar." 
     "Layla" "They come in search of a very particular product."
@@ -1390,6 +1401,7 @@ label vampirecastle:
     hide laylaappears with dissolve
     show bg coffeeshop with dissolve
     #move ed back to center
+    stop music fadeout 1.0
     "You take diligent notes of his vampire exploits."
     "You're particularly in awe of the way he stood up to Layla the Terrible..."
     "Although it sounded like his feelings toward that time were more complex than he let on."
@@ -1519,6 +1531,7 @@ label classiclit:
     ed thinking "So I figured it was better to take control of the situation myself..."
     bio sad "What did you end up doing???"
     show cg framed
+    play sound piano
     $ renpy.pause(0.5)
     ed smug "We framed the murder on someone else."
     hide petya
@@ -1575,6 +1588,8 @@ label classiclit:
         call offended
         show ed -angry
 
+    play music "<from 34.64>bgm/reporter.ogg"
+    queue music bio1
     ed "Anyway, if I had to relate it back to the question,"
     bio happy "Oh! Right."
     bio sad "That."
@@ -1665,9 +1680,11 @@ label classiclit:
     ed fakeout "What?"
     show bg black with dissolve
     ed lookup "Why not just ask me my biggest fear?"
+    play sound wink
     bio happy "Because I have a feeling I already know what it is!"
     bio -happy "Also, if I've got you pegged correctly, you wouldn't answer a question like that, now would you?"
     ed blush "True."
+    stop music fadeout 1.0
     if endearing:
         "You thought you saw him light up for a fraction of a second."
     ed -blush "Okay, here goes."
@@ -1708,7 +1725,8 @@ label film:
         "Go on":
             pass
 
-    # play music smartwomen
+    play music losangeles1
+    queue music losangeles2
     ed thinking "I had spent decades in countries with rotten weather when I decided I'd finally had enough."
     show ed at move_to_right
     ed lookup "I {i}needed{/i} to go somewhere with warm winters." 
@@ -1838,7 +1856,6 @@ label film:
             $ yourFacts +=1
             $ renpy.music.set_pause(False)
             $ renpy.music.set_volume(1.0, 0.5)
-            # play music fadein 1.0
 
         "I believe it":
             pass
@@ -2086,10 +2103,11 @@ label currentday:
     return
 
 label review:
-    #stop music fadeout 1.0
+    stop music fadeout 1.0
     bio "Well then. Let me just touch up my notes..."
     show bg black with dissolve
     "You opened up your notepad and scribbled."
+    play music bio1
     menu vocation:
         "Though he is many things now, his original occupation was..."
         "A fisherman":
@@ -2103,7 +2121,7 @@ label review:
             ed angry "Hey."
             show ed -angry
             pass
-
+    play sound scribble
     menu travel:
         "Ed arrived in Portugal via..."
         "Boat":
@@ -2152,19 +2170,23 @@ label review:
             pass
     $ renpy.fix_rollback()
 
+    $ theocracy = False
+    $ politics = False
     menu beliefs:
         "Ed's allegiances lie with..."
         "The owning class":
             pass
         "The proletariat":
             pass
-        "The Valkyrie theocracy":
+        "The Valkyrie theocracy" if not theocracy:
             ed angry "Don't write that. Even as a joke."
             menu:
                 "My mistake original gangsta":
                     bio sad "I must have gotten the wrong idea."
+                    $ theocracy = True
+                    jump beliefs
                 "Don't tell me what to write":
-                    "You think you see him roll his eyes."
+                    "You think you see him roll his eyes...?"
                     call offended
             pass
         "Himself":
@@ -2177,12 +2199,15 @@ label review:
             $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
             "You quickly scratch that out and write {w=0.3}\"[cuteanimal]\"{w=0.3} in its place."
             call endeared
-        "Are you kidding!? Our paper isn't political!":
+        "Are you kidding!? Our paper isn't political!" if not politics:
             "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
             "He's not an idiot.{w=0.1} He knows about...{nw=0.3}"
             play sound ominous 
             extend "The Implication."
+            $ politics = True
+            jump beliefs
     $ renpy.fix_rollback()
+    play sound scribble
 
     ed lookup "Hey, can you include a segment about my Ph.D.s?"
     "You sigh."
@@ -2210,6 +2235,7 @@ label review:
             "Did he study in the library or work in the library...?"
             "You can't remember."
             pass
+    play sound scribble
     
     "Finally, after a long afternoon of..."
     bio sad "What would you even call your stories? Swashbuckling?"
@@ -2241,8 +2267,8 @@ label review:
             "Then you write,"
             "\"More than he could have ever imagined.\""
             $ yourFacts += 1
-
     $ renpy.fix_rollback()
+    play sound scribble
 
     "You uncovered your thesis through the one thing all of his tales had in common."
     menu commonthread:
@@ -2273,7 +2299,7 @@ label review:
     return
 
 label interviewconclusion:
-
+    stop music fadeout 1.0
     show bg coffeeshop with dissolve
     ed "Well?{w=0.1} That should be enough to write a pretty basic profile."
     bio sad "Basic? You don't mean to imply that there's more."
@@ -2296,7 +2322,7 @@ label interviewconclusion:
     ed lookup "Why did I do it,{w=0.1} huh...?"
     ed -lookup "That's a great question."
     ed thinking "I,{w=0.1} um...{nw=0.5}"
-    # play music lovesong
+    play music lovesong
     ed blush "I did it for love."
     bio "Love...?"
     bio "Really?"
@@ -2371,9 +2397,10 @@ label interviewconclusion:
     
     "And with that, you took the last of your notes."
     hide ed with dissolve
+    stop music fadeout 1.0
     "The two of you stand up to leave the coffee shop..."
     
-
+    
     if yourFacts >= factstotal:
         if endearing:
             if nameroute:
@@ -2578,7 +2605,7 @@ label realname:
 
 label finaltest:
     scene bg black
-    # play music office
+    play music ending
     if secretending == True:
 
         "You wander into the office,{w=0.1} almost in a trance."
@@ -2651,6 +2678,7 @@ label finaltest:
     boss "Don't embarrass the paper!"
 
     call endoftest
+    stop music fadeout 1.0
 
     if finalanswer==totalPhds:
         jump goodend
