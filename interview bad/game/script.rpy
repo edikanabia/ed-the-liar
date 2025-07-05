@@ -1,15 +1,27 @@
 # The script of the game goes in this file.
 
+#ctc
+image ctcindicator:
+    "/screens/ctc.png"
+    align (0.9, 0.925)
+    parallel:
+        ease_bounce 0.5 yalign 0.92
+        ease_bounce 0.5 yalign 0.925
+        repeat
+
+
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
 #region Character
+define ctctc = Character(ctc="ctcindicator", ctc_position="fixed")
+
 default bioName = "Biographer"
 
 define ed = Character("ed_dn", image="ed", dynamic=True) #dynamically change name from Immortal Wizard to Ed
 define bio = Character("You", image="bio")
 define boss = Character("Boss")
-define umi = Character("Umi")
+define narrator = Character(ctc="ctcindicator", ctc_position="fixed")
 define yetu = Character("Dr. Olu")
 define devil = Character("The Devil")
 define petya = Character("petya_dn", dynamic=True)
@@ -64,6 +76,8 @@ default commonality = False
 default earlyend = False
 default yearcontradiction = False
 default italian = 0
+
+default jacket = False
 #endregion
 
 #region Resources
@@ -124,6 +138,7 @@ image cg csection = "/cgs/cg_csection.png"
 image cg filmset = "/cgs/cg_film.png"
 image cg slaughter = "/cgs/cg_vampire_hunting.png"
 image cg framed = "cgs/cg_frame.png"
+
 
 #endregion
 
@@ -274,9 +289,11 @@ label icebreaker:
             "He \"didn't realize\" he had a following?{w=0.1} How could he not know?"
 
     show bg black with dissolve
-    "Is he...{nw=0.1}" 
+    $ renpy.music.set_volume(0.5, 0.5)
+    "Is he...{nw=0.5}" 
     play sound ominous
     extend "lying?"
+    $ renpy.music.set_volume(1.0, 0.5)
     show bg coffeeshop with dissolve
 
     "You pay it no mind."
@@ -339,9 +356,10 @@ label demography:
     show ed lookup
     "See,{w=0.1} now he's looking at you funny."
     "Don't bite your lip!"
-    show ed smug
+    show ed wink
+    play sound wink
     "He's reciprocating.{w=0.1} {cps=*0.5}Unbelievable.{/cps}"
-    show ed -smug
+    show ed -wink
     "Anyway."
     menu:
         "You figure you don't need to spend so much time on his background,{w=0.1} so you ask him about..."
@@ -409,7 +427,7 @@ label offended:
     if affection <= 0:
         $ affection = 0
     
-    if affection <= affectionthreshold and e_firsttime == False:
+    if affection <= affectionthreshold and endearing == True:
         "You've definitely lost your favor with him."
         $ endearing = False
         $ favorlost = True
@@ -425,6 +443,9 @@ label offended:
         
     else:
         pass
+
+    if affection <= affectionthreshold:
+        $ endearing = False
     return
 
 label takenote(factoid, factuality):
@@ -472,6 +493,7 @@ label starsign:
 
     bio "When were you born,{w=0.1} then?"
     ed lookup "October 9. {w=0.2}Write that down." 
+    play sound scribble
     "You scratched out Virgo and wrote Libra."
     $ starsign = True
     
@@ -571,7 +593,7 @@ label interviewintro:
 label portugal:
     show ed at move_to_left
     show bg ship with dissolve
-    play music ["<silence 1.0>", ed1]
+    play music ed1
     queue music ed2
     ed "I had just gotten my first Ph.D{w=0.1}—theology.{w=0.1} I wasn't religious,{w=0.1}but there weren't many options back in those days."
     bio "Which days?"
@@ -657,7 +679,7 @@ label portugal:
             bio happy "You're bisexual!"
             ed lookup "Is it a surprise?"
             bio "I thought you were just...{w=0.1} a really sensitive guy."
-            ed blush "I can be both."
+            ed @blush "I can be both."
             ed "After all, I'm bi, aren't I...?"
             call endeared
             call takenote("Ed is bisexual", True)
@@ -881,10 +903,12 @@ label renaissance:
             bio angry "Really?"
             ed lookup "Those women are stone cold."
             show bg black with dissolve
+            $ renpy.music.set_volume(0.5, 0.5)
             "He stares past you,{w=0.1} into the distance."
             show bg coffeeshop
             "But...{w=0.1} there was only wall behind you."
             show bg ship with dissolve
+            $ renpy.music.set_volume(1.0, 0.5)
 
     ed thinking "Once I managed to calm down and take a better look at my situation, I took the money I had liberated from The Devil."
     ed "I knew I needed to reinvent myself, so I decided I would do what I do best:"
@@ -907,7 +931,9 @@ label renaissance:
     ed fakeout "See, there was some sickness going around Europe at the time—something to do with rats?"
     ed lookup "Others called it a plague."
     bio happy "Some would even call it... the Bubonic Plague."
-    ed -lookup "Eh! Maybe. {i}I{/i} called it{w=0.2} an opportunity."
+    ed -lookup "Eh! {w=0.2}Maybe.{w=0.2} {i}I{/i} called it...{nw=0.5}"
+    play sound wink
+    extend "an opportunity."
     show bg black with dissolve
     ed "Soon enough I had that MD under my belt. But while my academic life flourished, my romantic life flatlined."
 
@@ -1518,7 +1544,7 @@ label classiclit:
     ed fakeout "But soon, [petya_dn] started getting worse. He wasn't sleeping, he barely ate anything, and he stopped coming to our dinner nights." 
     ed "One of his classmates had plagiarized a section from one of his papers, and that was a breaking point." 
     ed thinking "He completely and utterly lost his marbles."
-    show petya at person_d
+    show petya at person_d with Dissolve(0.2)
     petya "Ed, you gotta help me man. I messed up."
     ed shock2 "What in the world!?"
     petya "I don't even know what happened... I lost control of myself..."
@@ -2623,7 +2649,12 @@ label finaltest:
         "You could even picture the final line of the article:"
         "{i}Even in a life full of tall tales,{w=0.1} he kept a simple truth in his heart.{/i}"
         pass
+
+
     label gooseygoo:
+        if not renpy.music.is_playing():
+            play music ending
+
         boss "There you are,{w=0.1} you silly goosey goo!{w=0.1} So what did you find out?{w=0.1} Is he really the world's most credentialed man?"
     bio "Well... "
     $ rattle = False
@@ -2678,7 +2709,6 @@ label finaltest:
     boss "Don't embarrass the paper!"
 
     call endoftest
-    stop music fadeout 1.0
 
     if finalanswer==totalPhds:
         jump goodend
@@ -2689,6 +2719,7 @@ label finaltest:
 label endoftest:
     play sound scribble
     "You sit down and write the article exactly as you envision it."
+    stop music fadeout 1.0
     "When you're done,{w=0.1} you submit it,{w=0.1} and you go home."
     return
 
@@ -2715,7 +2746,7 @@ label goodend:
     play sound hangup
     "He hangs up."
     
-    "You reached the good ending...?"
+    
     $ persistent.good_ending_reached = True
     #persistent from reaching the secret ending
 
@@ -2725,6 +2756,8 @@ label goodend:
 
     if all_endings_reached:
         "You realized this was as good an ending as you could get."
+    else:
+        "You reached the good ending...?"
     $ persistent.completed_playthroughs += 1
     return
 
@@ -2747,7 +2780,7 @@ label badend:
     "It's the highest on the Internet,{w=0.1} unfortunately for you."
     "When your boss told you not to check Glitter,{w=0.1} it's because he knew they were eviscerating you on there."
     "So you log on to check,{w=0.1} against your better judgement." 
-    "You immediately find the post.{w=0.1} It's got one william likes.{w=0.1} The quote gleets are eating you up."
+    "You immediately find the post.{w=0.1} It's got one william likes.{w=0.1} The quote gleets are eating you up..."
     "As it turns out,{w=0.1} a Dr. Yetunde Olu,{w=0.1} former colleague and ex-girlfriend of Ed,{w=0.1} wrote a response piece"
     "wherein she comments that she can excuse the occasional tall tale,{w=0.1} and even stops short of calling the piece laundering like many other critics have,"
     "but she draws the line at misrepresenting the nature of his involvement in academia."
