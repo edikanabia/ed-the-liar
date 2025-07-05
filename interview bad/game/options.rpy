@@ -62,7 +62,7 @@ define config.has_voice = False
 ## the player is at the main menu. This file will continue playing into the
 ## game, until it is stopped or another file is played.
 
-# define config.main_menu_music = "main-menu-theme.ogg"
+ define config.main_menu_music = "main-menu-theme.ogg"
 
 
 ## Transitions #################################################################
@@ -84,12 +84,12 @@ define config.intra_transition = dissolve
 
 ## A transition that is used after a game has been loaded.
 
-define config.after_load_transition = None
+define config.after_load_transition = MultipleTransition([False, CropMove(0.4, mode="wipeleft"), Solid("#000"), Pause(0.2), Solid("#000"), CropMove(0.4, mode="wipeleft"), True])
 
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = Fade(0.5, 0.2, 0.5)
+define config.end_game_transition = CropMove(0.5, mode="wipeleft")
 
 
 ## A variable to set the transition used when the game starts does not exist.

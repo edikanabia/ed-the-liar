@@ -164,7 +164,7 @@ transform move_to_left:
 
 define circlewipe = ImageDissolve("/transitions/circle_wipe.png", 1.0,2)
 
-image laylaappears:
+image bg laylaappears:
     Solid("#9e1a0c")
     pause 2.0
     "/backgrounds/vampire.png" with Dissolve(2.0)
@@ -188,9 +188,18 @@ define audio.pickup = "sfx/sine_b_short.ogg"
 define audio.hangup = "sfx/call_end.ogg"
 define audio.horse = "sfx/horse_neigh.ogg"
 define audio.scribble = "sfx/scribble.ogg"
+define audio.piano = "sfx.piano_dissonance.ogg"
 
 #Music
-#define audio.ed = "/bgm/ed.ogg"
+#define audio.ed1 = "/bgm/ed_intro.ogg"
+#define audio.ed2 = "/bgm/ed_loop.ogg"
+#define audio.bio = "/bgm/reporter.ogg"
+#define audio.bio2 = "/bgm/reporter_drums.ogg"
+#define audio.lovesong = "/bgm/love_song.ogg"
+#define audio.ending = "/bgm/ending.ogg"
+#define audio.castle1 = "/bgm/vampirecastle1.ogg"
+#define audio.castle2 = "/bgm/vampirecastle2.ogg"
+#define audio.castle3 = "/bgm/vampirecastle3.ogg"
 define audio.cambridge1 = "/bgm/petya_intro.ogg"
 define audio.cambridge2 = "/bgm/petya_loop.ogg"
 
@@ -200,12 +209,13 @@ define audio.cambridge2 = "/bgm/petya_loop.ogg"
 # The game starts here.
 
 label start:
+    stop music fadeout 1.0
     jump intro
 
     return
 
 label intro:
-    # play music officejob
+    # queue music officejob
     "You are a biographer of the magical,{w=0.2} mystical,{w=0.2} miraculous,{w=0.2} marvelous,{w=0.2} mythical,{w=0.2} and{cps=*.5}... {w=0.3}mmmm{/cps}{i}spellbinding{/i} people of this world."
     "Even though you fancy yourself rather credentialed,{w=0.2} what with the seventeen biographies under your belt,"
     "you are repeatedly upstaged by the charlatans in your field who insist upon filling their \"books\" with falsehoods and lies."
@@ -247,7 +257,7 @@ label icebreaker:
             play sound wink
             "!?{nw=0.5}" #wink
             show ed -wink
-            "You feel a lot more confident now!{w=0.1} But..."
+            "Suddenly, you feel a lot more confident!{w=0.1} But..."
             "It seems unlikely that someone as busy as he is has \"nothing better to do.\"{w=0.1} He's not messing with you,{w=0.1} {cps=*0.5}or...?{/cps}"
             
         "Excitedly":
@@ -1017,22 +1027,29 @@ label renaissance:
     label aftermicrowave:
         ed thinking "It took a lot of trial and error, but I'd made a working prototype." 
     ed -thinking "I was ready to show it off to the world when disaster struck."
-    menu disaster:
-        "Fire?":
-            pass
-        "Volcano?":
-            pass
-        "Political instability?":
-            pass
+    if not mermaidmafia:
+        menu disaster:
+            "Fire?":
+                pass
+            "Volcano?":
+                pass
+            "Political instability?":
+                pass
+        ed "No... the mermaid mafia."
 
-    ed "No... the mermaid mafia."
+    bio happy "The mermaid mafia?"
+    ed "No, it was the merm-{nw=0.5}"
+    ed lookup "Hey, you've been paying attention."
+    ed fakeout "{size=-8}Can't imagine why.{/size}"
+    ed "Anyway, the mermaid mafia."
+    "Suddenly it occurs to you..."
     $ issueraised = False
     menu:
-        "Interrupt":
+        "Ask the question":
             $ issueraised = True
-            bio -shocked "How did the mermaid mafia get-{nw}"
+            bio -happy "How did the mermaid mafia get-{nw}"
             ed "Hold on, hold on, I'm explaining."
-        "Do not":
+        "Let him explain":
             pass    
     
     label afterdisaster:
@@ -1044,7 +1061,7 @@ label renaissance:
         menu:
             "Interrupt":
                 $ issueraised = True
-                bio -shocked "But there's no-{nw}"
+                bio -happy "But there's no-{nw}"
                 ed -angry "Hey, hey, hey, I'm having a moment here."
             "Not yet":
                 pass
@@ -1053,11 +1070,14 @@ label renaissance:
     ed lookup "Except for the bottles of nail polish, which I also invented by the way. They kept those for themselves."
 
     if microwaveseen:
-        bio -shocked "If they tore apart everything, how did you manage to rescue the microwave?"
+        bio -happy "If they tore apart everything, how did you manage to rescue the microwave?"
         ed -lookup "At the time, I was workshopping a new magic... They call it void-hopping now, but I mainly used it for storage."
         ed "This is how I've been able to keep my lifeforce safe from fatal accidents, but it's also where I kept my microwave."
         ed blush "His name is Michael."
-        ed -blush "Unfortunately, at the time, my void dimension was only big enough to fit a few things."
+        bio "Michael Wave?"
+        ed lookup "Michael Joseph, the first ever MJ."
+        bio "Wow."
+        ed -lookup "Unfortunately, at the time, my void dimension was only big enough to fit a few things."
         ed thinking "I couldn't rescue the other inventions."
         "Seems awfully convenient..."
         "But, y'know." 
@@ -1065,6 +1085,12 @@ label renaissance:
 
     ed angry "I was furious, but what was I supposed to do?" 
     ed thinking "I couldn't drag them out of the water, and I knew if I fell in, they'd tear me apart like they did the prototypes..."
+    bio happy "You would have been sleepin' with the fishies."
+    ed lookup "No, they would have killed me."
+    bio -happy "That's what I meant."
+    ed angry "????"
+    ed lookup "Um, anyway, so..."
+    ed thinking "I started chucking rocks into the ocean, hoping to hit some of them." 
 
     if not issueraised:
         menu:
@@ -1074,9 +1100,10 @@ label renaissance:
                 ed -thinking "Hang on, I gotta finish this thought."
             "Keep holding it in":
                 pass
+    
 
-    ed thinking "I started chucking rocks into the ocean, hoping to hit some of them." 
     ed "I was yelling at the beach, grabbing whatever stones I could find and launching them at the mermaids."
+    ed fakeout "The city guard didn't like that. I was causing a public disturbance, and the mermaids were lining their pockets anyway." 
 
     if not issueraised:
         menu:
@@ -1087,7 +1114,6 @@ label renaissance:
             "Just a little longer":
                 pass
 
-    ed fakeout "The city guard didn't like that. I was causing a public disturbance, and the mermaids were lining their pockets anyway." 
     ed angry "Corruption everywhere... mermaids at my back... my exes had no use for me..." 
     ed thinking "It was time to get the hell out of Italy."
     ed -thinking "There. I'm done."
@@ -1104,12 +1130,12 @@ label renaissance:
                 bio "Because there was no sea."
                 ed "It was..." 
                 ed "It was a river."
-                ed lookup "I swear it happened.{nw=0.1}"
-                ed -lookup "It happened, I swear.{nw=0.1}"
-                ed lookup "I tell a lot of tall tales, but that was real!{nw=0.1}"
-                ed fakeout "It was real, I promise!{nw=0.1}"
-                ed angry "I just got it mixed up!{nw=0.1}"
-                ed lookup "I can't help it, I'm old!{nw=0.1}"
+                ed lookup "I swear it happened.{nw=0.5}"
+                ed -lookup "It happened, I swear.{nw=0.5}"
+                ed lookup "I tell a lot of tall tales, but that was real!{nw=0.5}"
+                ed fakeout "It was real, I promise!{nw=0.5}"
+                ed angry "I just got it mixed up!{nw=0.5}"
+                ed lookup "I can't help it, I'm old!{nw=0.5}"
                 ed thinking "I'm sorry!{w=0.1} I'm sorry.{nw=0.5}"
                 bio "It's no big d{nw}"
                 ed -thinking "I'm sorry."
@@ -1163,7 +1189,7 @@ label vampirecastle:
     window hide
     play sound appear
     $ renpy.pause(0.771, hard=True)
-    show laylaappears
+    show bg laylaappears
     show layla at person_e:
         matrixcolor BrightnessMatrix(-1.0)
         pause 2.0
@@ -1176,6 +1202,7 @@ label vampirecastle:
     
     $ renpy.pause(4.0, hard=True)
     window auto
+    show bg castle
     "Layla the Terrible" "Oh, hello why aren't you a tall drink of water."
     bio -happy "Did she really say that???"
     ed fakeout "Would you rather she say something like,"
@@ -1189,7 +1216,7 @@ label vampirecastle:
 
     play sound appear
     $ renpy.pause(0.771, hard=True)
-    show laylaappears
+    show bg laylaappears
     show layla at person_e:
         matrixcolor BrightnessMatrix(-1.0)
         pause 2.0
@@ -1202,13 +1229,18 @@ label vampirecastle:
     
     $ renpy.pause(4.0, hard=True)
     window auto
-    "Layla" "Come (wink wink) into my castle sexy warlock I will feed you grapes while I suck your blood."
+    show bg castle
+    "Layla" "Come {nw=0.3}"
+    play sound wink
+    extend "(wink wink) {nw=0.3}"
+    extend "into my castle sexy warlock I will feed you grapes while I suck your blood."
     "Ew."
     bio sad "I really wouldn't."
-    ed thinking "Okay then. When I arr-{nw=0.2}"
-    bio shocked "Wait, {i}blood?{/i}"
+    ed thinking "Okay then. So when I arr-{nw=0.2}"
+    bio shocked "Wait, {color=#f00}suck your {i}blood?{/i}{/color}"
     ed lookup "What?"
     ed -lookup "Oh, yeah. She was a vampire."
+    #play sound nyoom
     show layla:
         easeout 0.3 offscreenright
     show ed at move_to_center
@@ -1256,7 +1288,10 @@ label vampirecastle:
 
     ed -blush "When I completed my studies, everyone seemed a little {i}too{/i} excited." 
     ed "I was hoping to apply the knowledge to my backgrounds in medicine or engineering. But Layla had other plans..."
-    show layla at person_d with dissolve
+    show layla at person_d
+    play sound explosion
+    # stop music
+    $ renpy.pause(3.0)
     "Layla" "Darling Edmund how was chemistry."
     ed blush "It was great." 
     ed -blush "Unlike alchemy. Which was wrong."
@@ -1614,7 +1649,7 @@ label classiclit:
             
             if yourFacts >= 4:
                 ed -lookup "Yeah, a big one. It's harming your credibility."
-            elif endearing:
+            if endearing:
                 bio "What interests you in this dubious, unreliable paper, though?"
                 ed @smug "You."
                 bio @blush "Oh...!"
@@ -2161,7 +2196,11 @@ label review:
             ed lookup "That's not a real degree."
             bio shocked "What!?"
             ed "I made it up."
-            bio sad "Unbelievable.."
+            bio angry "Unbelievable!"
+            if yourFacts < 9:
+                bio "What else did you make up!?"
+                "He makes a hissing sound by sucking in air through his teeth."
+                ed @lying "Well."
             pass
         "Theology":
             pass
@@ -2325,7 +2364,7 @@ label interviewconclusion:
                 ed "I don't think I want this day to end?"
 
             else:
-                ed -lookup "Wow... you are forward."
+                ed -lookup "..."
                 ed blush "I'll think about it."
         "Thank you for sharing":
             ed thinking "Of course."
