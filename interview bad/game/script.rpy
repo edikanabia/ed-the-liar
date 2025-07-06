@@ -225,7 +225,7 @@ define audio.cambridge2 = "/bgm/petya_loop.ogg"
 # The game starts here.
 
 label start:
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     jump intro
 
     return
@@ -459,6 +459,7 @@ label takenote(factoid, factuality):
             pass
         "Leave it be":
             pass
+    play sound scribble
     $ factscollect.append(factoid)
     return
 
@@ -582,7 +583,7 @@ label interviewintro:
     bio "It's one of my favorite questions."
     bio "Of all the fine,{w=0.1} magically-inclined folks I've interviewed,{w=0.1} I've always asked the same question,{w=0.1} but I've never gotten the same answer!"
     ed -thinking "Well, if you wanna hear about that..."
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     "He uncrosses his legs,{w=0.1} leaning forward with his elbows now resting on his knees." 
     "You find yourself leaning forward as well,{w=0.1} pulled into his vortex,{w=0.1} his magnetic field." 
     "You are about to hear A Story."
@@ -1204,7 +1205,7 @@ label renaissance:
                 pass
 
     bio happy "Go ahead."
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     jump vampirecastle
     return
 
@@ -1270,7 +1271,7 @@ label vampirecastle:
     "Ew."
     bio sad "I really wouldn't."
     ed thinking "Okay then. So when I arr-{nw=0.2}"
-    bio shocked "Wait, {color=#f00}suck your {i}blood?{/i}{/color}"
+    bio shocked "Wait, {color=#8c1d15}suck your {i}blood?{/i}{/color}"
     ed lookup "What?"
     ed -lookup "Oh, yeah. She was a vampire."
     show layla:
@@ -1340,11 +1341,16 @@ label vampirecastle:
     "Layla" "...but which would be not just more economical but hugely lucrative to synthesize in-house."
     ed blush "You mean they don't have to pillage Afghanistan to mine lapis lazuli anymore?"
     show ed lookup
+    $ renpy.music.set_pause(True)
+    $ renpy.music.set_volume(0.0)
     "Layla" "What? No. It's drugs. I'm talking about drugs."
     "Layla" "Idiot."
+    $ renpy.music.set_pause(False)
+    $ renpy.music.set_volume(1.0, 0.5)
     show layla:
         linear 0.8 offscreenright
     #she slides off screen to the right
+
     bio -sad "Drugs for vampires, huh?"
     menu:
         "Are they different from regular drugs":
@@ -1386,12 +1392,14 @@ label vampirecastle:
     show layla at person_d with dissolve
     "Layla" "What if we rounded up all of the humans and started breeding them like cattle?"
     "Layla" "That would keep me fed for an eternity!"
+    $ renpy.music.set_pause(True)
     ed shock1 "..."
     ed shock2 "..."
     ed "Okay that's enough."
     hide layla with dissolve
     show bg black
     show ed at move_to_center
+    $ renpy.music.set_pause(False)
     ed thinking "What Layla didn't know was when I wasn't in the lab, I was building and collecting weapons."
     if endearing:
         ed lookup "And working out. I was also working out a lot."
@@ -1399,7 +1407,7 @@ label vampirecastle:
     ed thinking "All of the schmucks in Layla's castle were just too drunk, high, or both to notice."
     hide ed with dissolve
     ed "So when the time came for me to show my hand..."
-    #play sound alert
+    play sound explosion
     $ renpy.pause(0.5)
     show cg slaughter
     ed "I made quick work of that frat house."
@@ -1413,6 +1421,7 @@ label vampirecastle:
             ed angry "Technically it was ALSO MINE. WE made that money." 
             ed "TOGETHER."
             "Is he... sulking?"
+            show ed -angry
         "What did you take?":
             ed thinking "She loved jewels and precious stones and things. Had a lot of art in there, too." 
             ed "I took those to repatriate."
@@ -1426,7 +1435,7 @@ label vampirecastle:
     hide laylaappears with dissolve
     show bg coffeeshop with dissolve
     #move ed back to center
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     "You take diligent notes of his vampire exploits."
     "You're particularly in awe of the way he stood up to Layla the Terrible..."
     "Although it sounded like his feelings toward that time were more complex than he let on."
@@ -1592,7 +1601,7 @@ label classiclit:
 
     show ed at move_to_center
     bio sad "Okay, fine. What happened afterwards?"
-    stop music fadeout 1.5
+    stop music fadeout 5.0
     bio happy "A relationship tested through the flames should be able to survive, right?"
     show bg black with dissolve
     ed "Not really. I guess we could only relate to each other through that brief period."
@@ -1709,9 +1718,10 @@ label classiclit:
     bio happy "Because I have a feeling I already know what it is!"
     bio -happy "Also, if I've got you pegged correctly, you wouldn't answer a question like that, now would you?"
     ed blush "True."
-    stop music fadeout 1.0
+    
     if endearing:
         "You thought you saw him light up for a fraction of a second."
+    stop music fadeout 3.0
     ed -blush "Okay, here goes."
 
     jump film
@@ -1843,7 +1853,7 @@ label film:
     ed thinking "I lived in a modestly-sized house tucked away in the Hollywood Hills, with a view of the ocean." 
     ed -thinking "I mostly kept out of the public eye and hardly engaged with my fans." 
     ed lookup "In a way, you could say I played hard to get. I thought it added to my gentlemanly charm."
-    ed -lookup "Bit in retrospect, it may have ended up compounding the problem..."
+    ed -lookup "But in retrospect, it may have ended up compounding the problem..."
     ed thinking "It all started with the after work drinks and cast wrap-up parties."
     ed "Day in and day out, I am surrounded by beautiful women and handsome men as far as the eye can see..."
     ed -thinking "So I cave. And I buy people a few drinks here and there, and invite some of them over to my house..."
@@ -1861,7 +1871,7 @@ label film:
     "You brace yourself for what's about to come next."
     bio -angry "So who were these people who had you in their favor? Anyone I know?"
     ed fakeout "Well..."
-    ed "Rock Hudson, Anna May Wong, Katherine Hepburn, Eartha Kitt, James Dean,{nw=0.2}"
+    ed "Rock Hudson, Anna May Wong, Katharine Hepburn, Eartha Kitt, James Dean,{nw=0.2}"
     bio "Wow,{w=0.1} that's-{nw}"
     ed -fakeout "Josephine Baker, Rita Hayworth, Paul Robeson, Anthony Perkins, Paul Newman...{nw=0.3}"
     ed lying "...Zendaya{nw=0.5}"
@@ -1990,7 +2000,8 @@ label currentday:
                     bio angry "Look, if you're not a misogynist, name every woman."
                     ed thinking "..."
                     "See? It worked again!{nw=0.3}"
-                    #pause music
+                    $ renpy.music.set_pause(True)
+                    $ renpy.music.set_volume(0.0)
                     play sound explosion
                     ed smug "[everywoman]."
                     bio shocked "..."
@@ -2000,7 +2011,8 @@ label currentday:
                     #if it were up to me I would 3D model Ed so I can make him hit the griddy just for this bit
                     "But when you did, all you could see was him hitting the most ridiculous victory dance you could imagine."
                     "You can't beat this guy."
-                    #resume music fadein 0.5
+                    $ renpy.music.set_pause(False)
+                    $ renpy.music.set_volume(1.0, 1.0)
                     show ed at center with dissolve
 
             else:
@@ -2128,7 +2140,7 @@ label currentday:
     return
 
 label review:
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     bio "Well then. Let me just touch up my notes..."
     show bg black with dissolve
     "You opened up your notepad and scribbled."
@@ -2324,7 +2336,7 @@ label review:
     return
 
 label interviewconclusion:
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     show bg coffeeshop with dissolve
     ed "Well?{w=0.1} That should be enough to write a pretty basic profile."
     bio sad "Basic? You don't mean to imply that there's more."
@@ -2377,7 +2389,7 @@ label interviewconclusion:
     ed thinking "I went and did it anyway."
     ed -thinking "The way it works is that whenever I die, I come back in a few days or so..."
     ed angry "But I never told her. I was too ashamed."
-    ed -lookup "The day of the shipwreck, I actually died.{w=0.3} Well,{w=0.3} \"died.\""
+    ed -angry "The day of the shipwreck, I actually died.{w=0.3} Well,{w=0.3} \"died.\""
     ed "So she never knew I was still alive."
     ed thinking "I think that in the intervening years, I didn't want to replace her..."
     ed "So all of my relationships ended up being really short-lived."
@@ -2422,7 +2434,7 @@ label interviewconclusion:
     
     "And with that, you took the last of your notes."
     hide ed with dissolve
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     "The two of you stand up to leave the coffee shop..."
     
     
@@ -2718,7 +2730,7 @@ label finaltest:
 label endoftest:
     play sound scribble
     "You sit down and write the article exactly as you envision it."
-    stop music fadeout 1.0
+    stop music fadeout 5.0
     "When you're done,{w=0.1} you submit it,{w=0.1} and you go home."
     return
 
