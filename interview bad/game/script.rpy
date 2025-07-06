@@ -472,6 +472,7 @@ label selecttrue(truth, lie):
         "[lie]":
             $ factscollect.append(lie)
             pass
+    play sound scribble
     return
 
 label starsign:
@@ -1432,7 +1433,7 @@ label vampirecastle:
             show ed -wink
             call takenote("Ed discovered ultramarine blue", True)
             pass
-    hide laylaappears with dissolve
+    hide bg laylaappears with dissolve
     show bg coffeeshop with dissolve
     #move ed back to center
     stop music fadeout 5.0

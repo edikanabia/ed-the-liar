@@ -31,14 +31,17 @@ define config.version = "1.1"
 
 define gui.about = _p("""
 A game for Crossroads Jam 2.
+
 Credits:
-Concept: starafire, dustymagician
-Story, Scenario: evercee
-Character Art: starafire
-Background Art: Kat Britt
-UI Design: starafire
-Art, Story, UI Support: dustymagician
-Music and Sound: dustymagician
+
+Concept: starafire, dustymagician\n
+Story, Scenario: evercee\n
+Character Art: starafire\n
+Background Art: Kat Britt\n
+CGs: dustymagician\n
+UI Design: starafire\n
+Additional art, Story and UI Support: dustymagician\n
+Music and Sound: dustymagician\n
 Programming: dustymagician
 
 """)
