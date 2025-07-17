@@ -703,7 +703,7 @@ label portugal:
         "Remind him of the year":
             $ finesse = True
             bio "It was 1430."
-            ed "And I was about to be rolling in it the way I finessed the #!*% outta that devil."
+            ed "And I was about to be rolling in it the way I finessed the f**k outta that devil."
             ed "You're gonna love this.{w=0.1} I promise."
             "You make a note to yourself to edit that out of the transcript."
             
@@ -1031,9 +1031,6 @@ label renaissance:
         "That's so cool":
             pass
         "Don't buy it for a second":
-            if not endearing:
-                ed -lookup "That's fine. You don't have to."
-                jump aftermicrowave
             show ed smug:
                 linear 0.2 xalign 0.3
             ed smug "Behold my most prized possession."
@@ -1408,8 +1405,8 @@ label vampirecastle:
     ed thinking "All of the schmucks in Layla's castle were just too drunk, high, or both to notice."
     hide ed with dissolve
     ed "So when the time came for me to show my hand..."
-    play sound explosion
     $ renpy.pause(0.5)
+    play sound explosion
     show cg slaughter
     ed "I made quick work of that frat house."
     bio -blush "You defeated them all?"
