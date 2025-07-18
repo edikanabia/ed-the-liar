@@ -77,6 +77,7 @@ default yearcontradiction = False
 default italian = 0
 
 default jacket = False
+default isbisexual = False
 #endregion
 
 #region Resources
@@ -194,6 +195,7 @@ define audio.explosion = "/sfx/explosion.ogg"
 define audio.microwave = "/sfx/microwave_beep+hum_long.ogg"
 define audio.slidewhistledownup = "/sfx/slide_whistle_up-down.ogg"
 define audio.slidewhistledown = "/sfx/slide_whistle_down.ogg"
+define audio.slidewhistleup = "/sfx/slide_whistle_up.ogg"
 define audio.wink = "sfx/wink.ogg"
 define audio.ominous = "sfx/ominous.ogg"
 define audio.appear = "sfx/layla_appears.ogg"
@@ -232,23 +234,24 @@ label start:
 
 label intro:
     queue music bio1
-    "You are a biographer of the magical,{w=0.2} mystical,{w=0.2} miraculous,{w=0.2} marvelous,{w=0.2} mythical,{w=0.2} and{cps=*.5}... {w=0.3}mmmm{/cps}{i}spellbinding{/i} people of this world."
-    "Even though you fancy yourself rather credentialed,{w=0.2} what with the seventeen biographies under your belt,"
-    "you are repeatedly upstaged by the charlatans in your field who insist upon filling their \"books\" with falsehoods and lies."
-    "If there's anything you despise with every fiber of your being,{w=0.2} it's lies,{w=0.2} and liars,{w=0.2} and also people who tell lies."
-    "There's a lot of that in the magical community, and you find it nauseating."
+    "You are a biographer of the magical,{w=0.25} mystical,{w=0.25} miraculous,{w=0.25} marvelous,{w=0.25} mythical,{w=0.25} and{cps=*.5}... {w=0.3}mmmm{/cps}{i}spellbinding{/i}{w=0.25} people of this world."
+    "However."
+    "Even though you fancy yourself rather credentialed,{w=0.25} what with the seventeen biographies under your belt,"
+    "you are repeatedly upstaged by the charlatans in your field who insist upon filling their{w=0.25} \"books\" {w=0.25}with falsehoods and lies."
+    "If there's anything you despise with every fiber of your being,{w=0.25} it's lies,{w=0.25} and liars,{w=0.25} and also people who tell lies."
+    "There's a lot of that in the magical community,{w=0.25} and you find it nauseating."
     "You would rather die than take part!"
 
     show bg coffeeshop with dissolve
-    "But today is different.{w=0.1} Today, you're meeting with one of the most notorious magicians in the magical world."
-    "No, not the dusty one...{w=0.1} The other one.{w=0.1} Your paper is doing a profile on the Immortal Agent of Chaos."
-    "It's nearly complete,{w=0.1} except for the fact that it's nowhere near finished."
-    "You aren't worried,{w=0.1} though."
-    "Okay,{w=0.1} the deadline is this weekend and you're a {cps=*0.7}{i}little{/i}{/cps} worried."
-    "But after a few weeks of phone calls,{w=0.1} dead-ends,{w=0.1} and couple of desperate summoning circles,{w=0.1} your boss finally arranged an interview with him."
-    "You're finally going to get the truth from the man himself.{w=0.1} So there's nothing to worry about!" 
+    "But today is different.{w=0.25} Today, you're meeting with one of the most notorious magicians in the magical world."
+    "No,{w=0.25} not the dusty one...{w=0.25} The other one.{w=0.25} Your paper is doing a profile on the Immortal Agent of Chaos."
+    "It's nearly complete,{w=0.25} except for the fact that it's nowhere near finished."
+    "You aren't worried,{w=0.25} though."
+    "Okay,{w=0.25} the deadline is this weekend and you're a {cps=*0.7}{i}little{/i}{/cps} worried."
+    "But after a few weeks of phone calls,{w=0.25} dead-ends,{w=0.25} and couple of desperate summoning circles,{w=0.25} your boss finally arranged an interview with him."
+    "You're finally going to get the truth from the man himself.{w=0.25} So there's nothing to worry about!" 
 
-    "Of course,{w=0.1} you also brought the most factual encyclopedia known to magickind as supplementary material{w=0.1}—just in case." 
+    "Of course,{w=0.25} you also brought the most factual encyclopedia known to magickind as supplementary material{w=0.25}—just in case." 
     "It's the Valkyrie Order's Compendium of Known Agitators."
     show screen bookbutton with dissolve
     "But you're sure you won't need it." #show the valkyrie reference button  
@@ -288,7 +291,7 @@ label icebreaker:
             "He \"didn't realize\" he had a following?{w=0.1} How could he not know?"
 
     show bg black with dissolve
-    $ renpy.music.set_volume(0.5, 0.5)
+    $ renpy.music.set_volume(0.3, 0.5)
     "Is he...{nw=0.5}" 
     play sound ominous
     extend "lying?"
@@ -311,15 +314,15 @@ label icebreaker:
                     "You clear your throat (again)."
     show ed -lookup
     queue music bio2
-    "The magician leans back in his chair and crosses one leg over another,{w=0.1} resting his hands on one knee."
-    "...Seeing him relax makes you relax,{w=0.1} as well."
+    "The magician leans back in his chair and crosses one leg over another,{w=0.25} resting his hands on one knee."
+    "...Seeing him relax makes you relax,{w=0.25} as well."
 
     jump demography
     return
 
 label demography:
     bio "Let's just start with a basic background..."
-    bio "As we both know,{w=0.1} you are an immortal warlock,{w=0.1} the Agent of Chaos-{nw=0.1}"
+    bio "As we both know,{w=0.25} you are an immortal warlock,{w=0.25} the Agent of Chaos-{nw=0.5}"
     ed thinking "You can call me Ed."
     $ ed_dn = "Ed"
     bio "Ed."
@@ -329,35 +332,35 @@ label demography:
     "You are thinking about something already..."
     menu:
         "Is that really your real name?":
-            ed "No. {w=0.1}Obviously."
-            bio "You're joking,{w=0.1} right?"
+            ed "No. {w=0.25}Obviously."
+            bio "You're joking,{w=0.25} right?"
             ed lookup "Madam."
             ed -lookup "I think if you stick around you will find that I am a very funny guy..."
             ed lookup "But I don't joke about my name."
-            bio "Well...{w=0.1} what is your real name?"
-            ed -lookup "We can...{nw=0.3}" 
-            #play sound wink
+            bio "Well...{w=0.25} what is your real name?"
+            ed -lookup "We can...{nw=0.5}" 
+            play sound wink
             show ed blush
             extend "save that one for later, can we?" 
             # so you've initiated the impress him route 
             # what with him lowkey flirting with you and all, he'll tell you his real name if you charm him
             # but of course, out of respect, you won't publish it.
-            bio "Oh,{w=0.1} all right..."
+            bio sad "Oh,{w=0.25} all right..."
             show ed -blush
             $ nameroute = True
         "Keep it to yourself":
-            "\"Ed\" cannot possibly be his real name.{w=0.1} But you're sure he has his reasons..."
+            "\"Ed\" cannot possibly be his real name.{w=0.25} But you're sure he has his reasons..."
     $ renpy.fix_rollback()
     
     "You think about your deadline again and realize you need to cut back on some of your questions."
     bio "I need to cut back on some of these questions."
-    "Right,{w=0.1} that's...{w=0.1} what I said?"
+    "Right,{w=0.25} that's...{w=0.25} what I said?"
     show ed lookup
-    "See,{w=0.1} now he's looking at you funny."
+    "See,{w=0.25} now he's looking at you funny."
     "Don't bite your lip!"
     show ed wink
     play sound wink
-    "He's reciprocating.{w=0.1} {cps=*0.5}Unbelievable.{/cps}"
+    "He's reciprocating.{w=0.25} {cps=*0.5}{i}Unbelievable.{/i}{/cps}"
     show ed -wink
     "Anyway."
     menu:
@@ -381,17 +384,17 @@ label upbringing:
         "I'm so sorry":
             ed "Don't be. {nw=0.5}"
             show ed smug with None
+            play sound ominous
             extend "I'm evil."
-            "You furrow your brow in concern,{w=0.1} or is it fear?"
+            "You furrow your brow in concern,{w=0.25} or is it fear?"
             "You're not sure why it would be either because you already knew he was a warlock."
             ed -smug "That was supposed to be a joke."
             bio shocked "Oh."
         "I'm not surprised":
-            
             "He chuckles at your blasé response."
-            bio "At our paper,{w=0.1} we call warlocks with good childhoods priests."
-            "He snorts,{w=0.1} then covers his mouth to keep the giggles at bay."
-            ed blush "I mean,{w=0.1} it's true.{w=0.1} And they certainly aren't immortal."
+            bio "At our paper,{w=0.25} we call warlocks with good childhoods,{w=0.25} \"priests.\""
+            "He snorts,{w=0.25} then covers his mouth to keep the giggles at bay."
+            ed blush "I mean,{w=0.25} it's true.{w=0.25} And they certainly aren't immortal like me."
             call endeared
     jump interviewintro
     return
@@ -406,6 +409,9 @@ label endeared:
     
     else:
         pass
+
+    if endearing:
+        return
 
     if affection > affectionthreshold:
         $ endearing = True
@@ -436,9 +442,10 @@ label offended:
         "..."
         "He seems offended."
         if affection > 0:
+            "You haven't lost all of your goodwill yet,{w=0.25} though."
             "Let's try to avoid that."
     elif affection == affectionthreshold+1:
-        "He's starting to get testy.{w=0.1} Try not to offend him again..."
+        "He's starting to get testy.{w=0.25} Try not to offend him again..."
         
     else:
         pass
@@ -487,7 +494,7 @@ label starsign:
         "Insist he's a Virgo":
             "He acts like one, anyhow."
             bio sad "I would rather not contradict the Order of the Valkyries."
-            ed angry "That's fine.{w=0.1} But I'm not no damn Virgo."
+            ed angry "That's fine.{w=0.3} But I'm not no damn Virgo."
             jump interviewintro
         "Ask him his sign":
             pass
@@ -499,7 +506,7 @@ label starsign:
     $ starsign = True
     
     bio "Now that that's out of the way- {nw}"
-    ed angry "A September birthday...{w=0.2} \"Virgo.\"{w=0.2} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.2}A September birthday?"
+    ed angry "A September birthday... \"Virgo.\"{w=0.2} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.2}A September birthday?"
     ed lookup "I'm sorry,{w=0.1} you can continue."
     "He reaches out,{w=0.1} as if to put his hand on yours,{w=0.1} but your chairs are too far apart.{w=0.1} You nod and smile."
     bio "Okay."
@@ -677,6 +684,7 @@ label portugal:
             $ homophobicbeliefs.append("bisexuals existed before David Bowie")
             "He shakes his head disapprovingly." #shit eating grin. fucking hater
         "Oh!":
+            $ isbisexual = True
             bio happy "You're bisexual!"
             ed lookup "Is it a surprise?"
             bio "I thought you were just...{w=0.1} a really sensitive guy."
@@ -904,7 +912,7 @@ label renaissance:
             bio angry "Really?"
             ed lookup "Those women are stone cold."
             show bg black with dissolve
-            $ renpy.music.set_volume(0.5, 0.5)
+            $ renpy.music.set_volume(0.3, 0.5)
             "He stares past you,{w=0.1} into the distance."
             show bg coffeeshop
             "But...{w=0.1} there was only wall behind you."
@@ -1344,7 +1352,7 @@ label vampirecastle:
     "Layla" "What? No. It's drugs. I'm talking about drugs."
     "Layla" "Idiot."
     $ renpy.music.set_pause(False)
-    $ renpy.music.set_volume(1.0, 0.5)
+    $ renpy.music.set_volume(1.0, 1.5)
     show layla:
         linear 0.8 offscreenright
     #she slides off screen to the right
@@ -1573,7 +1581,7 @@ label classiclit:
     show ed smug at person_a with dissolve
     ed smug "He didn't know what hit him."
     hide cg with dissolve
-    bio "WHEN WAS THIS."
+    bio "WHEN WAS THIS!?"
     ed thinking "Later that night, we packed up and fled the country."
     bio "OH MY GOD?"
     ed lookup "What's the problem? You didn't seem to have a problem with all those vampires I slaughtered."
@@ -1595,6 +1603,42 @@ label classiclit:
                     pass
             pass
         "I guess you're right":
+            pass
+        "Didn't you hear me!? When did this happen??":
+            ed "Can't you figure it out with that big ass forehead of yours?"
+            ed "There were no computers, but he was obsessed with this Lady named Ada."
+            ed smug "Probably the first man ever to be, too, because computing and algorithms are for WOMEN! HA!"
+            menu:
+                "What's so funny":
+                    $ misogynyaccusation = True
+                    ed fakeout "Nothing."
+                    bio @happy "I thought so."
+                    show ed -fakeout
+                    pass
+                "Maybe he wasn't a man":
+                    ed thinking "I, too, had heard on occasion that he was actually a lesbian."
+                    ed -thinking "But in addition to me not knowing him well enough to make a judgement for myself, I've also been told {i}I'm{/i} a lesbian."
+                    ed "Which could very well be true."
+                    "You stare at him. He stares at you."
+                    if stareflag > 0:
+                        "You stare at him... blah blah blah..."
+                    "You break the silence."
+                    $ stareflag += 1
+                    bio "But?"
+                    ed @lookup"That's the end of the sentence."
+                    menu:
+                        "Are you a lesbian":
+                            ed @smug "I'm bisexual."
+                            bio "Right."
+                            if isbisexual:
+                                bio @sad "How could I possibly forget?"
+                            else:
+                                bio @sad "I figured you were."
+                            
+                            pass
+                        "Move on":
+                            pass
+                    pass
             pass
 
     show ed at move_to_center
@@ -1848,7 +1892,7 @@ label film:
     bio happy "They all {i}loved{/i} you, you say?"
     ed angry "Yeah, they loved me a bit too much, because here's where it starts to get wacky."
 
-    ed thinking "I lived in a modestly-sized house tucked away in the Hollywood Hills, with a view of the ocean." 
+    ed thinking "I lived in a modestly-sized house tucked away in this obscure little strip of land called Malibu."
     ed -thinking "I mostly kept out of the public eye and hardly engaged with my fans." 
     ed lookup "In a way, you could say I played hard to get. I thought it added to my gentlemanly charm."
     ed -lookup "But in retrospect, it may have ended up compounding the problem..."
@@ -1888,39 +1932,39 @@ label film:
             ed thinking "Just making sure."
             $ yourFacts +=1
             $ renpy.music.set_pause(False)
-            $ renpy.music.set_volume(1.0, 0.5)
+            $ renpy.music.set_volume(1.0, 1.5)
 
         "I believe it":
             pass
     
-    ed thinking "I was having so much fun loving{w=0.1}—and being loved{w=0.1}—that I nearly forgot about the fact that it was the early 20th century in North America,{nw=0.5}" 
-    ed "and actions like that have Consequences." 
-    ed "You see, the first divorce you cause is kind of funny." 
-    ed lookup "By the third, you start getting invited to the courthouse..."
+    ed thinking "I was having so much fun loving{w=0.25}—and being loved{w=0.25}—that I nearly forgot about the fact that it was the early 20th century in North America." 
+    ed "And actions like that have Consequences." 
+    ed "You see,{w=0.25} the first divorce you cause is kind of funny." 
+    ed lookup "By the third,{w=0.25} you start getting invited to the courthouse..."
     ed -lookup "It's pretty hard to be the cause of over fifteen divorces and not get the attention of your boss."
-    bio shocked "{i}Fifteen!?{/i}"
+    bio shocked "{size=+10}{i}Fifteen!?{/i}{/size}"
     ed "The studio heads were pissed." 
-    ed fakeout "If I hadn't been with their wives, I had been with their wives sisters,{w=0.1} or their wives sisters' husbands."
+    ed fakeout "If I hadn't been with their wives,{w=0.25} I had been with their wives' sisters,{w=0.25} or their wives' sisters' husbands..."
     play sound wink
     ed wink "Or perhaps all of them at once."
-    bio shocked "No s**t they were pissed. I would be, too!"
-    ed -wink "Yeah, but they couldn't fire me because I was loved by the public too much, and no one was worried about communists infiltrating Hollywood yet."
-    ed thinking "So it's not like I was going to be blacklisted."
-    ed -thinking "Besides, if I got banned from a set I could just get one of my many lovers to sneak me back in."
-    bio -shocked "In spite of it all, you still wound up on top."
+    bio shocked "No s**t they were pissed.{w=0.25} I would be,{w=0.25} too!"
+    ed -wink "Yeah,{w=0.25} but they couldn't fire me because I was loved by the public too much!"
+    ed "Plus,{w=0.25} no one was worried about communists infiltrating Hollywood yet.{w=0.25} So it's not like I was going to be blacklisted."
+    ed -thinking "Besides,{w=0.25} if I got banned from a set,{w=0.25} I could just get one of my many lovers to sneak me back in."
+    bio -shocked "In spite of it all,{w=0.25} you wound up on top."
     show bg black with dissolve
     show ed at move_to_center
-    ed lookup "That is until the suits decided enough was enough." 
-    ed thinking "Thirty eight divorces strong, I had to be stopped."
-    ed "If they couldn't fire me, and they couldn't ban me from the studios, they decided to take drastic measures:"
+    ed lookup "That is,{w=0.25} until the suits decided enough was enough." 
+    ed thinking "Thirty eight divorces strong,{w=0.25} I had to be stopped."
+    ed "If they couldn't fire me,{w=0.25} if they couldn't ban me from the studios,{w=0.25} they had to take drastic measures:"
     ed lookup "they had to go to the United States government." 
-    ed -lookup "Movies were going too far, and a governing body had to be put in place to stop them."
+    ed thinking "Movies were going too far,{w=0.25} and a governing body had to be put in place to stop them."
     bio shocked "{size=+20}You mean you caused the creation of the Hays Code!?{/size}"
-    ed smug "Well? Joke's on them. I retired with my millions and spent the rest of the 20th century unburdened and unbothered."
+    ed smug "Well?{w=0.25} Joke's on them.{w=0.25} I retired with my millions and spent the rest of the 20th century unburdened and unbothered."
     show ed lookup
     bio sad "And alone."
     ed thinking "..."
-    ed "Yeah. And alone."
+    ed "Yeah.{w=0.25} And alone."
 
     jump currentday
     return
@@ -1928,30 +1972,30 @@ label film:
 
 label currentday:
     show bg library with dissolve
-    ed "Much later,{w=0.1} I went and got a Ph.D in film studies."
+    ed "Much later,{w=0.25} I went and got a Ph.D in film studies."
     ed -thinking "It was pretty easy since I was there for all of it."
-    bio "So you just collect degrees, just because?"
-    ed lookup "What? No. No one does that."
-    bio "No one? I don't know how true that is."
-    ed -lookup "You know what...? You could be right."
+    bio "So you just collect degrees,{w=0.25} just because?"
+    ed lookup "What?{w=0.25} No.{w=0.25} No one does that."
+    bio "No one?{w=0.25} I don't know how true that is."
+    ed -lookup "You know what...?{w=0.25} You could be right."
     ed thinking "Maybe there's someone out there who wants a doctorate to affirm their gender."
-    bio "So you got your Ph.D.{w=0.5} Again."
+    bio "So you got your Ph.D.{w=0.25} Again."
     ed smug "Yes there's more I got more Ph.Ds."
     show ed -smug with dissolve
-    "Sigh.{w=0.5} Again with the Ph.Ds?"
+    "Sigh.{w=0.25} Again with the Ph.Ds?"
     "This is getting out of hand."
     $ degreeskip = False
     menu:
         "Tell him to hurry it up":
             $ renpy.block_rollback()
-            bio "Ed, I don't know if we have this much time to dedicate to all of your postgraduate degrees."
-            ed lookup "Really? Because I've been blowing a lot of hot air on s**t that really doesn't matter."
+            bio "Ed,{w=0.25} I don't know if we have this much time to dedicate to all of your postgraduate degrees."
+            ed lookup "Really?{w=0.25} Because I've been blowing a lot of hot air on s**t that really doesn't matter."
             ed "The Ph.Ds are the most important part."
             "You decide to be frank."
             bio "Ed."
             bio angry "No one cares how many Ph.Ds you have."
-            ed thinking "Damn, okay." 
-            ed -thinking "Famous last words though."
+            ed -lookup "Damn,{w=0.25} okay." 
+            ed @smug "Famous last words though."
             $ degreeskip = True
             play sound slidewhistledownup
             show bg coffeeshop with circlewipe
@@ -1969,12 +2013,14 @@ label currentday:
     ed "Like I said, I was there, so it wasn't suuuper difficult."
     ed angry "But, my god, the papers, and the records?"
     ed "I was like, \"Is this film studies or archaeology?\""
+    play sound slidewhistleup
     show ed at move_to_left
     show colleague:
         offscreenright
         linear 0.8 person_d
     show ed fakeout
     "Colleague" "It's called, \"doing research,\" Ed."
+    play sound slidewhistle
     show colleague:
         linear 0.8 offscreenright
     show ed at move_to_center
