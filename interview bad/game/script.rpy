@@ -117,7 +117,15 @@ image side bio shocked = "../charasprites/bio shocked.png"
 
 #Minor Characters
 image devil = "../charasprites/devil_normal.png"
-image devil glow = "../charasprites/devil_glow.png"
+image devil glow:
+    animation
+    "../charasprites/devil_glow.png" with Dissolve(1.0)
+    pause 2.0
+    "../charasprites/devil_normal.png" with Dissolve(1.0)
+    pause 1.0
+    "../charasprites/devil_glow.png" with Dissolve(1.0)
+    pause 1.5
+    repeat
 image layla = "../charasprites/layla_the_terrible.png"
 image petya = "../charasprites/petya_bloody.png"
 image colleague = "../charasprites/colleague.png"
@@ -177,8 +185,10 @@ transform move_to_left:
     linear 0.8 xalign 0.1
     yalign 1.0
 
+#custom transition
 define circlewipe = ImageDissolve("/transitions/circle_wipe.png", 1.0,2)
 
+#animated background
 image bg laylaappears:
     Solid("#9e1a0c")
     pause 2.0
@@ -254,7 +264,7 @@ label intro:
     "Of course,{w=0.25} you also brought the most factual encyclopedia known to magickind as supplementary material{w=0.25}—just in case." 
     "It's the Valkyrie Order's Compendium of Known Agitators."
     show screen bookbutton with dissolve
-    "But you're sure you won't need it." #show the valkyrie reference button  
+    "But you're sure you won't need it."
 
     jump icebreaker
     return
@@ -271,10 +281,9 @@ label icebreaker:
             ed "I didn't have anything better to do."
             bio -happy "Really?"
             ed "Nope.{w=0.1} Take as much time as you need.{w=0.1} As much time as you need..." 
-            #play sound wink
             show ed wink
             play sound wink
-            "!?{nw=0.5}" #wink
+            "!?{nw=0.5}" 
             show ed -wink
             "Suddenly, you feel a lot more confident!{w=0.1} But..."
             "It seems unlikely that someone as busy as he is has \"nothing better to do.\"{w=0.1} He's not messing with you,{w=0.1} {cps=*0.5}or...?{/cps}"
@@ -484,31 +493,31 @@ label selecttrue(truth, lie):
 
 label starsign:
     bio "Would you say your nature as a Virgo started you down the path of dark magic?"
-    ed lookup "Hold up.{w=0.1} I'm not a Virgo."
+    ed lookup "Hold up.{w=0.25} I'm not a Virgo."
     bio "Your entry on the Valkyrie Compendium of Known Agitators has your star sign listed as Virgo."
     ed "Well it's wrong."
-    ed "What are you gonna do,{w=0.1} argue with me? {w=0.1}It's wrong."
+    ed "What are you gonna do,{w=0.25} argue with me? {w=0.25}It's wrong."
     ed fakeout "I wasn't born in freaking September."
     menu:
-        "The Valkyrie Compendium is the most factual encyclopedia on magic ever written,{w=0.1} so..."
+        "The Valkyrie Compendium is the most factual encyclopedia on magic ever written,{w=0.25} so..."
         "Insist he's a Virgo":
             "He acts like one, anyhow."
             bio sad "I would rather not contradict the Order of the Valkyries."
-            ed angry "That's fine.{w=0.3} But I'm not no damn Virgo."
+            ed angry "That's fine.{w=0.25} But I'm not no damn Virgo."
             jump interviewintro
         "Ask him his sign":
             pass
 
-    bio "When were you born,{w=0.1} then?"
-    ed lookup "October 9. {w=0.2}Write that down." 
+    bio "When were you born,{w=0.25} then?"
+    ed lookup "October 9. {w=0.25}Write that down." 
     play sound scribble
     "You scratched out Virgo and wrote Libra."
     $ starsign = True
     
-    bio "Now that that's out of the way- {nw}"
-    ed angry "A September birthday... \"Virgo.\"{w=0.2} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.2}A September birthday?"
-    ed lookup "I'm sorry,{w=0.1} you can continue."
-    "He reaches out,{w=0.1} as if to put his hand on yours,{w=0.1} but your chairs are too far apart.{w=0.1} You nod and smile."
+    bio "Now that that's out of the way- {nw=0.5}"
+    ed angry "A September birthday... \"Virgo.\"{w=0.25} {cps=*0.3}Tchhhhhhhh... {/cps}{w=0.25}A September birthday?"
+    ed lookup "I'm sorry,{w=0.25} you can continue."
+    "He reaches out,{w=0.25} as if to put his hand on yours,{w=0.25} but your chairs are too far apart.{w=0.25} You nod and smile."
     bio "Okay."
     call endeared
     jump interviewintro
@@ -535,7 +544,7 @@ label jacket:
         "Move on":
             "It probably is designer."
     "You look back down at your notes and shake your head."
-    bio "Nothing.{w=0.1} Nevermind."
+    bio "Nothing.{w=0.25} Nevermind."
     "..."
     "He's looking directly at you."
     menu:
@@ -569,13 +578,13 @@ label interviewintro:
             "His nonchalance was charming before,{w=0.1} but now it's starting to throw you off your game." 
             bio -shocked "It's time to tap in."
             ed "Okay."
-            bio sad "I mean,{w=0.1} that's not what I meant to ask you."
+            bio sad "I mean,{w=0.25} that's not what I meant to ask you."
             ed thinking "Go on."
 
         "You have multiple??":
             ed lookup "I might."
-            "You stare at him.{w=0.1} He stares you."
-            "You stare at him...{w=0.3} He stares at you."
+            "You stare at him.{w=0.25} He stares you."
+            "You stare at him...{w=0.35} He stares at you."
             if stareflag >= 1:
                 "You...{w=0.3} are starting to get tired of this."
                 $ stareflag +=1
@@ -586,14 +595,14 @@ label interviewintro:
             "You try batting your eyelashes with what you think is a coquettish expression."
             "You're not sure if it came off as such or if it was more of a drunken hand-eye coordination exercise." 
             "You decide to move on."
-    bio happy "My question{w=0.1}—it's fairly straightforward{w=0.1}—I want to know just how you became an immortal wizard!"
+    bio happy "My question{w=0.25}—it's fairly straightforward{w=0.25}—I want to know just how you became an immortal wizard!"
     ed thinking "Mm."
     bio "It's one of my favorite questions."
-    bio "Of all the fine,{w=0.1} magically-inclined folks I've interviewed,{w=0.1} I've always asked the same question,{w=0.1} but I've never gotten the same answer!"
+    bio "Of all the fine,{w=0.1} magically-inclined folks I've interviewed,{w=0.25} I've always asked the same question,{w=0.25} but I've never gotten the same answer!"
     ed -thinking "Well, if you wanna hear about that..."
     stop music fadeout 5.0
-    "He uncrosses his legs,{w=0.1} leaning forward with his elbows now resting on his knees." 
-    "You find yourself leaning forward as well,{w=0.1} pulled into his vortex,{w=0.1} his magnetic field." 
+    "He uncrosses his legs,{w=0.25} leaning forward with his elbows now resting on his knees." 
+    "You find yourself leaning forward as well,{w=0.25} pulled into his vortex,{w=0.25} his magnetic field." 
     "You are about to hear A Story."
     jump portugal
     return
@@ -603,10 +612,10 @@ label portugal:
     show bg ship with dissolve
     play music ed1
     queue music ed2
-    ed "I had just gotten my first Ph.D{w=0.1}—theology.{w=0.1} I wasn't religious,{w=0.1}but there weren't many options back in those days."
+    ed "I had just gotten my first Ph.D{w=0.25}—theology.{w=0.25} I wasn't religious,{w=0.25} but there weren't many options back in those days."
     bio "Which days?"
     menu:
-        ed lying "It was when I turned thirty in 1430.{w=0.1} Pretty easy to remember,{w=0.1} right?"
+        ed lying "It was when I turned thirty in 1430.{w=0.25} Pretty easy to remember,{w=0.25} right?"
         "I suppose so":
             show ed -lying
             pass
@@ -712,13 +721,13 @@ label portugal:
             $ finesse = True
             bio "It was 1430."
             ed "And I was about to be rolling in it the way I finessed the f**k outta that devil."
-            ed "You're gonna love this.{w=0.1} I promise."
+            ed "You're gonna love this.{w=0.25} I promise."
             "You make a note to yourself to edit that out of the transcript."
             
             
         "Ask him about the year":
             bio "What year was it again?"
-            ed lookup "Like,{w=0.1} 1420-something.{w=0.1} Why?"
+            ed lookup "Like,{w=0.25} 1420-something.{w=0.25} Why?"
             bio happy "Just checking."
             call selecttrue("Ed turned 30 in the 1420s", "Ed turned 30 in 1430")
             $ yearcontradiction = True
@@ -726,28 +735,28 @@ label portugal:
         "Let him have it":
             "You mutter something under your breath about historical revisionism."
 
-    ed "So I see The Devil standing there on the street curb,{w=0.1} and I know it's him because he's got these eyes like a husky." 
-    ed "Piercing doesn't even begin to describe it{w=0.1}—they were glowing."
+    ed "So I see The Devil standing there on the street curb,{w=0.25} and I know it's him because he's got these eyes like a husky." 
+    ed "Piercing doesn't even begin to describe it{w=0.25}—they were glowing."
     show devil glow with dissolve
-    ed thinking "So I see him standing there with his freaky{w=0.1}and I mean STRANGE bright blue glowing eyes and I say,"
+    ed thinking "So I see him standing there with his freaky{w=0.25}—and I mean {i}STRANGE{/i}{w=0.25} bright blue glowing eyes and I say,"
 
-    ed -thinking "\"How about we make a deal...{w=0.1} a business deal.\"" 
+    ed -thinking "\"How about we make a deal...{w=0.25} a business deal.\"" 
     ed lookup "Also I had the slickest braids on at the time where are my braids. You gotta include the braids."
     "Please, sir. We didn't have the time."
     bio sad "Please continue."
-    ed -lookup "Right,{w=0.1} so he's like,"
-    devil "I'm glad you noticed my eyes,{w=0.1} they don't call me Big Dog for nothing bark bark am I right."
-    bio "I don't think he said that...{w=0.1} no one would respect a man called Big Dog."
-    ed lookup "How do you know the Devil wasn't a woman,{w=0.1} by the way?"
+    ed -lookup "Right,{w=0.25} so he's like,{nw=0.5}"
+    devil "I'm glad you noticed my eyes,{w=0.25} they don't call me Big Dog for nothing bark bark am I right."
+    bio "I don't think he said that...{w=0.25} no one would respect a man called Big Dog."
+    ed lookup "How do you know the Devil wasn't a woman,{w=0.25} by the way?"
     menu:
         "Because you said \"he\" earlier.":
             ed smug "Women can't be he/hims?"
             if homophobic == True:
                 "You don't even bother this time and just let him have it."
             else:
-                bio shocked "No, I- {w=0.1}"
+                bio shocked "No, I- {nw=0.5}"
                 ed "No? They {i}can't{/i}!?"
-                bio "They can, I just- {w=0.3}"
+                bio "They can, I just- {nw=0.5}"
                 ed thinking "You don't believe in gender-nonconforming women."
                 $ renpy.notify("Trait earned: homophobic!")
                 ed "Wowwwwwwww."
@@ -863,16 +872,18 @@ label renaissance:
         ed smug "Right? I told you you'd love it."
         show ed -smug
     
+    $ goldseen = False
     menu:
         "Compliment":
+            $ goldseen = True
             bio happy "You must have made a lot of cash from that."
             ed smug "I made a lot of {i}gold...!{/i}"
             show ed -smug
             pass
         "Move on":
             pass
-
-    call selecttrue("Ed dabbled in mercantilism", "Ed dabbled in capitalism")
+    if goldseen:
+        call selecttrue("Ed dabbled in mercantilism", "Ed dabbled in capitalism")
 
     if jacket:
         "That must be how he can afford designer clothes..."
@@ -935,12 +946,13 @@ label renaissance:
             call offended
         "Clout chase":
             ed smug "That's right."
+            call endeared
             pass
     ed lookup "I needed to get an education."
     ed fakeout "See, there was some sickness going around Europe at the time—something to do with rats?"
     ed lookup "Others called it a plague."
     bio happy "Some would even call it... the Bubonic Plague."
-    ed -lookup "Eh! {w=0.2}Maybe.{w=0.2} {i}I{/i} called it...{nw=0.5}"
+    ed -lookup "Eh! {w=0.25}Maybe.{w=0.25} {i}I{/i} called it...{nw=0.5}"
     play sound wink
     extend "an opportunity."
     show bg black with dissolve
@@ -1438,9 +1450,8 @@ label vampirecastle:
             show ed -wink
             call takenote("Ed discovered ultramarine blue", True)
             pass
-    hide bg laylaappears with dissolve
     show bg coffeeshop with dissolve
-    #move ed back to center
+
     stop music fadeout 5.0
     "You take diligent notes of his vampire exploits."
     "You're particularly in awe of the way he stood up to Layla the Terrible..."
@@ -1485,11 +1496,11 @@ label classiclit:
     menu:
         "How did you say that with your mouth":
             $ renpy.notify("Trait gained: monolingual!")
-            ed "What, [petya_dn]?"
-            bio "Seriously, how do you do that?"
-            ed "I open my mouth and say the sounds using the tongue God gave me."
-            bio "I thought you weren't religious."
-            ed "And I thought I wouldn't have to explain speaking to person with a communications degree?"
+            ed lookup "What, [petya_dn]?"
+            bio sad "Seriously, how do you do that?"
+            ed fakeout "I open my mouth and say the sounds using the tongue God gave me."
+            bio @angry "I thought you weren't religious."
+            ed @lookup "And I thought I wouldn't have to explain speaking to person with a communications degree?"
 
         "I'm guessing you were close":
             $ petya_dn = "Petya"
@@ -2020,7 +2031,7 @@ label currentday:
         linear 0.8 person_d
     show ed fakeout
     "Colleague" "It's called, \"doing research,\" Ed."
-    play sound slidewhistle
+    play sound slidewhistledown
     show colleague:
         linear 0.8 offscreenright
     show ed at move_to_center
@@ -2278,11 +2289,11 @@ label review:
             ed "That includes you."
             bio blush "What!?"
             $ cuteanimal = renpy.random.choice(["fluffy kitties", "fat baby seals"])
-            "You quickly scratch that out and write {w=0.3}\"[cuteanimal]\"{w=0.3} in its place."
+            "You quickly scratch that out and write {w=0.35}\"[cuteanimal]\"{w=0.35} in its place."
             call endeared
         "Are you kidding!? Our paper isn't political!" if not politics:
-            "Yeah,{w=0.1} that's what your boss says,{w=0.1} but he knows how running cover for a warlock will reflect on it."
-            "He's not an idiot.{w=0.1} He knows about...{nw=0.3}"
+            "Yeah,{w=0.25} that's what your boss says,{w=0.25} but he knows how running cover for a warlock will reflect on it."
+            "He's not an idiot.{w=0.25} He knows about...{nw=0.5}"
             play sound ominous 
             extend "The Implication."
             $ politics = True
@@ -2298,7 +2309,7 @@ label review:
         "You decide you will offhandedly mention his Ph.D. in..."
         "Fishing Science":
             show ed blush with dissolve
-            bio angry "What!? What's so funny?"
+            bio angry "What!?{w=0.25} What's so funny?"
             ed lookup "That's not a real degree."
             bio shocked "What!?"
             ed "I made it up."
@@ -2318,34 +2329,40 @@ label review:
             pass
     play sound scribble
     
-    "Finally, after a long afternoon of..."
-    bio sad "What would you even call your stories? Swashbuckling?"
+    "Finally,{w=0.25} after a long afternoon of..."
+    bio sad "What would you even call your stories?{w=0.25} Swashbuckling?"
     ed lookup "No I hate pirates."
-    bio -sad "Oh, okay. I'm asking because my inner monologue needs a little help with her vocabulary."
+    bio -sad "Oh,{w=0.25} okay.{w=0.25} I'm asking because my inner monologue needs a little help with her vocabulary."
     ed blush "Your inner monologue is very charming."
     "You share a laugh."
     bio happy "It's funny because you can't actually hear it."
     bio -happy "So what would you call your stories?"
-    ed lookup "Try, \"After a long afternoon of conversation.\""
-    bio happy "Oh, that's good. Nice and simple... Thank you!"
+    ed lookup "Try,{w=0.25} \"After a long afternoon of conversation.\""
+    bio happy "Oh,{w=0.25} that's good.{w=0.25} Nice and simple...{w=0.25} Thank you!"
 
 
-    "After a long afternoon of conversation, you arrived at the heart of your profile."
+    "After a long afternoon of conversation,{w=0.25} you arrived at the heart of your profile."
     menu thecost:
         "What did his immortality cost him?"
         "Two dollars":
+            ed "Yeah that's about my net worth right now."
+            bio "Not very liquid,{w=0.25} are you?"
+            ed "I thought the supervillain I'm living with was richer than he is."
+            ed "I thought wrong."
+            bio "Wow."
+            bio "Tough."
             pass
         "A Ph.D.":
-            bio happy "Nope! Not what I wrote."
+            bio happy "Nope!{w=0.25} Not what I wrote."
             jump thecost
         "His lily-white reputation":
-            "No. He has demonstrated in no uncertain terms that he had nothing of the sort."
+            "No.{w=0.25} He has demonstrated in no uncertain terms that he had nothing of the sort."
             pass
         "Human connection":
             "You look at the bags under his eyes."
-            "You think to yourself, \"Eye{i}bags?{/i} More like eye luggage.\""
-            "You snort, and then shake your head for laughing at your own joke."
-            "Then you write,"
+            "You think to yourself,{w=0.25} \"Eye{i}bags?{/i} More like eye luggage.\""
+            "You snort,{w=0.25} and then shake your head for laughing at your own joke."
+            "Then you write,{nw=0.5}"
             "\"More than he could have ever imagined.\""
             $ yourFacts += 1
     $ renpy.fix_rollback()
@@ -2355,7 +2372,7 @@ label review:
     menu commonthread:
         
         "Crazy-ass moments in world history":
-            "At the moment, though, you were a bit distracted by the surface-level elements."
+            "At the moment,{w=0.25} though,{w=0.25} you were a bit distracted by the surface-level elements."
             pass
         "A romantic partner":
             $ commonality = True
@@ -2364,7 +2381,7 @@ label review:
             "Okay, like, yeah, but, like, not that."
             jump commonthread
         "A supernatural component":
-            "At the moment, though, you were a bit distracted by the surface-level elements."
+            "At the moment,{w=0.25} though,{w=0.25} you were a bit distracted by the surface-level elements."
             pass
     $ renpy.fix_rollback()
 
@@ -2382,80 +2399,79 @@ label review:
 label interviewconclusion:
     stop music fadeout 5.0
     show bg coffeeshop with dissolve
-    ed "Well?{w=0.1} That should be enough to write a pretty basic profile."
-    bio sad "Basic? You don't mean to imply that there's more."
-    ed lookup "There {i}absolutely{/i} is,{w=0.1} but if I went into it,{w=0.1} I'm certain we'd be here all night."
-    "Truthfully,{w=0.1} you wouldn't mind spending all night with him."
+    ed "Well?{w=0.25} That should be enough to write a pretty basic profile."
+    bio sad "Basic?{w=0.25} You don't mean to imply that there's more."
+    ed lookup "There {i}absolutely{/i} is,{w=0.25} but if I went into it,{w=0.25} I'm certain we'd be here all night."
+    "Truthfully,{w=0.25} you wouldn't mind spending all night with him."
     if not endearing:
-        ed -lookup "But you have a deadline,{w=0.1} so."
+        ed -lookup "But you have a deadline,{w=0.25} so."
         pass
     ed lookup "Was there anything else you needed from me?"
-    bio -sad "Yes,{w=0.1} well,{w=0.1} I just have one final question."
-    bio "In all your stories,{w=0.1} you've gone on about the who, the what, the how..."
-    bio "Why did you do it?{w=0.1} Why did you decide to become an immortal wizard?"
+    bio -sad "Yes,{w=0.25} well,{w=0.25} I just have one final question."
+    bio "In all your stories,{w=0.25} you've gone on about the who, the what, the how..."
+    bio "Why did you do it?{w=0.25} Why did you decide to become an immortal wizard?"
     ed -lookup "I was already a wizard before I became immortal."
-    bio "Right,{w=0.1} of course.{w=0.1} But still. What motivates you?"
-    bio happy "Is it all those fun adventures? Money?"
+    bio "Right,{w=0.25} of course.{w=0.25} But still. What motivates you?"
+    bio happy "Is it all those fun adventures?{w=0.25} Money?"
     bio "Were you trying to change the world?"
     bio -happy "What's the reason?"
-    bio "Or,{w=0.1} at least,{w=0.1} what's the reason you want the world to know?"
+    bio "Or,{w=0.25} at least,{w=0.25} what's the reason you want the world to know?"
 
-    ed lookup "Why did I do it,{w=0.1} huh...?"
+    ed lookup "Why did I do it,{w=0.25} huh...?"
     ed -lookup "That's a great question."
-    ed thinking "I,{w=0.1} um...{nw=0.5}"
+    ed thinking "I,{w=0.25} um...{nw=0.5}"
     play music lovesong
     ed blush "I did it for love."
-    bio "Love...?"
+    bio "{cps=*0.5}Love...?{/cps}"
     bio "Really?"
     ed "Yes."
-    ed lookup "That's not weird...{w=0.1} is it?"
+    ed lookup "That's not weird...{w=0.25} is it?"
 
     $ weirdo = False
     menu:
         "It's a little weird":
             $ weirdo = True
             ed "..."
-            ed "I guess it is,{w=0.1} coming from someone like me."
+            ed "I guess it is,{w=0.25} coming from someone like me."
             
         "It's not weird at all":
-            ed "I'm...{nw=0.2}"
+            ed "I'm...{nw=0.5}"
             show ed thinking
             extend "You have no idea how relieved I am to hear that."
     if commonality:
         bio "I noticed you had a partner for every story."
-        bio happy "Or, at least someone you were very fond of, that you seem to miss, even now."
+        bio happy "Or,{w=0.25} at least someone you were very fond of,{w=0.25} whom you seem to miss,{w=0.25} even now."
     else:
         bio "Why do you say you did it for love?"
     show bg black with dissolve
     ed lookup "It goes back to my first girlfriend."
     ed "...Actually, she was my fiancée."
-    ed "She had warned against it beforehand. She said it wouldn't make me happy."
+    ed "She had warned against it beforehand.{w=0.25} She said it wouldn't make me happy."
     ed thinking "I went and did it anyway."
-    ed -thinking "The way it works is that whenever I die, I come back in a few days or so..."
-    ed angry "But I never told her. I was too ashamed."
-    ed -angry "The day of the shipwreck, I actually died.{w=0.3} Well,{w=0.3} \"died.\""
+    ed -thinking "The way it works is that whenever I die,{w=0.25} I come back in a few days or so..."
+    ed angry "But I never told her.{w=0.25} I was too ashamed."
+    ed -angry "The day of the shipwreck was the first time I actually died.{w=0.25} Well,{w=0.35} \"died.\""
     ed "So she never knew I was still alive."
-    ed thinking "I think that in the intervening years, I didn't want to replace her..."
+    ed thinking "I think that in the intervening years,{w=0.25} I didn't want to replace her..."
     ed "So all of my relationships ended up being really short-lived."
     bio -happy "Because you thought you would find her again?"
     ed "Right."
     bio "But you never did."
-    ed lookup "No, that's not true."
-    ed -lookup "When we reunited, she had married someone else."
+    ed lookup "No,{w=0.25} that's not true."
+    ed -lookup "When we reunited,{w=0.25} she had married someone else."
     bio sad "Oh..."
 
-    ed blush "Then she told me,\"You're like how I was when I met you.\""
+    ed blush "Then she told me,{w=0.35} \"You're like how I was when I met you.\""
     bio "That kind of makes sense."
     bio happy "Mermaids live for much longer than humans do."
     ed thinking "...You're smarter than I am."
-    bio blush "..."
     ed angry "I only see why she tried to talk me out of the deal some 200 years after I'd done it."
-    ed -angry "But she wasn't upset with me or anything. She just kind of... laughed."
+    ed -angry "But she wasn't upset with me or anything.{w=0.25} She just kind of...{w=0.25} laughed."
     ed thinking "She told me that if the connection is real, the love will be beautiful every time."
     ed "No matter how long or short the encounter is."
-    ed "In the beginning, I thought did it for \"love...\""
+    ed "In the beginning,{w=0.25} I thought did it for \"love...\""
     ed lookup "What's more important to me is that it's the reason I'm still here."
-    ed thinking "When I think about it... even from before my life as... this..."
+    ed thinking "When I think about it...{w=0.25} even from before my life as... this..."
     ed blush "That's all I ever really wanted."
 
     show bg coffeeshop with dissolve
@@ -2480,6 +2496,8 @@ label interviewconclusion:
     hide ed with dissolve
     stop music fadeout 5.0
     "The two of you stand up to leave the coffee shop..."
+
+    #
     
     
     if yourFacts >= factstotal:
@@ -2502,7 +2520,9 @@ label interviewconclusion:
         else:
             pass
     else:
-        pass    
+        pass
+
+
 
     if secretending:
         jump sneakdevildeal
@@ -2772,6 +2792,7 @@ label finaltest:
     return
 
 label endoftest:
+    $ renpy.block_rollback()
     play sound scribble
     "You sit down and write the article exactly as you envision it."
     stop music fadeout 5.0
