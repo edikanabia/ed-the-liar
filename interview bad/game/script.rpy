@@ -1321,7 +1321,7 @@ label vampirecastle:
     "Layla" "Edward I have a proposal for you."
     ed thinking "Not what I'm called."
     "Layla" "You're always going on about all those Ph.D.s you have..." 
-    "Layla" "Surely a man with a big strong brain such as yours pines for another one, yes?"
+    "Layla" "Surely a man with a big,{w=0.25} strong,{w=0.25} dripping,{w=0.25} throbbing brain such as yours pines for another one,{w=0.25} yes?"
     ed blush "Darn... I can't say no to another Ph.D..."
     hide layla with dissolve
     ed -blush "The hot new science of the times was chemistry, and Layla was willing to pay out." 
