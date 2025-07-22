@@ -674,6 +674,8 @@ label portugal:
             ed lookup "Correct.{w=0.1} I {i}had{/i} a mermaid girlfriend.{w=0.1} There's a difference."
             ed "Who would lie about having a mermaid ex?"
             bio angry "Many a fisherman have lied about mermaids."
+            ed "Not this fisherman."
+            "He says, pointing his thumb into his chest."
             ed -lookup "No fisherman this century would lie about having a mermaid girlfriend,{w=0.1} let alone a mermaid {i}ex.{/i}"
             ed thinking "These days that's just plain embarrassing."
             bio -angry"Point taken."
@@ -729,7 +731,6 @@ label portugal:
             bio "What year was it again?"
             ed lookup "Like,{w=0.25} 1420-something.{w=0.25} Why?"
             bio happy "Just checking."
-            call selecttrue("Ed turned 30 in the 1420s", "Ed turned 30 in 1430")
             $ yearcontradiction = True
             
         "Let him have it":
@@ -1089,12 +1090,12 @@ label renaissance:
             "Political instability?":
                 pass
         ed "No... the mermaid mafia."
-
-    bio happy "The mermaid mafia?"
-    ed "No, it was the merm-{nw=0.5}"
-    ed lookup "Hey, you've been paying attention."
-    ed fakeout "{size=-8}Can't imagine why.{/size}"
-    ed "Anyway, the mermaid mafia."
+    else:
+        bio happy "The mermaid mafia?"
+        ed "No, it was the merm-{nw=0.5}"
+        ed lookup "Hey, you've been paying attention."
+        ed fakeout "{size=-8}Can't imagine why.{/size}"
+        ed "Anyway, the mermaid mafia."
     "Suddenly it occurs to you..."
     $ issueraised = False
     menu:
@@ -1298,7 +1299,7 @@ label vampirecastle:
     play music castle1
     ed "When I arrived, Layla had just bought that castle."
     ed "She had big plans for it: a massive library, elaborate dining room, giant vat of blood in the kitchen."
-    ed fakeout "Yeah she had vampires all over the place, but it wasn't {i}too{/i} bad in the beginning..."
+    ed fakeout "She had vampires all over the place, but it wasn't {i}too{/i} bad in the beginning..."
     ed thinking "During the day I'd sit in the library and read,"
     ed -thinking "and at night the vampires ran around doing whatever it is vampires do I really don't give a f**k."
     
@@ -1321,14 +1322,14 @@ label vampirecastle:
     "Layla" "Edward I have a proposal for you."
     ed thinking "Not what I'm called."
     "Layla" "You're always going on about all those Ph.D.s you have..." 
-    "Layla" "Surely a man with a big,{w=0.25} strong,{w=0.25} dripping,{w=0.25} throbbing brain such as yours pines for another one,{w=0.25} yes?"
-    ed blush "Darn... I can't say no to another Ph.D..."
+    "Layla" "Surely a man with a big,{w=0.25} strong,{w=0.25} dripping,{w=0.25} {cps=*0.5}{i}throbbing{/i}{/cps} brain such as yours pines for another one,{w=0.25} yes?"
+    ed blush "Darn...{w=0.25} I can't say no to another Ph.D..."
     hide layla with dissolve
-    ed -blush "The hot new science of the times was chemistry, and Layla was willing to pay out." 
+    ed -blush "The hot new science of the times was chemistry,{w=0.25} and Layla was willing to pay out." 
     ed fakeout "All I had to do was \"donate\" some of my blood from time to time." 
-    ed -fakeout "Otherwise, I had the best books, highest quality equipment, and some of the best teachers at my disposal."
+    ed -fakeout "Otherwise,{w=0.25} I had the best books,{w=0.25} highest quality equipment,{w=0.25} and some of the best teachers at my disposal."
     bio angry "So this is another story about your Ph.D.s?"
-    ed "Is-{nw=0.1}"
+    ed "Is-{nw=0.25}"
     ed lookup "Is this not an interview about my Ph.D.s?"
     "No."
     "It is not."
@@ -2042,7 +2043,7 @@ label currentday:
     menu:
         "E-excuse me!?":
             ed lookup "Oh, so now it's weird to want to support your girlfriend's transition."
-            bio shocked "I- {nw}"
+            bio shocked "I- {nw=0.5}"
             if homophobic:
                 $ homophobicbelief = renpy.random.choice(homophobicbeliefs)
                 ed thinking "I know what you're gonna say."
@@ -2054,7 +2055,7 @@ label currentday:
                     "You're about to let the moment pass when you remember your trump card:"
                     bio angry "Look, if you're not a misogynist, name every woman."
                     ed thinking "..."
-                    "See? It worked again!{nw=0.3}"
+                    "See? It worked again! You decide to{nw=0.5}"
                     $ renpy.music.set_pause(True)
                     $ renpy.music.set_volume(0.0)
                     play sound explosion
@@ -2093,25 +2094,20 @@ label currentday:
         ed lookup "To make a long story short, I had an {i}amazing{/i} time in New York City."
     ed fakeout "Until I had to leave."
     bio angry "You {i}had{/i} to leave? Why?"
-    #pause music
+    $ renpy.music.set_pause(True)
     ed thinking "7/11."
-    bio -angry "Oooh, when that psychic girl collapsed that building, huh?"
-    ed "Yep."
-    bio happy "So this is like,{w=0.1} the 2000s era."
-    bio -happy "You know she still doesn't feel bad about that."
-    ed lookup "Oh I know."
-    ed angry "Believe you me...{w=0.1} I know."
-    #play music
-    ed lookup "Anyway,{w=0.1} I knew it was about to get crazy over here,{w=0.1} so I moved to London."
+    bio -angry "Never forget."
+    $ renpy.music.set_pause(False)
+    ed lookup "Anyway,{w=0.25} I knew it was about to get crazy over here,{w=0.25} so I moved to London."
     
     if not degreeskip:
-        ed "I got my most recent Ph.D. a few years later,{w=0.1} in Africana Studies."
-        ed "And I thought it was a very illuminating experience,{w=0.1} but now I don't know how I feel about gynecology?"
+        ed "I got my most recent Ph.D. a few years later,{w=0.25} in Africana Studies."
+        ed "And I thought it was a very illuminating experience,{w=0.25} but now I don't know how I feel about gynecology?"
         menu:
             "Gynecology?":
                 bio "What exactly is the thought process behind that...?"
-                ed "That's beyond the scope of this conversation,{w=0.1} don't you think?"
-                ed "You're a smart woman.{w=0.1} I'm sure you can figure it out."
+                ed "That's beyond the scope of this conversation,{w=0.25} don't you think?"
+                ed "You're a smart woman.{w=0.25} I'm sure you can figure it out."
             "I get what you mean":
                 pass
     ed "I taught there for the better part of two decades, and ended up working very closely with another professor who was also a witch."
@@ -2119,7 +2115,7 @@ label currentday:
     ed angry "...Reasons I would hope are obvious."
     ed -angry "Early on in our stint together, keeping the magic a secret got to be really quite difficult."
     ed lookup "You know, it's a university, so people ask questions."
-    ed "\"Can I have the key to the printing closet.\"{w=0.1} \"Why do you need library access after hours.\"{w=0.1} \"Aren't you the guy from Star War.\"" 
+    ed "\"Can I have the key to the printing closet.\"{w=0.25} \"Why do you need library access after hours.\"{w=0.25} \"Aren't you the guy from Star War.\"" 
     ed -lookup "Things like that."
     ed "So we put on fake wedding bands. That made them mainly ask when we got married."
     bio "I see."
@@ -2130,24 +2126,24 @@ label currentday:
     ed "She said I was too immature for her."
     ed angry "She's a regular 30-something."
     bio "She's a 30-something, right now?"
-    ed "Yes."
+    ed lookup "Yes."
     bio "So young!"
     ed "Yes, it's embarrassing."
     show ed thinking with dissolve
     bio "When did that happen?"
     ed "Only a few years ago."
     bio happy "You're taking it like a champ."
-    ed lookup "I- {nw=0.1}"
+    ed lookup "I- {nw=0.5}"
     ed blush "Thank you."
     show ed lookup with dissolve
     bio "What made you decide to come back from England?"
-    ed -lookup "Oh,{w=0.1} you know..."
+    ed -lookup "Oh,{w=0.25} you know..."
     ed fakeout "{size=-25}philandering{/size}"
     menu:
         "Tell him to speak up":
-            bio "Excuse me,{w=0.1} can you say that again?"
+            bio "Excuse me,{w=0.25} can you say that again?"
             ed smug "That again."
-            "Sigh.{w=0.1} Of course."
+            "Sigh.{w=0.25} Of course."
             play sound horse
             bio happy "Of horse."
             show ed lookup with dissolve
@@ -2199,7 +2195,7 @@ label review:
     bio "Well then. Let me just touch up my notes..."
     show bg black with dissolve
     "You opened up your notepad and scribbled."
-    play music bio1
+    queue music bio1
     menu vocation:
         "Though he is many things now, his original occupation was..."
         "A fisherman":
@@ -2224,7 +2220,7 @@ label review:
         "Mermaid":
             pass
         "He swam using those strong arms and legs":
-            "Chill out,{w=0.1} bro.{w=0.1} You can't even see them."
+            "Chill out,{w=0.25} bro.{w=0.25} You can't even see them."
 
     $ pine = False
     menu year:
