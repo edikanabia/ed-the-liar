@@ -103,7 +103,7 @@ define config.after_load_transition = MultipleTransition([False, CropMove(0.4, m
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = CropMove(0.5, mode="wipeleft")
+define config.end_game_transition = MultipleTransition([False, CropMove(0.4, mode="wipeleft"), Solid("#000"), Pause(0.2), Solid("#000"), CropMove(0.4, mode="wipeleft"), True])
 
 
 ## A variable to set the transition used when the game starts does not exist.
