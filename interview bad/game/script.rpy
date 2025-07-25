@@ -60,7 +60,7 @@ default misogynyaccusation = False
 default stareflag = 0
 default greeting = ""
 default whatyouget = False
-
+default horse = False
 
 default ed_observation = False
 
@@ -2233,6 +2233,7 @@ label currentday:
             "Sigh.{w=0.25} Of course."
             play sound horse
             bio happy "Of horse."
+            $ horse = True
             show ed lookup with dissolve
             "..."
             "He stares at you."
@@ -2591,7 +2592,7 @@ label interviewconclusion:
     $ namehint = False
     $ lovehint = False
     $ facthint = False
-
+    $ secretending = True
     if yourFacts >= factstotal:
         pass
     else:
@@ -2620,16 +2621,16 @@ label interviewconclusion:
     show ed with dissolve
     if facthint:
         ed "About the interview... I found it{nw=0.5}"
-        bio shocked "Bad?{w=0.25} It was bad.{w=0.25} It was a bad interview,{w=0.25} wasn't it?"
-        "You sigh."
+        bio sad "Bad?{w=0.25} It was bad.{w=0.25} It was a bad interview,{w=0.25} wasn't it?"
+        bio shocked "I knew it."
         bio sad "I knew the {nw}"
         play music wink noloop
-        extend bio "{color=#bd2000}interview{/color}{w=0.25} would be {nw}"
+        extend "{color=#bd2000}interview{/color}{w=0.25} would be {nw}"
         play sound explosion
-        extend bio sad "{color=#bd2000}bad.{/color}"
+        extend "{color=#bd2000}bad.{/color}"
         ed lookup "No,{w=0.25} no!{w=0.25} It wasn't bad.{w=0.25} Just a tad... {nw=0.25}"
-        extend thinking "easy."
-        ed -thinking "You could stand to be a little more skeptical."
+        extend "easy."
+        ed "You could stand to be a little more skeptical."
         if yourFacts == factstotal - 1:
             ed @fakeout "{size=-10}Although,{w=0.25} you almost had me..."
     if namehint:
@@ -2657,10 +2658,8 @@ label interviewconclusion:
     ed lookup "So,{w=0.25} let's meet again.{w=0.25} Same place,{w=0.25} same time..."
     ed blush "We could get to know each other a bit better."
     hide ed with dissolve
-    "And with that, he shuffles off."
-    "You should probably head back, too."
-
-
+    "And with that,{w=0.25} he shuffles off."
+    "You should probably head back,{w=0.25} too."
 
     jump finaltest
 
@@ -2686,8 +2685,8 @@ label sneakdevildeal:
     ed "But you're clearly good at what you do.{w=0.25} You want people to know that about you,{w=0.25} right?"
     "That would be nice..."
     ed "Wouldn't it?"
-    bio sad "I...{nw=0.25}"
-    extend bio -sad "wouldn't have to answer to my good-for-nothing boss."
+    bio sad "I...{nw=0.5}"
+    extend bio -sad "I wouldn't have to answer to my good-for-nothing boss."
     ed "Exactly...!"
     ed -lookup "Look,{w=0.25} I'll cut to the chase."
     ed lookup "I want to help you."
@@ -2789,7 +2788,8 @@ label accept:
             "You raised your fist to chest height.{w=0.25} He raises his to meet yours.{w=0.25} You bump fists."
             "You felt a slight gust wind brush past your face and through your hair."
         "Lock it in with a kiss" if persistent.secret_ending_reached:
-            #triggers the true ending which I won't write because there's no time
+            #triggers the true ending
+
             "You had to stand on the tips of your toes to reach his face."
             "He holds you steady by your waist as you lean into him.{w=0.25} You close your eyes."
             hide ed with dissolve
@@ -2903,7 +2903,7 @@ label finaltest:
         boss "Really?{w=0.25} Let's hear it."
         bio "He told me he had never forgotten the reason he became immortal." 
         bio happy "He told me he'd done it for love.{w=0.25} That was the one thing he desired most."
-        boss "{cps=*=0.5}YAWNNNNNNNNNNNNNNNNNNNNN.{/cps}{w=0.25} Boring!"
+        boss "{cps=*0.5}YAWNNNNNNNNNNNNNNNNNNNNN.{/cps}{w=0.25} Boring!"
         bio sad "I thought it was nice..."
         if dealtriggered == True:
             boss "I thought it was CORNY!"
@@ -2963,7 +2963,8 @@ label goodend:
     play sound hangup
     "He hangs up."
     
-    
+    "You reached the good ending...?"
+
     $ persistent.good_ending_reached = True
     #persistent from reaching the secret ending
 
@@ -2973,8 +2974,7 @@ label goodend:
 
     if all_endings_reached:
         "You realized this was as good an ending as you could get."
-    else:
-        "You reached the good ending...?"
+
     $ persistent.completed_playthroughs += 1
     return
 
@@ -3190,6 +3190,16 @@ label trueend:
     "You've been holed up indoors all day today, so you're kind of a slob right now..."
     "After you freshen up, you put on your shoes and schlep out the door."
 
+    "You arrive at the office to a horrific sight."
+    #show cg bossded
+    ed "Don't worry. He's fine."
+    #hide cg
+    #show bg office
+    show ed with dissolve
+    bio "Why did you have me come here?"
+    ed @lookup "I don't like phone calls."
+    
+    
 
     # "You tell him about how he robbed you of your accomplishment from right under your nose."
     # "You tell him of how he buttered you up to do it. How he tricked you."
@@ -3200,4 +3210,7 @@ label trueend:
     # "But it doesn't hurt any less."
     # "You say you felt like a silly little girl for falling for a pretty face and some smooth talking."
 
+    return
+
+label trueendunlock:
     return
