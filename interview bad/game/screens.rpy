@@ -1639,7 +1639,9 @@ screen bookbutton():
 
 
 screen compendium(page="cover"):
-    modal True
+    #give achievement: Studious
+    modal False
+    zorder 1
     add "gui/overlay/confirm.png"
     tag book
 
