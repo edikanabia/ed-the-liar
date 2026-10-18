@@ -738,7 +738,7 @@ label portugal:
     menu:
         "In the 1400s...?":
             $ homophobic = True
-            ed lookup "Oh.{w=0.25} I see.{w=0.25}" 
+            ed lookup "Oh.{w=0.25} I see." 
             ed thinking "You think being bisexual wasn't invented yet."
             bio shocked "No,{w=0.2} I don't-{w=0.2} I wasn't-{w=0.2} I mean-{nw=0.2}"
             $ renpy.notify("Trait earned: homophobic!")
@@ -761,8 +761,7 @@ label portugal:
             bio happy "You're bisexual!"
             ed lookup "Is it a surprise?"
             bio "I thought you were just...{w=0.25} a really sensitive guy."
-            ed @blush "I can be both."
-            ed "Isn't that the point of being bi...?"
+            ed @blush "I can be both.{w=0.25} Right?"
             call endeared
             call takenote("Ed is bisexual", True)
     
@@ -1294,7 +1293,6 @@ label renaissance:
                 "You decided not to ask how the mermaid mafia got on land."
                 "Even though you've been holding it in for so long,{w=0.25} and it definitely would have gotten you closer to the truth..."
                 "Why did you do that?"
-                "Dummy."
                 pass
         $ renpy.fix_rollback()
     else:
@@ -1548,7 +1546,7 @@ label vampirecastle:
             "Is he...{w=0.25} sulking?"
             show ed -angry
         "What did you take?":
-            ed thinking "She loved jewels and precious stones and things.{w=0.25} Had a lot of art in there, too." 
+            ed thinking "She loved jewels and precious stones and things.{w=0.25} Had a lot of art in there,{w=0.25} too." 
             ed "I took those to repatriate."
             ed "Other than money,{w=0.25} I had to take my research."
             ed -thinking "There was a little recipe I was working on that produced a brilliant blue pigment..."
@@ -2605,7 +2603,7 @@ label review:
             bio angry "H-hey,{w=0.25} I don't regret doing this in person at all!"
             bio sad "I'm just saying,{w=0.25} it's so down-to-the-wire,{w=0.25} and you barely made it out here as it stands..."
             bio -sad "It's about efficiency,{w=0.25} you know?{w=0.25} Anything could be an e-mail these days."
-            if endearing:
+            if not endearing:
                 ed "Well?"
                 ed -lookup "It couldn't be helped."
                 ed thinking "I had to see if you were really that beautiful in person."
@@ -2627,8 +2625,8 @@ label review:
                         $ interjection = "REALLY "
                         "You decide to take this a bit more seriously."
                         pass
-                $ twodollars = True
-                jump thecost
+                        $ twodollars = True
+                        jump thecost
             pass
         "A Ph.D.":
             if not phdseen:
@@ -3237,7 +3235,7 @@ label dealend:
     play sound hangup
     "He hangs up."
     "You've never heard him so stilted...{w=0.25} and so scared...?" 
-    "Just one more thing to pile on to the weird couple of weeks you've been having..."
+    "Just one more thing to pile on to the weird couple of days you've been having..."
     "You thought back to the conversation you had with Ed,{w=0.25} right before you left."
     "It seems like he was right:{w=0.25} your article did incredibly well!"
     "But it also seems like no one who read it knows what it actually said." 
@@ -3298,7 +3296,7 @@ label trueend:
     bio "I have a {w=0.25}correction to run."
     "???" "Really? {w=0.25}You do?"
     "You freeze. {w=0.25}That's not the voice of your boss..."
-    bio "You... what are you doing at my job...?"
+    bio "You...{w=0.25} what are you doing at my job...?"
     ed "Making sure you get paid."
     ed "What was the correction? {w=0.25}I can relay the message."
     "You sputter. {w=0.25}You know he knows what your \"correction\" was."
